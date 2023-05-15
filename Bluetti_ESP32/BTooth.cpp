@@ -53,7 +53,7 @@ class BluettiAdvertisedDeviceCallbacks: public BLEAdvertisedDeviceCallbacks {
       doConnect = true;
       doScan = true;
     }
-  } 
+  }
 };
 
 void initBluetooth(){
@@ -64,47 +64,45 @@ void initBluetooth(){
   pBLEScan->setWindow(449);
   pBLEScan->setActiveScan(true);
   pBLEScan->start(5, false);
-  
+
   commandHandleQueue = xQueueCreate( 5, sizeof(bt_command_t ) );
   sendQueue = xQueueCreate( 5, sizeof(bt_command_t) );
 }
 
 
-static void notifyCallback(
-  BLERemoteCharacteristic* pBLERemoteCharacteristic,
-  uint8_t* pData,
-  size_t length,
-  bool isNotify) {
+static void notifyCallback( BLERemoteCharacteristic* pBLERemoteCharacteristic,
+                            uint8_t* pData, size_t length,   bool isNotify)
+  {
 
-#ifdef DEBUG
-    Serial.println("F01 - Write Response");
-    /* pData Debug... */
-    for (int i=1; i<=length; i++){
-       
-      Serial.printf("%02x", pData[i-1]);
-      
-      if(i % 2 == 0){
-        Serial.print(" "); 
-      } 
+    #ifdef DEBUG
+        Serial.println("F01 - Write Response");
+        /* pData Debug... */
+        for (int i=1; i<=length; i++){
 
-      if(i % 16 == 0){
-        Serial.println();  
-      }
-    }
-    Serial.println();
-#endif
+          Serial.printf("%02x", pData[i-1]);
+
+          if(i % 2 == 0){
+            Serial.print(" ");
+          }
+
+          if(i % 16 == 0){
+            Serial.println();
+          }
+        }
+        Serial.println();
+      #endif
 
     bt_command_t command_handle;
     if(xQueueReceive(commandHandleQueue, &command_handle, 500)){
       pase_bluetooth_data(command_handle.page, command_handle.offset, pData, length);
     }
-   
+
 }
 
 bool connectToServer() {
     Serial.print(F("Forming a connection to "));
     Serial.println(bluettiDevice->getAddress().toString().c_str());
-    
+
     BLEClient*  pClient  = BLEDevice::createClient();
     Serial.println(F(" - Created client"));
 
@@ -114,7 +112,7 @@ bool connectToServer() {
     pClient->connect(bluettiDevice);  // if you pass BLEAdvertisedDevice instead of address, it will be recognized type of peer device address (public or private)
     Serial.println(F(" - Connected to server"));
     pClient->setMTU(517); //set client to request maximum MTU from server (default is 23 otherwise)
-  
+
     // Obtain a reference to the service we are after in the remote BLE server.
     BLERemoteService* pRemoteService = pClient->getService(serviceUUID);
     if (pRemoteService == nullptr) {
@@ -172,20 +170,20 @@ void handleBTCommandQueue(){
 
     bt_command_t command;
     if(xQueueReceive(sendQueue, &command, 0)) {
-      
+
 #ifdef DEBUG
     Serial.print("Write Request FF02 - Value: ");
-    
+
     for(int i=0; i<8; i++){
        if ( i % 2 == 0){ Serial.print(" "); };
        Serial.printf("%02x", ((uint8_t*)&command)[i]);
     }
-    
+
     Serial.println("");
 #endif
       pRemoteWriteCharacteristic->writeValue((uint8_t*)&command, sizeof(command),true);
- 
-     };  
+
+     };
 }
 
 void sendBTCommand(bt_command_t command){
@@ -204,7 +202,7 @@ void handleBluetooth(){
     doConnect = false;
   }
 
-  if ((millis() - lastBTMessage) > (MAX_DISCONNECTED_TIME_UNTIL_REBOOT * 60000)){ 
+  if ((millis() - lastBTMessage) > (MAX_DISCONNECTED_TIME_UNTIL_REBOOT * 60000)){
     Serial.println(F("BT is disconnected over allowed limit, reboot device"));
     #ifdef SLEEP_TIME_ON_BT_NOT_AVAIL
         esp_deep_sleep_start();
@@ -234,14 +232,14 @@ void handleBluetooth(){
        } else {
            pollTick++;
        }
-            
+
       lastBTMessage = millis();
     }
 
     handleBTCommandQueue();
-    
+
   }else if(doScan){
-    BLEDevice::getScan()->start(0);  
+    BLEDevice::getScan()->start(0);
   }
 }
 

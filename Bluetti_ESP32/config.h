@@ -2,7 +2,7 @@
 #define CONFIG_H
 #include "Arduino.h"
 
-#define DEBUG                 1
+#define DEBUG                 3
 //#define RESET_WIFI_SETTINGS   1
 
 #define EEPROM_SALT 13374
