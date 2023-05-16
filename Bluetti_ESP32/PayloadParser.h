@@ -1,7 +1,8 @@
 #ifndef PAYLOAD_PARSER_H
 #define PAYLOAD_PARSER_H
 #include "Arduino.h"
-#include "DeviceType.h"
+//#include "DeviceType.h"
+#include "Device_AC300.h"
 #include <md_defines.h>
 
 #define HEADER_SIZE 4
@@ -9,7 +10,7 @@
 
 uint16_t parse_uint_field(uint8_t data[]);
 bool parse_bool_field(uint8_t data[]);
-float pase_decimal_field(uint8_t data[], uint8_t scale);
+float parse_decimal_field(uint8_t data[], uint8_t scale);
 uint64_t parse_serial_field(uint8_t data[]);
 float parse_version_field(uint8_t data[]);
 String parse_string_field(uint8_t data[]);

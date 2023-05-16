@@ -5,6 +5,7 @@
 #include "Config.h"
 #include "Device_AC300.h"
 #include <md_defines.h>
+#include <md_util.h>
 
 /*
   static boolean doConnect = false;

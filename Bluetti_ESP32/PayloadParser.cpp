@@ -3,7 +3,7 @@
 #include "PayloadParser.h"
 //#include "BWifi.h"
 
-  #include "Device_AC300.h"
+
 
 uint16_t parse_uint_field(uint8_t data[]){
     return ((uint16_t) data[0] << 8 ) | (uint16_t) data[1];
