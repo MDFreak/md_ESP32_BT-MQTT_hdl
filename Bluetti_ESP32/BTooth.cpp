@@ -1,7 +1,7 @@
 //#include "BluettiConfig.h"
 #include "BTooth.h"
-//#include "utils.h"
-#include "PayloadParser.h"
+//#include "md_util.h"
+//#include "PayloadParser.h"
 //#include "BWifi.h"
 
 static boolean doConnect = false;
@@ -289,6 +289,29 @@ void sendBTCommand(bt_command_t command){
     xQueueSend(sendQueue, &cmd, 0);
 }
 
+uint16_t bt_crc16_update (uint16_t crc, uint8_t a)
+  {
+    int i;
+    crc ^= a;
+    for (i = 0; i < 8; ++i)
+      {
+          if (crc & 1)
+        crc = (crc >> 1) ^ 0xA001;
+          else
+        crc = (crc >> 1);
+      }
+    return crc;
+  }
+uint16_t bt_modbus_crc(uint8_t buf[], int len)
+  {
+    unsigned int crc = 0xFFFF;
+    for (unsigned int i = 0; i < len; i++)
+     {
+      crc = bt_crc16_update(crc, buf[i]);
+     }
+     return crc;
+  }
+
 void handleBluetooth()
   {
     if (doConnect == true)
@@ -325,7 +348,7 @@ void handleBluetooth()
             command.page = bluetti_polling_command[pollTick].f_page;
             command.offset = bluetti_polling_command[pollTick].f_offset;
             command.len = (uint16_t) bluetti_polling_command[pollTick].f_size << 8;
-            command.check_sum = modbus_crc((uint8_t*)&command,6);
+            command.check_sum = bt_modbus_crc((uint8_t*) &command,6);
             S2VAL(" command  pollTick  page ", pollTick, bluetti_polling_command[pollTick].f_page);
             xQueueSend(commandHandleQueue, &command, portMAX_DELAY);
             xQueueSend(sendQueue, &command, portMAX_DELAY);

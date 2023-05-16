@@ -3,7 +3,8 @@
 #include "Arduino.h"
 //#include "DeviceType.h"
 #include "Device_AC300.h"
-#include <md_defines.h>
+#include <md_util.h>
+//#include <md_defines.h>
 
 #define HEADER_SIZE 4
 #define CHECKSUM_SIZE 2
