@@ -5,7 +5,7 @@
 #define DEBUG                 3
 //#define RESET_WIFI_SETTINGS   1
 
-#define EEPROM_SALT 13374
+//#define EEPROM_SALT 13374
 
 #define DEVICE_NAME "BLUETTI-MQTT"
 //#define BLUETTI_TYPE BLUETTI_EP500P

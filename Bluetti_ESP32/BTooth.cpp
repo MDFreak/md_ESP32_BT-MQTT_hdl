@@ -1,8 +1,8 @@
-#include "BluettiConfig.h"
+//#include "BluettiConfig.h"
 #include "BTooth.h"
 #include "utils.h"
 #include "PayloadParser.h"
-#include "BWifi.h"
+//#include "BWifi.h"
 
 static boolean doConnect = false;
 static boolean connected = false;
@@ -18,7 +18,12 @@ static BLEUUID serviceUUID("0000ff00-0000-1000-8000-00805f9b34fb");
 static BLEUUID    WRITE_UUID("0000ff02-0000-1000-8000-00805f9b34fb");
 static BLEUUID    NOTIFY_UUID("0000ff01-0000-1000-8000-00805f9b34fb");
 
+int publishErrorCount = 0;
+unsigned long lastMQTTMessage = 0;
+unsigned long previousDeviceStatePublish = 0;
+
 int pollTick = 0;
+ESPBluettiSettings _settings;
 
 struct command_handle
   {
@@ -30,6 +35,73 @@ struct command_handle
 QueueHandle_t commandHandleQueue;
 QueueHandle_t sendQueue;
 unsigned long lastBTMessage = 0;
+
+String map_field_name(enum field_names f_name)
+  {
+   switch(f_name)
+    {
+      case DC_OUTPUT_POWER:
+        return "dc_output_power";
+        break;
+      case AC_OUTPUT_POWER:
+        return "ac_output_power";
+        break;
+      case DC_OUTPUT_ON:
+        return "dc_output_on";
+        break;
+      case AC_OUTPUT_ON:
+        return "ac_output_on";
+        break;
+      case POWER_GENERATION:
+        return "power_generation";
+        break;
+      case TOTAL_BATTERY_PERCENT:
+        return "total_battery_percent";
+        break;
+      case DC_INPUT_POWER:
+        return "dc_input_power";
+        break;
+      case AC_INPUT_POWER:
+        return "ac_input_power";
+        break;
+      case PACK_VOLTAGE:
+        return "pack_voltage";
+        break;
+      case SERIAL_NUMBER:
+        return "serial_number";
+        break;
+      case ARM_VERSION:
+        return "arm_version";
+        break;
+      case DSP_VERSION:
+        return "dsp_version";
+        break;
+      case DEVICE_TYPE:
+        return "device_type";
+        break;
+      case UPS_MODE:
+        return "ups_mode";
+        break;
+      case AUTO_SLEEP_MODE:
+        return "auto_sleep_mode";
+        break;
+      case GRID_CHANGE_ON:
+        return "grid_change_on";
+        break;
+      case INTERNAL_AC_VOLTAGE:
+        return "internal_ac_voltage";
+        break;
+      case INTERNAL_CURRENT_ONE:
+        return "internal_current_one";
+        break;
+      case PACK_NUM_MAX:
+        return "pack_max_num";
+        break;
+      default:
+        return "unknown";
+        break;
+    }
+  }
 
 class MyClientCallback : public BLEClientCallbacks
   {
@@ -67,9 +139,10 @@ class BluettiAdvertisedDeviceCallbacks: public BLEAdvertisedDeviceCallbacks
         //Serial.print(F("BLE Advertised Device found: "));
         //Serial.println(advertisedDevice.toString().c_str());
         SVAL("BLE Advertised Device found: ", advertisedDevice.toString().c_str());
-        ESPBluettiSettings settings = get_esp32_bluetti_settings();
+        //ESPBluettiSettings settings = get_esp32_bluetti_settings();
         // We have found a device, let us now see if it contains the service we are looking for.
-        if (advertisedDevice.haveServiceUUID() && advertisedDevice.isAdvertisingService(serviceUUID) && advertisedDevice.getName().compare(settings.bluetti_device_id))
+        //if (advertisedDevice.haveServiceUUID() && advertisedDevice.isAdvertisingService(serviceUUID) && advertisedDevice.getName().compare(settings.bluetti_device_id))
+        if (advertisedDevice.haveServiceUUID() && advertisedDevice.isAdvertisingService(serviceUUID) && advertisedDevice.getName().compare(_settings.bluetti_device_id))
           {
             Serial.println(" onResult stop scan ");
             BLEDevice::getScan()->stop();

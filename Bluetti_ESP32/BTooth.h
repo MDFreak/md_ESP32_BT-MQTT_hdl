@@ -2,6 +2,8 @@
 #define BTOOTH_H
 #include "Arduino.h"
 #include "BLEDevice.h"
+#include "Config.h"
+#include "Device_AC300.h"
 #include <md_defines.h>
 
 /*
@@ -30,6 +32,19 @@ typedef struct __attribute__ ((packed))
     uint16_t check_sum;         // 2 bytes
   } bt_command_t;
 
+typedef struct{
+  //int  salt = EEPROM_SALT;
+  //char mqtt_server[40] = "127.0.0.1";
+  char mqtt_server[40] = "10.0.0.230";
+  char mqtt_port[6]  = "1883";
+  char mqtt_username[40] = "";
+  char mqtt_password[40] = "";
+  //char bluetti_device_id[40] = "Bluetti Blutetooth Id";
+  char bluetti_device_id[40] = "AC3002235000574654";
+  char ota_username[40] = "MAMD-HomeG";
+  char ota_password[40] = "ElaNanniRalf3";
+} ESPBluettiSettings;
+
 extern void initBluetooth();
 extern void handleBluetooth();
 bool connectToServer();
@@ -37,4 +52,6 @@ extern void handleBTCommandQueue();
 extern void sendBTCommand(bt_command_t command);
 extern bool isBTconnected();
 extern unsigned long getLastBTMessageTime();
+String map_field_name(enum field_names f_name);
+
 #endif

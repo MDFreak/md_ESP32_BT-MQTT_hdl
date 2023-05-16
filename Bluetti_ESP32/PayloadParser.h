@@ -2,6 +2,7 @@
 #define PAYLOAD_PARSER_H
 #include "Arduino.h"
 #include "DeviceType.h"
+#include <md_defines.h>
 
 #define HEADER_SIZE 4
 #define CHECKSUM_SIZE 2
