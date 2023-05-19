@@ -109,7 +109,6 @@ class MyClientCallback : public BLEClientCallbacks
       {
         Serial.println(F("onConnect"));
       }
-
     void onDisconnect(BLEClient* pclient)
       {
         connected = false;
@@ -131,9 +130,6 @@ MyClientCallback* plocClientCallback  = &locClientCallback;
  */
 class BluettiAdvertisedDeviceCallbacks: public BLEAdvertisedDeviceCallbacks
   {
-    /**
-     * Called for each advertising BLE server.
-     */
     void onResult(BLEAdvertisedDevice advertisedDevice)
       {
         //Serial.print(F("BLE Advertised Device found: "));

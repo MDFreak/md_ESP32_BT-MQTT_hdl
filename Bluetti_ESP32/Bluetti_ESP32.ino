@@ -6,6 +6,17 @@
 unsigned long lastTime1 = 0;
 unsigned long timerDelay1 = 3000;
 
+static uint32_t freeHeap    = 10000000;
+static int32_t  tmpval32;
+
+// --- heap output
+  void heapFree(const char* text)
+    {
+      uint32_t tmp32 = ESP.getFreeHeap();
+      //uint32_t tmp32 = heap_caps_get_free_size(MALLOC_CAP_8BIT | MALLOC_CAP_32BIT);
+      SVAL(text, tmp32);
+    }
+
 void setup()
   {
     Serial.begin(115200);
@@ -26,7 +37,15 @@ void setup()
 
 void loop()
   {
+      tmpval32 = ESP.getFreeHeap();
+      //heapFree("+loop");
+      if (tmpval32 < freeHeap)
+        {
+          freeHeap = tmpval32;
+          heapFree(" loop ");
+        }
     handleBluetooth();
     //handleMQTT();
     //handleWebserver();
+    usleep(5000);
   }
