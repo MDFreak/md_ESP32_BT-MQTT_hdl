@@ -48,13 +48,18 @@ typedef struct{
   char ota_password[40] = "ElaNanniRalf3";
 } ESPBluettiSettings;
 
-extern void initBluetooth();
-extern void handleBluetooth();
-bool connectToServer();
-extern void handleBTCommandQueue();
-extern void sendBTCommand(bt_command_t command);
-extern bool isBTconnected();
-extern unsigned long getLastBTMessageTime();
-String map_field_name(enum field_names f_name);
-
+// function declaration
+  device_field_data_t* getpDevField();
+  void initBluetooth();
+  void handleBluetooth();
+  bool connectToServer();
+  void handleBTCommandQueue();
+  void sendBTCommand(bt_command_t command);
+  bool isBTconnected();
+  unsigned long getLastBTMessageTime();
+// export data structures
+  //extern String map_field_name(enum field_index f_name);
+  //static device_field_data_t bluetti_device_state[];
+  //extern device_field_data_t bluetti_device_command[];
+  //extern device_field_data_t bluetti_polling_command[];
 #endif

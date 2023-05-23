@@ -25,6 +25,47 @@ unsigned long previousDeviceStatePublish = 0;
 int pollTick = 0;
 ESPBluettiSettings _settings;
 
+// initialize bluetti device data
+  // { FIELD_NAME, PAGE, OFFSET, SIZE, SCALE (if scale is needed e.g. decimal value, defaults to 0) , ENUM (if data is enum, defaults to 0) , FIELD_TYPE }
+  static device_field_data_t bluetti_device_state[] =
+    {
+      // Page 0x00 Core
+        // FIELD_NAME,          PVALUE,PAGE,  OFFS,  SIZ, SCAL (if scale is needed e.g. decimal value, defaults to 0)
+        //                                            ENUM (if data is enum, defaults to 0)
+        //                                               FIELD_TYPE
+        {AC_OUTPUT_ON,          NULL,  0x00,  0x30,  1,   0, 0, BOOL_FIELD},
+        {DC_OUTPUT_ON,          NULL,  0x00,  0x31,  1,   0, 0, BOOL_FIELD},
+        {DC_OUTPUT_POWER,       NULL,  0x00,  0x27,  1,   0, 0, UINT_FIELD},
+        {AC_OUTPUT_POWER,       NULL,  0x00,  0x26,  1,   0, 0, UINT_FIELD},
+        {POWER_GENERATION,      NULL,  0x00,  0x29,  1,   1, 0, DECIMAL_FIELD},
+        {TOTAL_BATTERY_PERCENT, NULL,  0x00,  0x2B,  1,   0, 0, UINT_FIELD},
+        {DC_INPUT_POWER,        NULL,  0x00,  0x24,  1,   0, 0, UINT_FIELD},
+        {AC_INPUT_POWER,        NULL,  0x00,  0x25,  1,   0, 0, UINT_FIELD},
+        {PACK_VOLTAGE,          NULL,  0x00,  0x62,  1,   2 ,0 ,DECIMAL_FIELD},
+        {SERIAL_NUMBER,         NULL,  0x00,  0x11,  4,   0 ,0, SN_FIELD},
+        {ARM_VERSION,           NULL,  0x00,  0x17,  2,   0, 0, VERSION_FIELD},
+        {DSP_VERSION,           NULL,  0x00,  0x19,  2,   0, 0, VERSION_FIELD},
+        {DEVICE_TYPE,           NULL,  0x00,  0x0A,  7,   0, 0, STRING_FIELD},
+        //Page 0x00 Details
+        {INTERNAL_AC_VOLTAGE,   NULL,  0x00,  0x47,  1,   1, 0, DECIMAL_FIELD},
+        {INTERNAL_CURRENT_ONE,  NULL,  0x00,  0x48,  1,   1, 0, DECIMAL_FIELD},
+        //Page 0x00 Battery Details
+        {PACK_NUM_MAX,          NULL,  0x00,  0x5B,  1,   0, 0, UINT_FIELD },
+        //Page 0x00 Battery Data
+    };
+  static device_field_data_t bluetti_device_command[] =
+    {
+      /*Page 0x00 Core */
+      {AC_OUTPUT_ON,            NULL,  0x0B, 0xBF, 1, 0, 0, BOOL_FIELD},
+      {DC_OUTPUT_ON,            NULL,  0x0B, 0xC0, 1, 0, 0, BOOL_FIELD}
+    };
+  static device_field_data_t bluetti_polling_command[] =
+    {
+      {FIELD_UNDEFINED,         NULL,  0x00, 0x0A, 0x28 ,0 , 0, TYPE_UNDEFINED},
+      {FIELD_UNDEFINED,         NULL,  0x00, 0x46, 0x15 ,0 , 0, TYPE_UNDEFINED},
+      {FIELD_UNDEFINED,         NULL,  0x0B, 0xB9, 0x3D ,0 , 0, TYPE_UNDEFINED}
+    };
+
 struct command_handle
   {
     uint8_t page;
@@ -36,7 +77,8 @@ QueueHandle_t commandHandleQueue;
 QueueHandle_t sendQueue;
 unsigned long lastBTMessage = 0;
 
-String map_field_name(enum field_names f_name)
+/*
+String map_field_name(enum field_index f_index)
   {
    switch(f_name)
     {
@@ -102,7 +144,7 @@ String map_field_name(enum field_names f_name)
         break;
     }
   }
-
+*/
 class MyClientCallback : public BLEClientCallbacks
   {
     void onConnect(BLEClient* pclient)
@@ -125,8 +167,7 @@ MyClientCallback  locClientCallback   = MyClientCallback();
 MyClientCallback* plocClientCallback  = &locClientCallback;
 
 //BLEAdvertisedDevice
-/**
- * Scan for BLE servers and find the first one that advertises the service we are looking for.
+/* Scan for BLE servers and find the first one that advertises the service we are looking for.
  */
 class BluettiAdvertisedDeviceCallbacks: public BLEAdvertisedDeviceCallbacks
   {
@@ -151,6 +192,14 @@ class BluettiAdvertisedDeviceCallbacks: public BLEAdvertisedDeviceCallbacks
 BluettiAdvertisedDeviceCallbacks  BluettiAdvDevCallbacks  =  BluettiAdvertisedDeviceCallbacks();
 BluettiAdvertisedDeviceCallbacks* pBluettiAdvDevCallbacks = &BluettiAdvDevCallbacks;
 
+
+device_field_data_t* getpDevField()
+  {
+    S2HEXVAL(" getpDevField pBluetti", (uint32_t) &bluetti_device_state[0], (uint32_t) bluetti_device_state);
+    init_dev_fields(&bluetti_device_state[0], &bluetti_device_command[0], &bluetti_polling_command[0]);
+    return &bluetti_device_state[0];
+  }
+
 void initBluetooth()
   {
     BLEDevice::init("");
@@ -172,118 +221,91 @@ static void notifyCallback( BLERemoteCharacteristic* pBLERemoteCharacteristic,
     #ifdef DEBUG
         Serial.println("F01 - Write Response");
         /* pData Debug... */
-        for (int i=1; i<=length; i++)
-          {
-            Serial.printf("%02x", pData[i-1]);
-            if(i % 2 == 0)
-              {
-                Serial.print(" ");
-              }
-            if(i % 16 == 0)
-              {
-                Serial.println();
-              }
-          }
-        Serial.println();
+        serHEXdump(pData, length);
+          Serial.println();
       #endif
 
     bt_command_t command_handle;
     if(xQueueReceive(commandHandleQueue, &command_handle, 500))
       {
-        pase_bluetooth_data(command_handle.page, command_handle.offset, pData, length);
+        parse_bluetooth_data(NULL, command_handle.page, command_handle.offset, pData, length);
       }
   }
 
 bool connectToServer()
   {
-            Serial.print(F("Forming a connection to "));
-            Serial.println(bluettiDevice->getAddress().toString().c_str());
+    // create client
+        SVAL("Forming a connection to ", bluettiDevice->getAddress().toString().c_str());
     BLEClient*  pClient  = BLEDevice::createClient();
-            Serial.println(F(" - Created client"));
-    //pClient->setClientCallbacks(new MyClientCallback());
+        STXT(" - Created client");
     pClient->setClientCallbacks(plocClientCallback);
-
     // Connect to the remove BLE Server.
     pClient->connect(bluettiDevice);  // if you pass BLEAdvertisedDevice instead of address, it will be recognized type of peer device address (public or private)
-    Serial.println(F(" - Connected to server"));
+        STXT(" - Connected to server");
     pClient->setMTU(517); //set client to request maximum MTU from server (default is 23 otherwise)
-
     // Obtain a reference to the service we are after in the remote BLE server.
     BLERemoteService* pRemoteService = pClient->getService(serviceUUID);
-    if (pRemoteService == nullptr) {
-      Serial.print(F("Failed to find our service UUID: "));
-      Serial.println(serviceUUID.toString().c_str());
-      pClient->disconnect();
-      return false;
-    }
-    Serial.println(F(" - Found our service"));
-
-
+    if (pRemoteService == nullptr)
+      {
+        SVAL("Failed to find our service UUID: ", serviceUUID.toString().c_str());
+        pClient->disconnect();
+        return false;
+      }
+    STXT(" - Found our service");
     // Obtain a reference to the characteristic in the service of the remote BLE server.
     pRemoteWriteCharacteristic = pRemoteService->getCharacteristic(WRITE_UUID);
-    if (pRemoteWriteCharacteristic == nullptr) {
-      Serial.print(F("Failed to find our characteristic UUID: "));
-      Serial.println(WRITE_UUID.toString().c_str());
-      pClient->disconnect();
-      return false;
-    }
-    Serial.println(F(" - Found our Write characteristic"));
-
-        // Obtain a reference to the characteristic in the service of the remote BLE server.
+    if (pRemoteWriteCharacteristic == nullptr)
+      {
+        SVAL("Failed to find our characteristic UUID: ", WRITE_UUID.toString().c_str());
+        pClient->disconnect();
+        return false;
+      }
+    STXT(" - Found our Write characteristic");
+    // Obtain a reference to the characteristic in the service of the remote BLE server.
     pRemoteNotifyCharacteristic = pRemoteService->getCharacteristic(NOTIFY_UUID);
-    if (pRemoteNotifyCharacteristic == nullptr) {
-      Serial.print(F("Failed to find our characteristic UUID: "));
-      Serial.println(NOTIFY_UUID.toString().c_str());
-      pClient->disconnect();
-      return false;
-    }
-    Serial.println(F(" - Found our Notifyite characteristic"));
-
+    if (pRemoteNotifyCharacteristic == nullptr)
+      {
+        SVAL("Failed to find our characteristic UUID: ", NOTIFY_UUID.toString().c_str());
+        pClient->disconnect();
+        return false;
+      }
+    STXT(" - Found our Notifyite characteristic");
     // Read the value of the characteristic.
-    if(pRemoteWriteCharacteristic->canRead()) {
-      std::string value = pRemoteWriteCharacteristic->readValue();
-      Serial.print(F("The characteristic value was: "));
-      Serial.println(value.c_str());
-    }
-
+    if(pRemoteWriteCharacteristic->canRead())
+      {
+        std::string value = pRemoteWriteCharacteristic->readValue();
+        SVAL("The characteristic value was: ", value.c_str());
+      }
     if(pRemoteNotifyCharacteristic->canNotify())
-      pRemoteNotifyCharacteristic->registerForNotify(notifyCallback);
+      { pRemoteNotifyCharacteristic->registerForNotify(notifyCallback); }
 
     connected = true;
-     #ifdef RELAISMODE
-      #ifdef DEBUG
-        Serial.println(F("activate relais contact"));
-      #endif
-      digitalWrite(RELAIS_PIN, RELAIS_HIGH);
-    #endif
-
     return true;
   }
 
-void handleBTCommandQueue(){
-
+void handleBTCommandQueue()
+  {
     bt_command_t command;
-    if(xQueueReceive(sendQueue, &command, 0)) {
-
-#ifdef DEBUG
-    Serial.print("Write Request FF02 - Value: ");
-
-    for(int i=0; i<8; i++){
-       if ( i % 2 == 0){ Serial.print(" "); };
-       Serial.printf("%02x", ((uint8_t*)&command)[i]);
-    }
-
-    Serial.println("");
-#endif
-      pRemoteWriteCharacteristic->writeValue((uint8_t*)&command, sizeof(command),true);
-
+    if(xQueueReceive(sendQueue, &command, 0))
+      {
+        #ifdef DEBUG
+            Serial.print("Write Request FF02 - Value: ");
+            for(int i=0; i<8; i++)
+              {
+                 if ( i % 2 == 0){ Serial.print(" "); };
+                 Serial.printf("%02x", ((uint8_t*)&command)[i]);
+              }
+            Serial.println("");
+          #endif
+        pRemoteWriteCharacteristic->writeValue((uint8_t*)&command, sizeof(command),true);
      };
-}
+  }
 
-void sendBTCommand(bt_command_t command){
+void sendBTCommand(bt_command_t command)
+  {
     bt_command_t cmd = command;
     xQueueSend(sendQueue, &cmd, 0);
-}
+  }
 
 uint16_t bt_crc16_update (uint16_t crc, uint8_t a)
   {
@@ -322,29 +344,28 @@ void handleBluetooth()
           }
         doConnect = false;
       }
-
     if ((millis() - lastBTMessage) > (MAX_DISCONNECTED_TIME_UNTIL_REBOOT * 60000))
       {
         Serial.println(F("BT is disconnected over allowed limit, reboot device"));
-        #ifdef SLEEP_TIME_ON_BT_NOT_AVAIL
-            //esp_deep_sleep_start();
-          #else
-            ESP.restart();
-          #endif
+        if (SLEEP_TIME_ON_BT_NOT_AVAIL > OFF)
+            { ESP.restart(); }
+            //{ esp_deep_sleep_start(); }
+          else
+            { ESP.restart(); }
       }
-
     if (connected)
       {
         // poll for device state
         if ( millis() - lastBTMessage > BLUETOOTH_QUERY_MESSAGE_DELAY)
           {
             bt_command_t command;
-            command.prefix = 0x01;
-            command.field_update_cmd = 0x03;
-            command.page = bluetti_polling_command[pollTick].f_page;
-            command.offset = bluetti_polling_command[pollTick].f_offset;
-            command.len = (uint16_t) bluetti_polling_command[pollTick].f_size << 8;
-            command.check_sum = bt_modbus_crc((uint8_t*) &command,6);
+            // build command[index: polltick]
+              command.prefix = 0x01;
+              command.field_update_cmd = 0x03;
+              command.page = bluetti_polling_command[pollTick].f_page;
+              command.offset = bluetti_polling_command[pollTick].f_offset;
+              command.len = (uint16_t) bluetti_polling_command[pollTick].f_size << 8;
+              command.check_sum = bt_modbus_crc((uint8_t*) &command,6);
             S2VAL(" command  pollTick  page ", pollTick, bluetti_polling_command[pollTick].f_page);
             xQueueSend(commandHandleQueue, &command, portMAX_DELAY);
             xQueueSend(sendQueue, &command, portMAX_DELAY);

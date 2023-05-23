@@ -41,13 +41,12 @@
        SN_FIELD,
        TYPE_UNDEFINED
     };
-
-  enum field_names
+  enum field_index
     {
-      DC_OUTPUT_POWER,
       DC_OUTPUT_ON,
-      AC_OUTPUT_POWER,
       AC_OUTPUT_ON,
+      DC_OUTPUT_POWER,
+      AC_OUTPUT_POWER,
       POWER_GENERATION,
       TOTAL_BATTERY_PERCENT,
       DC_INPUT_POWER,
@@ -57,18 +56,42 @@
       ARM_VERSION,
       DSP_VERSION,
       DEVICE_TYPE,
+      INTERNAL_AC_VOLTAGE,
+      INTERNAL_CURRENT_ONE,
+      PACK_NUM_MAX,
       UPS_MODE,
       AUTO_SLEEP_MODE,
       GRID_CHANGE_ON,
       FIELD_UNDEFINED,
-      INTERNAL_AC_VOLTAGE,
-      INTERNAL_CURRENT_ONE,
-      PACK_NUM_MAX
+      FIELD_IDX_MAX
     };
-
+  const char DEVICE_F_NAMES [FIELD_IDX_MAX][25] =
+    {
+      "AC_OUTPUT_ON",
+      "DC_OUTPUT_ON",
+      "DC_OUTPUT_POWER",
+      "AC_OUTPUT_POWER",
+      "POWER_GENERATION",
+      "TOTAL_BATTERY_PERCENT",
+      "DC_INPUT_POWER",
+      "AC_INPUT_POWER",
+      "PACK_VOLTAGE",
+      "SERIAL_NUMBER",
+      "ARM_VERSION",
+      "DSP_VERSION",
+      "DEVICE_TYPE",
+      "INTERNAL_AC_VOLTAGE",
+      "INTERNAL_CURRENT_ONE",
+      "PACK_NUM_MAX",
+      "UPS_MODE",
+      "AUTO_SLEEP_MODE",
+      "GRID_CHANGE_ON",
+      "FIELD_UNDEFINED"
+    };
   typedef struct device_field_data
     {
-      enum field_names f_name;
+      enum field_index f_name;
+      void*   p_f_value;
       uint8_t f_page;
       uint8_t f_offset;
       int8_t  f_size;
@@ -77,48 +100,9 @@
       enum field_types f_type;
     } device_field_data_t;
 
+
   // { FIELD_NAME, PAGE, OFFSET, SIZE, SCALE (if scale is needed e.g. decimal value, defaults to 0) , ENUM (if data is enum, defaults to 0) , FIELD_TYPE }
-  static device_field_data_t bluetti_device_state[] =
-    {
-      // Page 0x00 Core
-        // FIELD_NAME,          PAGE,  OFFS,  SIZ, SCAL (if scale is needed e.g. decimal value, defaults to 0)
-        //                                            ENUM (if data is enum, defaults to 0)
-        //                                               FIELD_TYPE
-        {DEVICE_TYPE,           0x00,  0x0A,  7,   0, 0, STRING_FIELD},
-        {SERIAL_NUMBER,         0x00,  0x11,  4,   0 ,0, SN_FIELD},
-        {ARM_VERSION,           0x00,  0x17,  2,   0, 0, VERSION_FIELD},
-        {DSP_VERSION,           0x00,  0x19,  2,   0, 0, VERSION_FIELD},
-        {DC_INPUT_POWER,        0x00,  0x24,  1,   0, 0, UINT_FIELD},
-        {AC_INPUT_POWER,        0x00,  0x25,  1,   0, 0, UINT_FIELD},
-        {AC_OUTPUT_POWER,       0x00,  0x26,  1,   0, 0, UINT_FIELD},
-        {DC_OUTPUT_POWER,       0x00,  0x27,  1,   0, 0, UINT_FIELD},
-        {POWER_GENERATION,      0x00,  0x29,  1,   1, 0, DECIMAL_FIELD},
-        {TOTAL_BATTERY_PERCENT, 0x00,  0x2B,  1,   0, 0, UINT_FIELD},
-        {AC_OUTPUT_ON,          0x00,  0x30,  1,   0, 0, BOOL_FIELD},
-        {DC_OUTPUT_ON,          0x00,  0x31,  1,   0, 0, BOOL_FIELD},
-        /*Page 0x00 Details
-          {INTERNAL_AC_VOLTAGE,       0x00, 0x47, 1, 1, 0, DECIMAL_FIELD},
-          {INTERNAL_CURRENT_ONE,      0x00, 0x48, 1, 1, 0, DECIMAL_FIELD},
-
-          //Page 0x00 Battery Details
-          {PACK_NUM_MAX, 0x00, 0x5B, 1, 0, 0, UINT_FIELD },
-
-          //Page 0x00 Battery Data
-          {PACK_VOLTAGE, 0x00, 0x62, 1, 2 ,0 ,DECIMAL_FIELD},
-         */
-    };
-  static device_field_data_t bluetti_device_command[] =
-    {
-      /*Page 0x00 Core */
-      {AC_OUTPUT_ON,      0x0B, 0xBF, 1, 0, 0, BOOL_FIELD},
-      {DC_OUTPUT_ON,      0x0B, 0xC0, 1, 0, 0, BOOL_FIELD}
-    };
-
-  static device_field_data_t bluetti_polling_command[] =
-    {
-      {FIELD_UNDEFINED, 0x00, 0x0A, 0x28 ,0 , 0, TYPE_UNDEFINED},
-      {FIELD_UNDEFINED, 0x00, 0x46, 0x15 ,0 , 0, TYPE_UNDEFINED},
-      {FIELD_UNDEFINED, 0x0B, 0xB9, 0x3D ,0 , 0, TYPE_UNDEFINED}
-    };
-
+  //extern device_field_data_t bluetti_device_state[];
+  //extern device_field_data_t bluetti_device_command[];
+  //extern device_field_data_t bluetti_polling_command[];
 #endif
