@@ -15,7 +15,7 @@
   static boolean doScan = false;
   static BLERemoteCharacteristic* pRemoteWriteCharacteristic;
   static BLERemoteCharacteristic* pRemoteNotifyCharacteristic;
-  static BLEAdvertisedDevice* bluettiDevice;
+  static BLEAdvertisedDevice* pbluettiDevice;
 
   // The remote Bluetti service we wish to connect to.
   static BLEUUID serviceUUID("0000ff00-0000-1000-8000-00805f9b34fb");

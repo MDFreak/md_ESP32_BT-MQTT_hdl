@@ -1,7 +1,6 @@
 #ifndef _DEVICE_AC300_H_
   #define _DEVICE_AC300_H_
   #include <Arduino.h>
-
   /* Not implemented yet
     enum output_mode
       {
@@ -19,7 +18,6 @@
           STANDARD = 3,
           TIME_CONTROl = 4
       };
-
     enum auto_sleep_mode
       {
         THIRTY_SECONDS = 2,
@@ -28,7 +26,6 @@
         NEVER = 5
       };
    */
-
   enum field_types
     {
        UINT_FIELD,
@@ -43,50 +40,114 @@
     };
   enum field_index
     {
-      DC_OUTPUT_ON,
-      AC_OUTPUT_ON,
-      DC_OUTPUT_POWER,
-      AC_OUTPUT_POWER,
-      POWER_GENERATION,
-      TOTAL_BATTERY_PERCENT,
-      DC_INPUT_POWER,
-      AC_INPUT_POWER,
-      PACK_VOLTAGE,
-      SERIAL_NUMBER,
-      ARM_VERSION,
-      DSP_VERSION,
-      DEVICE_TYPE,
-      INTERNAL_AC_VOLTAGE,
-      INTERNAL_CURRENT_ONE,
-      PACK_NUM_MAX,
-      UPS_MODE,
-      AUTO_SLEEP_MODE,
-      GRID_CHANGE_ON,
-      FIELD_UNDEFINED,
-      FIELD_IDX_MAX
+      // INFO device offset sort
+        DEVICE_TYPE,
+        SERIAL_NUMBER,
+        ARM_VERSION,
+        DSP_VERSION,
+        DC_INPUT_POWER,
+        AC_INPUT_POWER,
+        AC_OUTPUT_POWER,
+        DC_OUTPUT_POWER,
+        POWER_GENERATION,
+        TOTAL_BATT_PERC,
+        AC_OUTPUT_ON,
+        DC_OUTPUT_ON,
+      // INFO internal
+        AC_OUTPUT_MODE,        //
+        INTERN_AC_VOLT,
+        INTERN_CURR_1,
+        INTERN_POWER_1,
+        INTERN_AC_FREQ,
+        INTERN_CURR_2,
+        INTERN_POWER_2,
+        AC_INPUT_VOLT,
+        INTERN_CURR_3,
+        INTERN_POWER_3,
+        AC_INPUT_FREQ,
+        INT_DC_INP_VOLT,
+        INT_DC_INP_POW,
+        INT_DC_INP_CURR,
+        PACK_NUM_MAX,
+        TOTAL_BATT_VOLT,
+        TOTAL_BATT_CURR,
+        PACK_NUM,
+        PACK_STATUS,
+        PACK_VOLTAGE,
+        PACK_BATT_PERC,
+        //CELL_VOTAGES,
+        PACK_BMS_VERSION,
+      // CONTROL elements
+        UPS_MODE,
+        SPLIT_PHASE_ON,
+        SPLIT_PH_MACH_MODE,
+        SET_PACK_NUM,
+        SET_AC_OUT_ON,
+        SET_DC_OUT_ON,
+        GRID_CHANGE_ON,
+        TIME_CTRL_ON,
+        BATT_RANGE_START,
+        BATT_RANGE_END,
+        BLUETOOTH_CONN,
+        AUTO_SLEEP_MODE,
+        LED_CONTROL,
+        FIELD_UNDEFINED,
+        FIELD_IDX_MAX
     };
   const char DEVICE_F_NAMES [FIELD_IDX_MAX][25] =
     {
-      "AC_OUTPUT_ON",
-      "DC_OUTPUT_ON",
-      "DC_OUTPUT_POWER",
-      "AC_OUTPUT_POWER",
-      "POWER_GENERATION",
-      "TOTAL_BATTERY_PERCENT",
-      "DC_INPUT_POWER",
-      "AC_INPUT_POWER",
-      "PACK_VOLTAGE",
-      "SERIAL_NUMBER",
-      "ARM_VERSION",
-      "DSP_VERSION",
-      "DEVICE_TYPE",
-      "INTERNAL_AC_VOLTAGE",
-      "INTERNAL_CURRENT_ONE",
-      "PACK_NUM_MAX",
-      "UPS_MODE",
-      "AUTO_SLEEP_MODE",
-      "GRID_CHANGE_ON",
-      "FIELD_UNDEFINED"
+      // INFO device offset sort
+        "DEVICE_TYPE",
+        "SERIAL_NUMBER",
+        "ARM_VERSION",
+        "DSP_VERSION",
+        "DC_INPUT_POWER",
+        "AC_INPUT_POWER",
+        "AC_OUTPUT_POWER",
+        "DC_OUTPUT_POWER",
+        "POWER_GENERATION",
+        "TOTAL_BATT_PERC",
+        "AC_OUTPUT_ON",
+        "DC_OUTPUT_ON",
+      // INFO internal
+        "AC_OUTPUT_MODE",
+        "INTERN_AC_VOLT",
+        "INTERN_CURR_1",
+        "INTERN_POWER_1",
+        "INTERN_AC_FREQ",
+        "INTERN_CURR_2",
+        "INTERN_POWER_2",
+        "AC_INPUT_VOLT",
+        "INTERN_CURR_3",
+        "INTERN_POWER_3",
+        "AC_INPUT_FREQ",
+        "INT_DC_INP_VOLT",
+        "INT_DC_INP_POW",
+        "INT_DC_INP_CURR",
+        "PACK_NUM_MAX",
+        "TOTAL_BATT_VOLT",
+        "TOTAL_BATT_CURR",
+        "PACK_NUM"
+        "PACK_STATUS"
+        "PACK_VOLTAGE",
+        "PACK_BATT_PERC",
+        //"CELL_VOLTAGES",
+        "PACK_BMS_VERSION",
+      // CONTROL elements
+        "UPS_MODE",
+        "SPLIT_PHASE_ON",
+        "SPLIT_PH_MACH_MODE",
+        "SET_PACK_NUM",
+        "SET_AC_OUT_ON",
+        "SET_DC_OUT_ON",
+        "GRID_CHANGE_ON",
+        "TIME_CTRL_ON",
+        "BATT_RANGE_START",
+        "BATT_RANGE_END",
+        "BLUETOOTH_CONN",
+        "AUTO_SLEEP_MODE",
+        "LED_CONTROL",
+        "FIELD_UNDEFINED"
     };
   typedef struct device_field_data
     {
@@ -99,10 +160,4 @@
       int8_t  f_enum;
       enum field_types f_type;
     } device_field_data_t;
-
-
-  // { FIELD_NAME, PAGE, OFFSET, SIZE, SCALE (if scale is needed e.g. decimal value, defaults to 0) , ENUM (if data is enum, defaults to 0) , FIELD_TYPE }
-  //extern device_field_data_t bluetti_device_state[];
-  //extern device_field_data_t bluetti_device_command[];
-  //extern device_field_data_t bluetti_polling_command[];
 #endif

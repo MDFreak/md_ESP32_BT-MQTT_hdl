@@ -9,7 +9,7 @@ static boolean connected = false;
 static boolean doScan = false;
 static BLERemoteCharacteristic* pRemoteWriteCharacteristic;
 static BLERemoteCharacteristic* pRemoteNotifyCharacteristic;
-static BLEAdvertisedDevice*     bluettiDevice;
+static BLEAdvertisedDevice*     pbluettiDevice;
 
 // The remote Bluetti service we wish to connect to.
 static BLEUUID serviceUUID("0000ff00-0000-1000-8000-00805f9b34fb");
@@ -31,38 +31,77 @@ ESPBluettiSettings _settings;
     {
       // Page 0x00 Core
         // FIELD_NAME,          PVALUE,PAGE,  OFFS,  SIZ, SCAL (if scale is needed e.g. decimal value, defaults to 0)
-        //                                            ENUM (if data is enum, defaults to 0)
-        //                                               FIELD_TYPE
-        {AC_OUTPUT_ON,          NULL,  0x00,  0x30,  1,   0, 0, BOOL_FIELD},
-        {DC_OUTPUT_ON,          NULL,  0x00,  0x31,  1,   0, 0, BOOL_FIELD},
-        {DC_OUTPUT_POWER,       NULL,  0x00,  0x27,  1,   0, 0, UINT_FIELD},
-        {AC_OUTPUT_POWER,       NULL,  0x00,  0x26,  1,   0, 0, UINT_FIELD},
-        {POWER_GENERATION,      NULL,  0x00,  0x29,  1,   1, 0, DECIMAL_FIELD},
-        {TOTAL_BATTERY_PERCENT, NULL,  0x00,  0x2B,  1,   0, 0, UINT_FIELD},
-        {DC_INPUT_POWER,        NULL,  0x00,  0x24,  1,   0, 0, UINT_FIELD},
-        {AC_INPUT_POWER,        NULL,  0x00,  0x25,  1,   0, 0, UINT_FIELD},
-        {PACK_VOLTAGE,          NULL,  0x00,  0x62,  1,   2 ,0 ,DECIMAL_FIELD},
+        //                                                   ENUM (if data is enum, defaults to 0)
+      // INFO device offset sort                                               FIELD_TYPE
+        {DEVICE_TYPE,           NULL,  0x00,  0x0A,  7,   0, 0, STRING_FIELD},
         {SERIAL_NUMBER,         NULL,  0x00,  0x11,  4,   0 ,0, SN_FIELD},
         {ARM_VERSION,           NULL,  0x00,  0x17,  2,   0, 0, VERSION_FIELD},
         {DSP_VERSION,           NULL,  0x00,  0x19,  2,   0, 0, VERSION_FIELD},
-        {DEVICE_TYPE,           NULL,  0x00,  0x0A,  7,   0, 0, STRING_FIELD},
-        //Page 0x00 Details
-        {INTERNAL_AC_VOLTAGE,   NULL,  0x00,  0x47,  1,   1, 0, DECIMAL_FIELD},
-        {INTERNAL_CURRENT_ONE,  NULL,  0x00,  0x48,  1,   1, 0, DECIMAL_FIELD},
-        //Page 0x00 Battery Details
+        {DC_INPUT_POWER,        NULL,  0x00,  0x24,  1,   0, 0, UINT_FIELD},
+        {AC_INPUT_POWER,        NULL,  0x00,  0x25,  1,   0, 0, UINT_FIELD},
+        {AC_OUTPUT_POWER,       NULL,  0x00,  0x26,  1,   0, 0, UINT_FIELD},
+        {DC_OUTPUT_POWER,       NULL,  0x00,  0x27,  1,   0, 0, UINT_FIELD},
+        {POWER_GENERATION,      NULL,  0x00,  0x29,  1,   1, 0, DECIMAL_FIELD},
+        {TOTAL_BATT_PERC,       NULL,  0x00,  0x2B,  1,   0, 0, UINT_FIELD},
+        {AC_OUTPUT_ON,          NULL,  0x00,  0x30,  1,   0, 0, BOOL_FIELD},
+        {DC_OUTPUT_ON,          NULL,  0x00,  0x31,  1,   0, 0, BOOL_FIELD},
+      // INFO internal
+        {AC_OUTPUT_MODE,        NULL,  0x00,  0x46,  1,   0, 0, UINT_FIELD},
+        {INTERN_AC_VOLT,        NULL,  0x00,  0x47,  1,   1, 0, DECIMAL_FIELD},
+        {INTERN_CURR_1,         NULL,  0x00,  0x48,  1,   1, 0, DECIMAL_FIELD},
+        {INTERN_POWER_1,        NULL,  0x00,  0x49,  1,   0, 0, UINT_FIELD},
+        {INTERN_AC_FREQ,        NULL,  0x00,  0x4A,  1,   2, 0, DECIMAL_FIELD},
+        {INTERN_CURR_2,         NULL,  0x00,  0x4B,  1,   1, 0, DECIMAL_FIELD},
+        {INTERN_POWER_2,        NULL,  0x00,  0x4C,  1,   0, 0, UINT_FIELD},
+        {AC_INPUT_VOLT,         NULL,  0x00,  0x4D,  1,   1, 0, DECIMAL_FIELD},
+        {INTERN_CURR_3,         NULL,  0x00,  0x4E,  1,   1, 0, DECIMAL_FIELD},
+        {INTERN_POWER_3,        NULL,  0x00,  0x4F,  1,   0, 0, UINT_FIELD},
+        {AC_INPUT_FREQ,         NULL,  0x00,  0x50,  1,   2, 0, DECIMAL_FIELD},
+        {INT_DC_INP_VOLT,       NULL,  0x00,  0x56,  1,   1, 0, DECIMAL_FIELD},
+        {INT_DC_INP_POW,        NULL,  0x00,  0x57,  1,   0, 0, UINT_FIELD},
+        {INT_DC_INP_CURR,       NULL,  0x00,  0x58,  1,   1, 0, DECIMAL_FIELD},
         {PACK_NUM_MAX,          NULL,  0x00,  0x5B,  1,   0, 0, UINT_FIELD },
-        //Page 0x00 Battery Data
+        {TOTAL_BATT_VOLT,       NULL,  0x00,  0x5C,  1,   1, 0, DECIMAL_FIELD},
+        {TOTAL_BATT_CURR,       NULL,  0x00,  0x5D,  1,   1, 0, DECIMAL_FIELD},
+        {PACK_NUM,              NULL,  0x00,  0x60,  1,   0, 0, UINT_FIELD},
+        {PACK_STATUS,           NULL,  0x00,  0x61,  1,   1, 0, UINT_FIELD},
+        {PACK_VOLTAGE,          NULL,  0x00,  0x62,  1,   2 ,0 ,DECIMAL_FIELD},
+        {PACK_BATT_PERC,        NULL,  0x00,  0x63,  1,   0, 0, UINT_FIELD},
+        //{CELL_VOTAGES,          NULL,  0x00,  0x48,  1,   1, 0, },
+        {PACK_BMS_VERSION,      NULL,  0x00,  0xC9,  1,   0, 0, UINT_FIELD},
+      // CONTROL elements
+        {UPS_MODE,              NULL,  0x00,  0xB9,  1,   0, 0, UINT_FIELD},
+        {SPLIT_PHASE_ON,        NULL,  0x00,  0xBC,  1,   0, 0, UINT_FIELD},
+        {SPLIT_PH_MACH_MODE,    NULL,  0x00,  0xBD,  1,   0, 0, UINT_FIELD},
+        {SET_PACK_NUM,          NULL,  0x00,  0xBE,  1,   0, 0, UINT_FIELD},
+        {SET_AC_OUT_ON,         NULL,  0x0B,  0xBF,  1,   0, 0, BOOL_FIELD},
+        {SET_DC_OUT_ON,         NULL,  0x0B,  0xC0,  1,   0, 0, BOOL_FIELD},
+        {GRID_CHANGE_ON,        NULL,  0x00,  0xC3,  1,   0, 0, UINT_FIELD},
+        {TIME_CTRL_ON,          NULL,  0x00,  0xC5,  1,   0, 0, UINT_FIELD},
+        {BATT_RANGE_START,      NULL,  0x00,  0xC7,  1,   0, 0, UINT_FIELD},
+        {BATT_RANGE_END,        NULL,  0x00,  0xC8,  1,   0, 0, UINT_FIELD},
+        {BLUETOOTH_CONN,        NULL,  0x00,  0xDD,  1,   0, 0, UINT_FIELD},
+        {AUTO_SLEEP_MODE,       NULL,  0x00,  0xF5,  1,   0, 0, UINT_FIELD},
+        {LED_CONTROL,           NULL,  0x00,  0xDA,  1,   0, 0, UINT_FIELD},
+        {FIELD_UNDEFINED,       NULL,  0x00,  0xDF,  1,   0, 0, UINT_FIELD},
     };
-  static device_field_data_t bluetti_device_command[] =
-    {
-      /*Page 0x00 Core */
-      {AC_OUTPUT_ON,            NULL,  0x0B, 0xBF, 1, 0, 0, BOOL_FIELD},
-      {DC_OUTPUT_ON,            NULL,  0x0B, 0xC0, 1, 0, 0, BOOL_FIELD}
-    };
+
+  //static device_field_data_t bluetti_device_command[] =
+    //  {
+    //    /*Page 0x00 Core */
+    //    {AC_OUTPUT_ON,            NULL,  0x0B, 0xBF, 1, 0, 0, BOOL_FIELD},
+    //    {DC_OUTPUT_ON,            NULL,  0x0B, 0xC0, 1, 0, 0, BOOL_FIELD}
+    //  };
   static device_field_data_t bluetti_polling_command[] =
     {
+      {FIELD_UNDEFINED,         NULL,  0x00, 0x00, 0x0A ,0 , 0, TYPE_UNDEFINED},
       {FIELD_UNDEFINED,         NULL,  0x00, 0x0A, 0x28 ,0 , 0, TYPE_UNDEFINED},
+      {FIELD_UNDEFINED,         NULL,  0x00, 0x32, 0x14 ,0 , 0, TYPE_UNDEFINED},
       {FIELD_UNDEFINED,         NULL,  0x00, 0x46, 0x15 ,0 , 0, TYPE_UNDEFINED},
+      {FIELD_UNDEFINED,         NULL,  0x00, 0x54, 0x60 ,0 , 0, TYPE_UNDEFINED},
+      {FIELD_UNDEFINED,         NULL,  0x00, 0xB4, 0x3C ,0 , 0, TYPE_UNDEFINED},
+      {FIELD_UNDEFINED,         NULL,  0x0B, 0x00, 0x2F ,0 , 0, TYPE_UNDEFINED},
+      {FIELD_UNDEFINED,         NULL,  0x0B, 0x30, 0x2F ,0 , 0, TYPE_UNDEFINED},
       {FIELD_UNDEFINED,         NULL,  0x0B, 0xB9, 0x3D ,0 , 0, TYPE_UNDEFINED}
     };
 
@@ -97,7 +136,7 @@ String map_field_name(enum field_index f_index)
       case POWER_GENERATION:
         return "power_generation";
         break;
-      case TOTAL_BATTERY_PERCENT:
+      case TOTAL_BATT_PERC:
         return "total_battery_percent";
         break;
       case DC_INPUT_POWER:
@@ -130,10 +169,10 @@ String map_field_name(enum field_index f_index)
       case GRID_CHANGE_ON:
         return "grid_change_on";
         break;
-      case INTERNAL_AC_VOLTAGE:
+      case INTERN_AC_VOLT:
         return "internal_ac_voltage";
         break;
-      case INTERNAL_CURRENT_ONE:
+      case INTERN_CURR_1:
         return "internal_current_one";
         break;
       case PACK_NUM_MAX:
@@ -183,7 +222,7 @@ class BluettiAdvertisedDeviceCallbacks: public BLEAdvertisedDeviceCallbacks
           {
             Serial.println(" onResult stop scan ");
             BLEDevice::getScan()->stop();
-            bluettiDevice = new BLEAdvertisedDevice(advertisedDevice);
+            pbluettiDevice = new BLEAdvertisedDevice(advertisedDevice);
             doConnect = true;
             doScan = true;
           }
@@ -219,7 +258,7 @@ static void notifyCallback( BLERemoteCharacteristic* pBLERemoteCharacteristic,
                             uint8_t* pData, size_t length,   bool isNotify)
   {
     #ifdef DEBUG
-        Serial.println("F01 - Write Response");
+        S2VAL("notifyCallback F01 - Write Response ", length, "Bytes");
         /* pData Debug... */
         serHEXdump(pData, length);
           Serial.println();
@@ -235,12 +274,12 @@ static void notifyCallback( BLERemoteCharacteristic* pBLERemoteCharacteristic,
 bool connectToServer()
   {
     // create client
-        SVAL("Forming a connection to ", bluettiDevice->getAddress().toString().c_str());
+        SVAL("Forming a connection to ", pbluettiDevice->getAddress().toString().c_str());
     BLEClient*  pClient  = BLEDevice::createClient();
         STXT(" - Created client");
     pClient->setClientCallbacks(plocClientCallback);
     // Connect to the remove BLE Server.
-    pClient->connect(bluettiDevice);  // if you pass BLEAdvertisedDevice instead of address, it will be recognized type of peer device address (public or private)
+    pClient->connect(pbluettiDevice);  // if you pass BLEAdvertisedDevice instead of address, it will be recognized type of peer device address (public or private)
         STXT(" - Connected to server");
     pClient->setMTU(517); //set client to request maximum MTU from server (default is 23 otherwise)
     // Obtain a reference to the service we are after in the remote BLE server.
@@ -289,16 +328,17 @@ void handleBTCommandQueue()
     if(xQueueReceive(sendQueue, &command, 0))
       {
         #ifdef DEBUG
-            Serial.print("Write Request FF02 - Value: ");
-            for(int i=0; i<8; i++)
-              {
-                 if ( i % 2 == 0){ Serial.print(" "); };
-                 Serial.printf("%02x", ((uint8_t*)&command)[i]);
-              }
+            STXT("handleBTComm Write Request FF02 - Value: ");
+            serHEXdump((uint8_t*)&command, 8);
+              //for(int i=0; i<8; i++)
+              //  {
+              //     if ( i % 2 == 0){ Serial.print(" "); };
+              //     Serial.printf("%02x", ((uint8_t*)&command)[i]);
+              //  }
             Serial.println("");
           #endif
         pRemoteWriteCharacteristic->writeValue((uint8_t*)&command, sizeof(command),true);
-     };
+      };
   }
 
 void sendBTCommand(bt_command_t command)
@@ -366,7 +406,67 @@ void handleBluetooth()
               command.offset = bluetti_polling_command[pollTick].f_offset;
               command.len = (uint16_t) bluetti_polling_command[pollTick].f_size << 8;
               command.check_sum = bt_modbus_crc((uint8_t*) &command,6);
-            S2VAL(" command  pollTick  page ", pollTick, bluetti_polling_command[pollTick].f_page);
+            Serial.println();
+            S2VAL("command  pollTick  page ", pollTick, bluetti_polling_command[pollTick].f_page);
+            xQueueSend(commandHandleQueue, &command, portMAX_DELAY);
+            xQueueSend(sendQueue, &command, portMAX_DELAY);
+
+            if (pollTick == sizeof(bluetti_polling_command)/sizeof(device_field_data_t)-1 )
+              {
+                pollTick = 0;
+              }
+            else
+              {
+                pollTick++;
+              }
+            lastBTMessage = millis();
+          }
+        handleBTCommandQueue();
+      }
+    else if(doScan)
+      {
+        BLEDevice::getScan()->start(0);
+      }
+  }
+
+void pollBluetti()
+  {
+    if (doConnect == true)
+      {
+        if (connectToServer())
+          {
+            Serial.println(F("We are now connected to the Bluetti BLE Server."));
+          }
+        else
+          {
+            Serial.println(F("We have failed to connect to the server; there is nothing more we will do."));
+          }
+        doConnect = false;
+      }
+    if ((millis() - lastBTMessage) > (MAX_DISCONNECTED_TIME_UNTIL_REBOOT * 60000))
+      {
+        Serial.println(F("BT is disconnected over allowed limit, reboot device"));
+        if (SLEEP_TIME_ON_BT_NOT_AVAIL > OFF)
+            { ESP.restart(); }
+            //{ esp_deep_sleep_start(); }
+          else
+            { ESP.restart(); }
+      }
+    if (connected)
+      {
+        // poll for device state
+        if ( millis() - lastBTMessage > BLUETOOTH_QUERY_MESSAGE_DELAY)
+          {
+            bt_command_t command;
+            // build command[index: polltick]
+              command.prefix = 0x01;
+              command.field_update_cmd = 0x03;
+              command.page = bluetti_polling_command[pollTick].f_page;
+              command.offset = bluetti_polling_command[pollTick].f_offset;
+              command.len = (uint16_t) bluetti_polling_command[pollTick].f_size << 8;
+              command.check_sum = bt_modbus_crc((uint8_t*) &command,6);
+            Serial.println();
+            S2VAL("command  pollTick  page ", pollTick, bluetti_polling_command[pollTick].f_page);
             xQueueSend(commandHandleQueue, &command, portMAX_DELAY);
             xQueueSend(sendQueue, &command, portMAX_DELAY);
 

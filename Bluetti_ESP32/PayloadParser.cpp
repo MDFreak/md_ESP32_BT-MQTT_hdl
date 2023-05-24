@@ -101,7 +101,7 @@ void     parse_bluetooth_data(device_field_data_t* pdev_field_data,
                               {
                                 *((uint16_t*) pbluetti_device_state[i].p_f_value) = parse_uint_field(data_payload_field);
                               }
-                            S2VAL(DEVICE_F_NAMES[pbluetti_device_state[i].f_name], pbluetti_device_state[i].f_name, String(parse_uint_field(data_payload_field)));
+                            //S2VAL(DEVICE_F_NAMES[pbluetti_device_state[i].f_name], pbluetti_device_state[i].f_name, String(parse_uint_field(data_payload_field)));
                             //SVAL(bluetti_device_state[i].f_name, *((uint16_t*) bluetti_device_state[i].p_f_value));
                           break;
                         case BOOL_FIELD:
@@ -110,7 +110,7 @@ void     parse_bluetooth_data(device_field_data_t* pdev_field_data,
                               {
                                 *((bool*) pbluetti_device_state[i].p_f_value) = parse_bool_field(data_payload_field);
                               }
-                            S2VAL(DEVICE_F_NAMES[pbluetti_device_state[i].f_name], pbluetti_device_state[i].f_name, String((int)parse_bool_field(data_payload_field)));
+                            //S2VAL(DEVICE_F_NAMES[pbluetti_device_state[i].f_name], pbluetti_device_state[i].f_name, String((int)parse_bool_field(data_payload_field)));
                             //SVAL(bluetti_device_state[i].f_name, *((bool*) bluetti_device_state[i].p_f_value));
                           break;
                         case DECIMAL_FIELD:
@@ -125,12 +125,13 @@ void     parse_bluetooth_data(device_field_data_t* pdev_field_data,
                         case SN_FIELD:
                             char sn[16];
                             sprintf(sn, "%lld", parse_serial_field(data_payload_field));
+                            SVAL(" Seriennr ",sn);
                             //publishTopic(bluetti_device_state[i].f_name, String(sn));
                             if (pbluetti_device_state[i].p_f_value > NULL)
                               {
                                 *((String*) pbluetti_device_state[i].p_f_value) = String(sn);
                               }
-                            S2VAL(DEVICE_F_NAMES[pbluetti_device_state[i].f_name], pbluetti_device_state[i].f_name, String(sn));
+                            //S2VAL(DEVICE_F_NAMES[pbluetti_device_state[i].f_name], pbluetti_device_state[i].f_name, String(sn));
                             //SVAL(bluetti_device_state[i].f_name, *((String*) bluetti_device_state[i].p_f_value));
                           break;
                         case VERSION_FIELD:
@@ -139,7 +140,7 @@ void     parse_bluetooth_data(device_field_data_t* pdev_field_data,
                               {
                                 *((float*) pbluetti_device_state[i].p_f_value) = parse_version_field(data_payload_field);
                               }
-                            S2VAL(DEVICE_F_NAMES[pbluetti_device_state[i].f_name], pbluetti_device_state[i].f_name, String(parse_version_field(data_payload_field),2) );
+                            //S2VAL(DEVICE_F_NAMES[pbluetti_device_state[i].f_name], pbluetti_device_state[i].f_name, String(parse_version_field(data_payload_field),2) );
                             //SVAL(bluetti_device_state[i].f_name, *((float*) bluetti_device_state[i].p_f_value) );
                           break;
                         case STRING_FIELD:
@@ -148,12 +149,12 @@ void     parse_bluetooth_data(device_field_data_t* pdev_field_data,
                               {
                                 *((String*) pbluetti_device_state[i].p_f_value) = parse_string_field(data_payload_field);
                               }
-                            S2VAL(DEVICE_F_NAMES[pbluetti_device_state[i].f_name], pbluetti_device_state[i].f_name, parse_string_field(data_payload_field));
+                            //S2VAL(DEVICE_F_NAMES[pbluetti_device_state[i].f_name], pbluetti_device_state[i].f_name, parse_string_field(data_payload_field));
                             //SVAL(bluetti_device_state[i].f_name, *((String*) bluetti_device_state[i].p_f_value));
                           break;
                         case ENUM_FIELD:
                             //publishTopic(bluetti_device_state[i].f_name, pase_enum_field(data_payload_field));
-                            S2VAL(DEVICE_F_NAMES[pbluetti_device_state[i].f_name], pbluetti_device_state[i].f_name, parse_enum_field(data_payload_field));
+                            //S2VAL(DEVICE_F_NAMES[pbluetti_device_state[i].f_name], pbluetti_device_state[i].f_name, parse_enum_field(data_payload_field));
                           break;
                         default:
                           break;
