@@ -86,23 +86,22 @@ ESPBluettiSettings _settings;
         {FIELD_UNDEFINED,       NULL,  0x00,  0xDF,  1,   0, 0, UINT_FIELD},
     };
 
-  //static device_field_data_t bluetti_device_command[] =
-    //  {
-    //    /*Page 0x00 Core */
-    //    {AC_OUTPUT_ON,            NULL,  0x0B, 0xBF, 1, 0, 0, BOOL_FIELD},
-    //    {DC_OUTPUT_ON,            NULL,  0x0B, 0xC0, 1, 0, 0, BOOL_FIELD}
-    //  };
+  static device_field_data_t bluetti_device_command[] =
+      {
+        /*Page 0x00 Core */
+        {AC_OUTPUT_ON,            NULL,  0x0B, 0xBF, 1, 0, 0, BOOL_FIELD},
+        {DC_OUTPUT_ON,            NULL,  0x0B, 0xC0, 1, 0, 0, BOOL_FIELD}
+      };
   static device_field_data_t bluetti_polling_command[] =
     {
-      {FIELD_UNDEFINED,         NULL,  0x00, 0x00, 0x0A ,0 , 0, TYPE_UNDEFINED},
-      {FIELD_UNDEFINED,         NULL,  0x00, 0x0A, 0x28 ,0 , 0, TYPE_UNDEFINED},
-      {FIELD_UNDEFINED,         NULL,  0x00, 0x32, 0x14 ,0 , 0, TYPE_UNDEFINED},
-      {FIELD_UNDEFINED,         NULL,  0x00, 0x46, 0x15 ,0 , 0, TYPE_UNDEFINED},
-      {FIELD_UNDEFINED,         NULL,  0x00, 0x54, 0x60 ,0 , 0, TYPE_UNDEFINED},
-      {FIELD_UNDEFINED,         NULL,  0x00, 0xB4, 0x3C ,0 , 0, TYPE_UNDEFINED},
-      {FIELD_UNDEFINED,         NULL,  0x0B, 0x00, 0x2F ,0 , 0, TYPE_UNDEFINED},
-      {FIELD_UNDEFINED,         NULL,  0x0B, 0x30, 0x2F ,0 , 0, TYPE_UNDEFINED},
-      {FIELD_UNDEFINED,         NULL,  0x0B, 0xB9, 0x3D ,0 , 0, TYPE_UNDEFINED}
+      {FIELD_UNDEFINED,         NULL,  0x00, 0x0A, 0x07 ,0 , 0, TYPE_UNDEFINED},
+      //{FIELD_UNDEFINED,         NULL,  0x00, 0x32, 0x14 ,0 , 0, TYPE_UNDEFINED},
+      //{FIELD_UNDEFINED,         NULL,  0x00, 0x46, 0x2C ,0 , 0, TYPE_UNDEFINED},
+      //{FIELD_UNDEFINED,         NULL,  0x00, 0xC9, 0x01 ,0 , 0, TYPE_UNDEFINED},
+      //{FIELD_UNDEFINED,         NULL,  0x00, 0xB4, 0x3C ,0 , 0, TYPE_UNDEFINED},
+      //{FIELD_UNDEFINED,         NULL,  0x0B, 0x00, 0x2F ,0 , 0, TYPE_UNDEFINED},
+      //{FIELD_UNDEFINED,         NULL,  0x0B, 0xB9, 0x26 ,0 , 0, TYPE_UNDEFINED},
+      //{FIELD_UNDEFINED,         NULL,  0x0B, 0xD7, 0x31 ,0 , 0, TYPE_UNDEFINED}
     };
 
 struct command_handle

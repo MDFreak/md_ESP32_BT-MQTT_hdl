@@ -54,7 +54,8 @@
         AC_OUTPUT_ON,
         DC_OUTPUT_ON,
       // INFO internal
-        AC_OUTPUT_MODE,        //
+        INFO_INTERNAL = DC_OUTPUT_ON,
+        AC_OUTPUT_MODE,
         INTERN_AC_VOLT,
         INTERN_CURR_1,
         INTERN_POWER_1,
@@ -78,6 +79,7 @@
         //CELL_VOTAGES,
         PACK_BMS_VERSION,
       // CONTROL elements
+        CTRL_ELEMENTS = PACK_BMS_VERSION,
         UPS_MODE,
         SPLIT_PHASE_ON,
         SPLIT_PH_MACH_MODE,
@@ -94,7 +96,7 @@
         FIELD_UNDEFINED,
         FIELD_IDX_MAX
     };
-  const char DEVICE_F_NAMES [FIELD_IDX_MAX][25] =
+  const char DEVICE_F_NAMES [FIELD_IDX_MAX][40] =
     {
       // INFO device offset sort
         "DEVICE_TYPE",

@@ -119,13 +119,12 @@ void     parse_bluetooth_data(device_field_data_t* pdev_field_data,
                               {
                                 *((float*) pbluetti_device_state[i].p_f_value) = parse_decimal_field(data_payload_field, pbluetti_device_state[i].f_scale);
                               }
-                            S2VAL(DEVICE_F_NAMES[pbluetti_device_state[i].f_name], pbluetti_device_state[i].f_name, String(parse_decimal_field(data_payload_field, pbluetti_device_state[i].f_scale ), 2) );
+                            //S2VAL(DEVICE_F_NAMES[pbluetti_device_state[i].f_name], pbluetti_device_state[i].f_name, String(parse_decimal_field(data_payload_field, pbluetti_device_state[i].f_scale ), 2) );
                             //SVAL(bluetti_device_state[i].f_name, *((float*) bluetti_device_state[i].p_f_value) );
                           break;
                         case SN_FIELD:
                             char sn[16];
                             sprintf(sn, "%lld", parse_serial_field(data_payload_field));
-                            SVAL(" Seriennr ",sn);
                             //publishTopic(bluetti_device_state[i].f_name, String(sn));
                             if (pbluetti_device_state[i].p_f_value > NULL)
                               {
@@ -149,7 +148,7 @@ void     parse_bluetooth_data(device_field_data_t* pdev_field_data,
                               {
                                 *((String*) pbluetti_device_state[i].p_f_value) = parse_string_field(data_payload_field);
                               }
-                            //S2VAL(DEVICE_F_NAMES[pbluetti_device_state[i].f_name], pbluetti_device_state[i].f_name, parse_string_field(data_payload_field));
+                            S4VAL(" string idx ", i, DEVICE_F_NAMES[pbluetti_device_state[i].f_name], pbluetti_device_state[i].f_name, parse_string_field(data_payload_field));
                             //SVAL(bluetti_device_state[i].f_name, *((String*) bluetti_device_state[i].p_f_value));
                           break;
                         case ENUM_FIELD:
