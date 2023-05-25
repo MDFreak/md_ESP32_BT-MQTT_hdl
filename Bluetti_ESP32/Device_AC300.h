@@ -129,8 +129,8 @@
         "PACK_NUM_MAX",
         "TOTAL_BATT_VOLT",
         "TOTAL_BATT_CURR",
-        "PACK_NUM"
-        "PACK_STATUS"
+        "PACK_NUM",
+        "PACK_STATUS",
         "PACK_VOLTAGE",
         "PACK_BATT_PERC",
         //"CELL_VOLTAGES",
@@ -151,7 +151,7 @@
         "LED_CONTROL",
         "FIELD_UNDEFINED"
     };
-  typedef struct device_field_data
+  typedef struct __attribute__ ((packed)) //device_field_data
     {
       enum field_index f_name;
       void*   p_f_value;
@@ -160,6 +160,7 @@
       int8_t  f_size;
       int8_t  f_scale;
       int8_t  f_enum;
+      uint8_t f_new;
       enum field_types f_type;
     } device_field_data_t;
 #endif

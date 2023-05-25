@@ -494,512 +494,72 @@
                 //SVAL(" outputcycle idx ", outpIdx);
                 if (errMQTT == MD_OK)
                   {
-                    switch(outpIdx)
+                    if (pbluetti_dev_state[outpIdx].f_new > OFF) // new value
                       {
-                        // INFO device offset sort
-                          case DEVICE_TYPE:         // 0
-                              if (BLUDEVICE_TYPE != BLUDEVICE_TYPEold)
-                                {
-                                  valBLUDEVICE_TYPE = BLUDEVICE_TYPE;
-                                  //errMQTT = (int8_t) mqtt.publish(topBLUDEVICE_TYPE.c_str(), (uint8_t*) valBLUDEVICE_TYPE.c_str(), valBLUDEVICE_TYPE.length());
-                                  errMQTT = (int8_t) mqtt.publish(topBLU[FIELD_IDX_MAX].c_str(), (uint8_t*) valBLUDEVICE_TYPE.c_str(), valBLUDEVICE_TYPE.length());
-                                  soutMQTTerr(valBLUDEVICE_TYPE.c_str(), errMQTT);
-                                      //SVAL(topBLUDEVICE_TYPE, valBLUDEVICE_TYPE.c_str());
-                                      SVAL(topBLUDEVICE_TYPE, valBLUDEVICE_TYPE.c_str());
-                                  BLUDEVICE_TYPEold = BLUDEVICE_TYPE;
-                                }
-                            break;
-                          case SERIAL_NUMBER:       // 1
-                              if (BLUSERIAL_NUMBER != BLUSERIAL_NUMBERold)
-                                {
-                                  valBLUSERIAL_NUMBER = BLUSERIAL_NUMBER;
-                                  errMQTT = (int8_t) mqtt.publish(topBLUSERIAL_NUMBER.c_str(), (uint8_t*) valBLUSERIAL_NUMBER.c_str(), valBLUSERIAL_NUMBER.length());
-                                  soutMQTTerr(valBLUSERIAL_NUMBER.c_str(), errMQTT);
-                                      SVAL(topBLUSERIAL_NUMBER, valBLUSERIAL_NUMBER.c_str());
-                                  BLUSERIAL_NUMBERold = BLUSERIAL_NUMBER;
-                                }
-                            break;
-                          case ARM_VERSION:         // 2
-                              if (BLUARM_VERSION != BLUARM_VERSIONold)
-                                {
-                                  valBLUARM_VERSION = BLUARM_VERSION;
-                                  errMQTT = (int8_t) mqtt.publish(topBLUARM_VERSION.c_str(), (uint8_t*) valBLUARM_VERSION.c_str(), valBLUARM_VERSION.length());
-                                  soutMQTTerr(valBLUDC_OUTPUT_POWER.c_str(), errMQTT);
-                                      SVAL(topBLUARM_VERSION, valBLUARM_VERSION.c_str());
-                                  BLUARM_VERSIONold = BLUARM_VERSION;
-                                }
-                            break;
-                          case DSP_VERSION:         // 3
-                              if (BLUDSP_VERSION != BLUDSP_VERSION)
-                                {
-                                  valBLUDSP_VERSION = BLUDSP_VERSION;
-                                  errMQTT = (int8_t) mqtt.publish(topBLUDSP_VERSION.c_str(), (uint8_t*) valBLUDSP_VERSION.c_str(), valBLUDSP_VERSION.length());
-                                  soutMQTTerr(valBLUDC_OUTPUT_POWER.c_str(), errMQTT);
-                                      SVAL(topBLUDSP_VERSION, valBLUDSP_VERSION.c_str());
-                                  BLUDSP_VERSION = BLUDSP_VERSION;
-                                }
-                            break;
-                          case DC_INPUT_POWER:      // 4
-                              if (BLUDC_INPUT_POWER != BLUDC_INPUT_POWERold)
-                                {
-                                  valBLUDC_INPUT_POWER = BLUDC_INPUT_POWER;
-                                  errMQTT = (int8_t) mqtt.publish(topBLUDC_INPUT_POWER.c_str(), (uint8_t*) valBLUDC_INPUT_POWER.c_str(), valBLUDC_INPUT_POWER.length());
-                                  soutMQTTerr(valBLUDC_INPUT_POWER.c_str(), errMQTT);
-                                      SVAL(topBLUDC_INPUT_POWER, valBLUDC_INPUT_POWER.c_str());
-                                  BLUDC_INPUT_POWERold = BLUDC_INPUT_POWER;
-                                }
-                            break;
-                          case AC_INPUT_POWER:      // 5
-                              if (BLUAC_INPUT_POWER != BLUAC_INPUT_POWERold)
-                                {
-                                  valBLUAC_INPUT_POWER = BLUAC_INPUT_POWER;
-                                  errMQTT = (int8_t) mqtt.publish(topBLUAC_INPUT_POWER.c_str(), (uint8_t*) valBLUAC_INPUT_POWER.c_str(), valBLUAC_INPUT_POWER.length());
-                                  soutMQTTerr(valBLUAC_INPUT_POWER.c_str(), errMQTT);
-                                      SVAL(topBLUAC_INPUT_POWER, valBLUAC_INPUT_POWER.c_str());
-                                  BLUAC_INPUT_POWERold = BLUAC_INPUT_POWER;
-                                }
-                            break;
-                          case AC_OUTPUT_POWER:     // 6
-                              if (BLUAC_OUTPUT_POWER != BLUAC_OUTPUT_POWERold)
-                                {
-                                  valBLUDC_OUTPUT_POWER = BLUDC_OUTPUT_POWER;
-                                  errMQTT = (int8_t) mqtt.publish(topBLUDC_OUTPUT_POWER.c_str(), (uint8_t*) valBLUAC_OUTPUT_POWER.c_str(), valBLUAC_OUTPUT_POWER.length());
-                                  soutMQTTerr(valBLUAC_OUTPUT_POWER.c_str(), errMQTT);
-                                      SVAL(topBLUDC_OUTPUT_POWER, valBLUAC_OUTPUT_POWER.c_str());
-                                  BLUAC_OUTPUT_POWERold = BLUAC_OUTPUT_POWER;
-                                }
-                            break;
-                          case DC_OUTPUT_POWER:     // 7
-                              if (BLUDC_OUTPUT_POWER != BLUDC_OUTPUT_POWERold)
-                                {
-                                  valBLUDC_OUTPUT_POWER = BLUDC_OUTPUT_POWER;
-                                  errMQTT = (int8_t) mqtt.publish(topBLUDC_OUTPUT_ON.c_str(), (uint8_t*) valBLUDC_OUTPUT_POWER.c_str(), valBLUDC_OUTPUT_POWER.length());
-                                  soutMQTTerr(valBLUDC_OUTPUT_POWER.c_str(), errMQTT);
-                                      SVAL(topBLUDC_OUTPUT_ON, valBLUDC_OUTPUT_POWER.c_str());
-                                  BLUDC_OUTPUT_POWERold = BLUDC_OUTPUT_POWER;
-                                }
-                            break;
-                          case POWER_GENERATION:    // 8
-                              if (BLUAC_OUTPUT_POWER != BLUAC_OUTPUT_POWERold)
-                                {
-                                    valBLUAC_OUTPUT_POWER = BLUAC_OUTPUT_POWER;
-                                    errMQTT = (int8_t) mqtt.publish(topBLUPOWER_GENERATION.c_str(), (uint8_t*) valBLUAC_OUTPUT_POWER.c_str(), valBLUAC_OUTPUT_POWER.length());
-                                    soutMQTTerr(valBLUAC_OUTPUT_POWER.c_str(), errMQTT);
-                                        SVAL(topBLUPOWER_GENERATION, valBLUAC_OUTPUT_POWER.c_str());
-                                  BLUAC_OUTPUT_POWERold = BLUAC_OUTPUT_POWER;
-                                }
-                            break;
-                          case TOTAL_BATT_PERC:     // 9
-                              if (BLUTOTAL_BATT_PERC != BLUTOTAL_BATT_PERCold)
-                                {
-                                  valBLUTOTAL_BATT_PERC = BLUTOTAL_BATT_PERC;
-                                  errMQTT = (int8_t) mqtt.publish(topBLUTOTAL_BATT_PERC.c_str(), (uint8_t*) valBLUTOTAL_BATT_PERC.c_str(), valBLUTOTAL_BATT_PERC.length());
-                                  soutMQTTerr(valBLUTOTAL_BATT_PERC.c_str(), errMQTT);
-                                      SVAL(topBLUTOTAL_BATT_PERC, valBLUTOTAL_BATT_PERC.c_str());
-                                  BLUTOTAL_BATT_PERCold = BLUTOTAL_BATT_PERC;
-                                }
-                            break;
-                          case AC_OUTPUT_ON:        // 10
-                              if (BLUAC_OUTPUT_POWER != BLUARM_VERSIONold)
-                                {
-                                  valBLUARM_VERSION = BLUARM_VERSIONold;
-                                  errMQTT = (int8_t) mqtt.publish(topBLUAC_OUTPUT_POWER.c_str(), (uint8_t*) valBLUARM_VERSION.c_str(), valBLUARM_VERSION.length());
-                                  soutMQTTerr(valBLUARM_VERSION.c_str(), errMQTT);
-                                      SVAL(topBLUAC_OUTPUT_POWER, valBLUARM_VERSION.c_str());
-                                  BLUARM_VERSIONold = BLUARM_VERSION;
-                                }
-                            break;
-                          case DC_OUTPUT_ON:        // 11
-                              if (BLUAC_OUTPUT_ON != BLUAC_OUTPUT_ONold)
-                                {
-                                  valBLUAC_OUTPUT_ON = BLUAC_OUTPUT_ON;
-                                  errMQTT = (int8_t) mqtt.publish(topBLUAC_OUTPUT_ON.c_str(), (uint8_t*) valBLUAC_OUTPUT_ON.c_str(), valBLUAC_OUTPUT_ON.length());
-                                  soutMQTTerr(valBLUAC_OUTPUT_ON.c_str(), errMQTT);
-                                      SVAL(topBLUAC_OUTPUT_ON, valBLUAC_OUTPUT_ON.c_str());
-                                  BLUAC_OUTPUT_ONold = BLUAC_OUTPUT_ON;
-                                }
-                            break;
-                        // INFO internal
-                          case AC_OUTPUT_MODE:      // 12
-                              if (BLUAC_OUTPUT_MODE != BLUAC_OUTPUT_MODEold)
-                                {
-                                  valBLUAC_OUTPUT_MODE = BLUAC_OUTPUT_MODE;
-                                  errMQTT = (int8_t) mqtt.publish(topBLUAC_OUTPUT_MODE.c_str(), (uint8_t*) valBLUAC_OUTPUT_MODE.c_str(), valBLUAC_OUTPUT_MODE.length());
-                                  soutMQTTerr(valBLUAC_OUTPUT_MODE.c_str(), errMQTT);
-                                      SVAL(topBLUPACK_VOLTAGE, valBLUAC_OUTPUT_MODE.c_str());
-                                  BLUAC_OUTPUT_MODEold = AC_OUTPUT_MODE;
-                                }
-                            break;
-                          case INTERN_AC_VOLT:      // 13
-                              if (BLUINTERN_AC_VOLT != BLUINTERN_AC_VOLTold)
-                                {
-                                  valBLUINTERN_AC_VOLT = BLUINTERN_AC_VOLT;
-                                  errMQTT = (int8_t) mqtt.publish(topBLUINTERN_AC_VOLT.c_str(), (uint8_t*) valBLUINTERN_AC_VOLT.c_str(), valBLUINTERN_AC_VOLT.length());
-                                  soutMQTTerr(valBLUINTERN_AC_VOLT.c_str(), errMQTT);
-                                      SVAL(topBLUINTERN_AC_VOLT, valBLUINTERN_AC_VOLT.c_str());
-                                  BLUINTERN_AC_VOLTold = BLUINTERN_AC_VOLT;
-                                }
-                            break;
-                          case INTERN_CURR_1:       // 14
-                              if (BLUINTERN_CURR_1 != BLUINTERN_CURR_1old)
-                                {
-                                  valBLUINTERN_CURR_1 = BLUINTERN_CURR_1;
-                                  errMQTT = (int8_t) mqtt.publish(topBLUINTERN_CURR_1.c_str(), (uint8_t*) valBLUINTERN_CURR_1.c_str(), valBLUINTERN_CURR_1.length());
-                                  soutMQTTerr(valBLUINTERN_CURR_1.c_str(), errMQTT);
-                                      SVAL(topBLUINTERN_CURR_1, valBLUINTERN_CURR_1.c_str());
-                                  BLUINTERN_CURR_1old = BLUINTERN_CURR_1;
-                                }
-                            break;
-                          case INTERN_POWER_1:  // 15
-                              if (BLUINTERN_POWER_1 != BLUINTERN_POWER_1old)
-                                {
-                                  valBLUINTERN_POWER_1 = BLUINTERN_POWER_1;
-                                  errMQTT = (int8_t) mqtt.publish(topBLUINTERN_POWER_1.c_str(), (uint8_t*) valBLUINTERN_POWER_1.c_str(), valBLUINTERN_POWER_1.length());
-                                  soutMQTTerr(valBLUINTERN_POWER_1.c_str(), errMQTT);
-                                      SVAL(topBLUINTERN_POWER_1, valBLUINTERN_POWER_1.c_str());
-                                  BLUINTERN_POWER_1old = BLUINTERN_POWER_1;
-                                }
-                            break;
-                          case INTERN_AC_FREQ:  // 16
-                              if (BLUINTERN_AC_FREQ != BLUINTERN_AC_FREQold)
-                                {
-                                  valBLUINTERN_AC_FREQ = BLUINTERN_AC_FREQ;
-                                  errMQTT = (int8_t) mqtt.publish(topBLUINTERN_AC_FREQ.c_str(), (uint8_t*) valBLUINTERN_AC_FREQ.c_str(), valBLUINTERN_AC_FREQ.length());
-                                  soutMQTTerr(valBLUINTERN_AC_FREQ.c_str(), errMQTT);
-                                      SVAL(topBLUINTERN_AC_FREQ, valBLUINTERN_AC_FREQ.c_str());
-                                  BLUINTERN_AC_FREQold = BLUINTERN_AC_FREQ;
-                                }
-                            break;
-                          case INTERN_CURR_2:  // 17
-                              if (BLUINTERN_CURR_2 != BLUINTERN_CURR_2old)
-                                {
-                                  valBLUINTERN_CURR_2 = BLUINTERN_CURR_2;
-                                  errMQTT = (int8_t) mqtt.publish(topBLUINTERN_CURR_2.c_str(), (uint8_t*) valBLUINTERN_CURR_2.c_str(), valBLUINTERN_CURR_2.length());
-                                  soutMQTTerr(valBLUINTERN_CURR_2.c_str(), errMQTT);
-                                      SVAL(topBLUINTERN_CURR_2, valBLUINTERN_CURR_2.c_str());
-                                  BLUINTERN_CURR_2old = BLUINTERN_CURR_2;
-                                }
-                            break;
-                          case INTERN_POWER_2:  // 18
-                              if (BLUINTERN_POWER_2 != BLUINTERN_POWER_2old)
-                                {
-                                  valBLUINTERN_POWER_2 = BLUINTERN_POWER_2;
-                                  errMQTT = (int8_t) mqtt.publish(topBLUINTERN_POWER_2.c_str(), (uint8_t*) valBLUINTERN_POWER_2.c_str(), valBLUINTERN_POWER_2.length());
-                                  soutMQTTerr(valBLUINTERN_POWER_2.c_str(), errMQTT);
-                                      SVAL(topBLUINTERN_POWER_2, valBLUINTERN_POWER_2.c_str());
-                                  BLUINTERN_POWER_2old = BLUINTERN_POWER_2;
-                                }
-                            break;
-                          case AC_INPUT_VOLT:  // 19
-                              if (BLUAC_INPUT_VOLT != BLUAC_INPUT_VOLTold)
-                                {
-                                  valBLUAC_INPUT_VOLT = BLUAC_INPUT_VOLT;
-                                  errMQTT = (int8_t) mqtt.publish(topBLUAC_INPUT_VOLT.c_str(), (uint8_t*) valBLUAC_INPUT_VOLT.c_str(), valBLUAC_INPUT_VOLT.length());
-                                  soutMQTTerr(valBLUAC_INPUT_VOLT.c_str(), errMQTT);
-                                      SVAL(topBLUAC_INPUT_VOLT, valBLUAC_INPUT_VOLT.c_str());
-                                  BLUAC_INPUT_VOLTold = BLUAC_INPUT_VOLT;
-                                }
-                            break;
-                          case INTERN_CURR_3:  // 20
-                              if (BLUINTERN_CURR_3 != BLUINTERN_CURR_3old)
-                                {
-                                  valBLUINTERN_CURR_3 = BLUINTERN_CURR_3;
-                                  errMQTT = (int8_t) mqtt.publish(topBLUINTERN_CURR_3.c_str(), (uint8_t*) valBLUINTERN_CURR_3.c_str(), valBLUINTERN_CURR_3.length());
-                                  soutMQTTerr(valBLUINTERN_CURR_3.c_str(), errMQTT);
-                                      SVAL(topBLUINTERN_CURR_3, valBLUINTERN_CURR_3.c_str());
-                                  BLUINTERN_CURR_3old = BLUINTERN_CURR_3;
-                                }
-                            break;
-                          case INTERN_POWER_3:  // 21
-                              if (BLUINTERN_POWER_3 != BLUINTERN_POWER_3old)
-                                {
-                                  valBLUINTERN_POWER_3 = BLUINTERN_POWER_3;
-                                  errMQTT = (int8_t) mqtt.publish(topBLUINTERN_POWER_3.c_str(), (uint8_t*) valBLUINTERN_POWER_3.c_str(), valBLUINTERN_POWER_3.length());
-                                  soutMQTTerr(valBLUINTERN_POWER_3.c_str(), errMQTT);
-                                      SVAL(topBLUINTERN_POWER_3, valBLUINTERN_POWER_3.c_str());
-                                  BLUINTERN_POWER_3old = BLUINTERN_POWER_3;
-                                }
-                            break;
-                          case AC_INPUT_FREQ:  // 22
-                              if (BLUAC_INPUT_FREQ != BLUAC_INPUT_FREQold)
-                                {
-                                  valBLUAC_INPUT_FREQ = BLUAC_INPUT_FREQ;
-                                  errMQTT = (int8_t) mqtt.publish(topBLUAC_INPUT_FREQ.c_str(), (uint8_t*) valBLUAC_INPUT_FREQ.c_str(), valBLUAC_INPUT_FREQ.length());
-                                  soutMQTTerr(valBLUAC_INPUT_FREQ.c_str(), errMQTT);
-                                      SVAL(topBLUAC_INPUT_FREQ, valBLUAC_INPUT_FREQ.c_str());
-                                  BLUAC_INPUT_FREQold = BLUAC_INPUT_FREQ;
-                                }
-                            break;
-                          case INT_DC_INP_VOLT:  // 23
-                              if (BLUINT_DC_INP_VOLT != BLUINT_DC_INP_VOLTold)
-                                {
-                                  valBLUINT_DC_INP_VOLT = BLUINT_DC_INP_VOLT;
-                                  errMQTT = (int8_t) mqtt.publish(topBLUINT_DC_INP_VOLT.c_str(), (uint8_t*) valBLUINT_DC_INP_VOLT.c_str(), valBLUINT_DC_INP_VOLT.length());
-                                  soutMQTTerr(valBLUINT_DC_INP_VOLT.c_str(), errMQTT);
-                                      SVAL(topBLUINT_DC_INP_VOLT, valBLUINT_DC_INP_VOLT.c_str());
-                                  BLUINT_DC_INP_VOLTold = BLUINT_DC_INP_VOLT;
-                                }
-                            break;
-                          case INT_DC_INP_POW:  // 24
-                              if (BLUINT_DC_INP_POW != BLUINT_DC_INP_POWold)
-                                {
-                                  valBLUINT_DC_INP_POW = BLUINT_DC_INP_POW;
-                                  errMQTT = (int8_t) mqtt.publish(topBLUINT_DC_INP_POW.c_str(), (uint8_t*) valBLUINT_DC_INP_POW.c_str(), valBLUINT_DC_INP_POW.length());
-                                  soutMQTTerr(valBLUINT_DC_INP_POW.c_str(), errMQTT);
-                                      SVAL(topBLUINT_DC_INP_POW, valBLUINT_DC_INP_POW.c_str());
-                                  BLUINT_DC_INP_POWold = BLUINT_DC_INP_POW;
-                                }
-                            break;
-                          case INT_DC_INP_CURR:  // 25
-                              if (BLUINT_DC_INP_CURR != BLUINT_DC_INP_CURRold)
-                                {
-                                  valBLUINT_DC_INP_CURR = BLUINT_DC_INP_CURR;
-                                  errMQTT = (int8_t) mqtt.publish(topBLUINT_DC_INP_CURR.c_str(), (uint8_t*) valBLUINT_DC_INP_CURR.c_str(), valBLUINT_DC_INP_CURR.length());
-                                  soutMQTTerr(valBLUINT_DC_INP_CURR.c_str(), errMQTT);
-                                      SVAL(topBLUINT_DC_INP_CURR, valBLUINT_DC_INP_CURR.c_str());
-                                  BLUINT_DC_INP_CURRold = BLUINT_DC_INP_CURR;
-                                }
-                            break;
-                          case PACK_NUM_MAX:  // 26
-                              if (BLUPACK_NUM_MAX != BLUPACK_NUM_MAXold)
-                                {
-                                  valBLUPACK_NUM_MAX = BLUPACK_NUM_MAX;
-                                  errMQTT = (int8_t) mqtt.publish(topBLUPACK_NUM_MAX.c_str(), (uint8_t*) valBLUPACK_NUM_MAX.c_str(), valBLUPACK_NUM_MAX.length());
-                                  soutMQTTerr(valBLUPACK_NUM_MAX.c_str(), errMQTT);
-                                      SVAL(topBLUPACK_NUM_MAX, valBLUPACK_NUM_MAX.c_str());
-                                  BLUPACK_NUM_MAXold = BLUPACK_NUM_MAX;
-                                }
-                            break;
-                          case TOTAL_BATT_VOLT:  // 27
-                              if (BLUTOTAL_BATT_VOLT != BLUTOTAL_BATT_VOLTold)
-                                {
-                                  valBLUTOTAL_BATT_VOLT = BLUTOTAL_BATT_VOLT;
-                                  errMQTT = (int8_t) mqtt.publish(topBLUTOTAL_BATT_VOLT.c_str(), (uint8_t*) valBLUTOTAL_BATT_VOLT.c_str(), valBLUTOTAL_BATT_VOLT.length());
-                                  soutMQTTerr(valBLUTOTAL_BATT_VOLT.c_str(), errMQTT);
-                                      SVAL(topBLUTOTAL_BATT_VOLT, valBLUTOTAL_BATT_VOLT.c_str());
-                                  BLUTOTAL_BATT_VOLTold = BLUTOTAL_BATT_VOLT;
-                                }
-                            break;
-                          case TOTAL_BATT_CURR:  // 28
-                              if (BLUTOTAL_BATT_CURR != BLUTOTAL_BATT_CURRold)
-                                {
-                                  valBLUTOTAL_BATT_CURR = BLUTOTAL_BATT_CURR;
-                                  errMQTT = (int8_t) mqtt.publish(topBLUTOTAL_BATT_CURR.c_str(), (uint8_t*) valBLUTOTAL_BATT_CURR.c_str(), valBLUTOTAL_BATT_CURR.length());
-                                  soutMQTTerr(valBLUTOTAL_BATT_CURR.c_str(), errMQTT);
-                                      SVAL(topBLUTOTAL_BATT_CURR, valBLUTOTAL_BATT_CURR.c_str());
-                                  BLUTOTAL_BATT_CURRold = BLUTOTAL_BATT_CURR;
-                                }
-                            break;
-                          case PACK_NUM:  // 29
-                              if (BLUPACK_NUM != BLUPACK_NUMold)
-                                {
-                                  valBLUPACK_NUM = BLUPACK_NUM;
-                                  errMQTT = (int8_t) mqtt.publish(topBLUPACK_NUM.c_str(), (uint8_t*) valBLUPACK_NUM.c_str(), valBLUPACK_NUM.length());
-                                  soutMQTTerr(valBLUPACK_NUM.c_str(), errMQTT);
-                                      SVAL(topBLUPACK_NUM, valBLUPACK_NUM.c_str());
-                                  BLUPACK_NUMold = BLUPACK_NUM;
-                                }
-                            break;
-                          case PACK_STATUS:  // 30
-                              if (BLUPACK_STATUS != BLUPACK_STATUSold)
-                                {
-                                  valBLUPACK_STATUS = BLUPACK_STATUS;
-                                  errMQTT = (int8_t) mqtt.publish(topBLUPACK_STATUS.c_str(), (uint8_t*) valBLUPACK_STATUS.c_str(), valBLUPACK_STATUS.length());
-                                  soutMQTTerr(valBLUPACK_STATUS.c_str(), errMQTT);
-                                      SVAL(topBLUPACK_STATUS, valBLUPACK_STATUS.c_str());
-                                  BLUPACK_STATUSold = BLUPACK_STATUS;
-                                }
-                            break;
-                          case PACK_VOLTAGE:  // 31
-                              if (BLUPACK_VOLTAGE != BLUPACK_VOLTAGEold)
-                                {
-                                  valBLUPACK_VOLTAGE = BLUPACK_VOLTAGE;
-                                  errMQTT = (int8_t) mqtt.publish(topBLUPACK_VOLTAGE.c_str(), (uint8_t*) valBLUPACK_VOLTAGE.c_str(), valBLUPACK_VOLTAGE.length());
-                                  soutMQTTerr(valBLUPACK_VOLTAGE.c_str(), errMQTT);
-                                      SVAL(topBLUPACK_VOLTAGE, valBLUPACK_VOLTAGE.c_str());
-                                  BLUPACK_VOLTAGEold = BLUPACK_VOLTAGE;
-                                }
-                            break;
-                          case PACK_BATT_PERC:  // 32
-                              if (BLUPACK_BATT_PERC != BLUPACK_BATT_PERCold)
-                                {
-                                  valBLUPACK_BATT_PERC = BLUPACK_BATT_PERC;
-                                  errMQTT = (int8_t) mqtt.publish(topBLUPACK_BATT_PERC.c_str(), (uint8_t*) valBLUPACK_BATT_PERC.c_str(), valBLUPACK_BATT_PERC.length());
-                                  soutMQTTerr(valBLUPACK_BATT_PERC.c_str(), errMQTT);
-                                      SVAL(topBLUPACK_BATT_PERC, valBLUPACK_BATT_PERC.c_str());
-                                  BLUPACK_BATT_PERCold = BLUPACK_BATT_PERC;
-                                }
-                            break;
-                          //case CELL_VOTAGES // 33
-                              /*
-                                if (BLUCELL_VOTAGES != BLUCELL_VOTAGESold)
-                                  {
-                                    valBLUCELL_VOTAGES = BLUCELL_VOTAGES;
-                                    errMQTT = (int8_t) mqtt.publish(topBLUCELL_VOTAGES.c_str(), (uint8_t*) valBLUCELL_VOTAGES.c_str(), valBLUCELL_VOTAGES.length());
-                                    soutMQTTerr(valBLUCELL_VOTAGES.c_str(), errMQTT);
-                                        SVAL(topBLUCELL_VOTAGES, valBLUCELL_VOTAGES.c_str());
-                                    BLUCELL_VOTAGESold = BLUCELL_VOTAGES;
-                                  }
-                                break;
-                               */
-                          case PACK_BMS_VERSION:  // 34
-                              if (BLUPACK_BMS_VERSION != BLUPACK_BMS_VERSIONold)
-                                {
-                                  valBLUPACK_BMS_VERSION = BLUPACK_BMS_VERSION;
-                                  errMQTT = (int8_t) mqtt.publish(topBLUPACK_BMS_VERSION.c_str(), (uint8_t*) valBLUPACK_BMS_VERSION.c_str(), valBLUPACK_BMS_VERSION.length());
-                                  soutMQTTerr(valBLUPACK_BMS_VERSION.c_str(), errMQTT);
-                                      SVAL(topBLUPACK_BMS_VERSION, valBLUPACK_BMS_VERSION.c_str());
-                                  BLUPACK_BMS_VERSIONold = BLUPACK_BMS_VERSION;
-                                }
-                            break;
-                        // CONTROL elements
-                          case UPS_MODE:  // 35
-                              if (BLUUPS_MODE != BLUUPS_MODEold)
-                                {
-                                  valBLUUPS_MODE = BLUUPS_MODE;
-                                  errMQTT = (int8_t) mqtt.publish(topBLUUPS_MODE.c_str(), (uint8_t*) valBLUUPS_MODE.c_str(), valBLUUPS_MODE.length());
-                                  soutMQTTerr(valBLUUPS_MODE.c_str(), errMQTT);
-                                      SVAL(topBLUUPS_MODE, valBLUUPS_MODE.c_str());
-                                  BLUUPS_MODEold = BLUUPS_MODE;
-                                }
-                            break;
-                          case SPLIT_PHASE_ON:  // 36
-                              if (BLUSPLIT_PHASE_ON != BLUSPLIT_PHASE_ONold)
-                                {
-                                  valBLUSPLIT_PHASE_ON = BLUSPLIT_PHASE_ON;
-                                  errMQTT = (int8_t) mqtt.publish(topBLUSPLIT_PHASE_ON.c_str(), (uint8_t*) valBLUSPLIT_PHASE_ON.c_str(), valBLUSPLIT_PHASE_ON.length());
-                                  soutMQTTerr(valBLUSPLIT_PHASE_ON.c_str(), errMQTT);
-                                      SVAL(topBLUSPLIT_PHASE_ON, valBLUSPLIT_PHASE_ON.c_str());
-                                  BLUSPLIT_PHASE_ONold = BLUSPLIT_PHASE_ON;
-                                }
-                            break;
-                          case SPLIT_PH_MACH_MODE:  // 37
-                              if (BLUSPLIT_PH_MACH_MODE != BLUSPLIT_PH_MACH_MODEold)
-                                {
-                                  valBLUSPLIT_PH_MACH_MODE = BLUSPLIT_PH_MACH_MODE;
-                                  errMQTT = (int8_t) mqtt.publish(topBLUSPLIT_PH_MACH_MODE.c_str(), (uint8_t*) valBLUSPLIT_PH_MACH_MODE.c_str(), valBLUSPLIT_PH_MACH_MODE.length());
-                                  soutMQTTerr(valBLUSPLIT_PH_MACH_MODE.c_str(), errMQTT);
-                                      SVAL(topBLUSPLIT_PH_MACH_MODE, valBLUSPLIT_PH_MACH_MODE.c_str());
-                                  BLUSPLIT_PH_MACH_MODEold = BLUSPLIT_PH_MACH_MODE;
-                                }
-                            break;
-                          case SET_PACK_NUM:  // 38
-                              if (BLUSET_PACK_NUM != BLUSET_PACK_NUMold)
-                                {
-                                  valBLUSET_PACK_NUM = BLUSET_PACK_NUM;
-                                  errMQTT = (int8_t) mqtt.publish(topBLUSET_PACK_NUM.c_str(), (uint8_t*) valBLUSET_PACK_NUM.c_str(), valBLUSET_PACK_NUM.length());
-                                  soutMQTTerr(valBLUSET_PACK_NUM.c_str(), errMQTT);
-                                      SVAL(topBLUSET_PACK_NUM, valBLUSET_PACK_NUM.c_str());
-                                  BLUSET_PACK_NUMold = BLUSET_PACK_NUM;
-                                }
-                            break;
-                          case SET_AC_OUT_ON:  // 39
-                              if (BLUSET_AC_OUT_ON != BLUSET_AC_OUT_ONold)
-                                {
-                                  valBLUSET_AC_OUT_ON = BLUSET_AC_OUT_ON;
-                                  errMQTT = (int8_t) mqtt.publish(topBLUSET_AC_OUT_ON.c_str(), (uint8_t*) valBLUSET_AC_OUT_ON.c_str(), valBLUSET_AC_OUT_ON.length());
-                                  soutMQTTerr(valBLUSET_AC_OUT_ON.c_str(), errMQTT);
-                                      SVAL(topBLUSET_AC_OUT_ON, valBLUSET_AC_OUT_ON.c_str());
-                                  BLUSET_AC_OUT_ONold = BLUSET_AC_OUT_ON;
-                                }
-                            break;
-                          case SET_DC_OUT_ON:  // 40
-                              if (BLUSET_DC_OUT_ON != BLUSET_DC_OUT_ONold)
-                                {
-                                  valBLUSET_DC_OUT_ON = BLUSET_DC_OUT_ON;
-                                  errMQTT = (int8_t) mqtt.publish(topBLUSET_DC_OUT_ON.c_str(), (uint8_t*) valBLUSET_DC_OUT_ON.c_str(), valBLUSET_DC_OUT_ON.length());
-                                  soutMQTTerr(valBLUSET_DC_OUT_ON.c_str(), errMQTT);
-                                      SVAL(topBLUSET_DC_OUT_ON, valBLUSET_DC_OUT_ON.c_str());
-                                  BLUSET_DC_OUT_ONold = BLUSET_DC_OUT_ON;
-                                }
-                            break;
-                          case GRID_CHANGE_ON:  // 41
-                              if (BLUGRID_CHANGE_ON != BLUGRID_CHANGE_ONold)
-                                {
-                                  valBLUGRID_CHANGE_ON = BLUGRID_CHANGE_ON;
-                                  errMQTT = (int8_t) mqtt.publish(topBLUGRID_CHANGE_ON.c_str(), (uint8_t*) valBLUGRID_CHANGE_ON.c_str(), valBLUGRID_CHANGE_ON.length());
-                                  soutMQTTerr(valBLUDC_OUTPUT_POWER.c_str(), errMQTT);
-                                      SVAL(topBLUGRID_CHANGE_ON, valBLUGRID_CHANGE_ON.c_str());
-                                  BLUGRID_CHANGE_ONold = BLUGRID_CHANGE_ON;
-                                }
-                            break;
-                          case TIME_CTRL_ON:  // 42
-                              if (BLUTIME_CTRL_ON != BLUTIME_CTRL_ONold)
-                                {
-                                  valBLUTIME_CTRL_ON = BLUTIME_CTRL_ON;
-                                  errMQTT = (int8_t) mqtt.publish(topBLUTIME_CTRL_ON.c_str(), (uint8_t*) valBLUTIME_CTRL_ON.c_str(), valBLUTIME_CTRL_ON.length());
-                                  soutMQTTerr(valBLUTIME_CTRL_ON.c_str(), errMQTT);
-                                      SVAL(topBLUTIME_CTRL_ON, valBLUTIME_CTRL_ON.c_str());
-                                  BLUTIME_CTRL_ONold = BLUTIME_CTRL_ON;
-                                }
-                            break;
-                          case BATT_RANGE_START:  // 43
-                              if (BLUBATT_RANGE_START != BLUBATT_RANGE_STARTold)
-                                {
-                                  valBLUBATT_RANGE_START = BLUBATT_RANGE_START;
-                                  errMQTT = (int8_t) mqtt.publish(topBLUBATT_RANGE_START.c_str(), (uint8_t*) valBLUBATT_RANGE_START.c_str(), valBLUBATT_RANGE_START.length());
-                                  soutMQTTerr(valBLUBATT_RANGE_START.c_str(), errMQTT);
-                                      SVAL(topBLUBATT_RANGE_START, valBLUBATT_RANGE_START.c_str());
-                                  BLUBATT_RANGE_STARTold = BLUBATT_RANGE_START;
-                                }
-                            break;
-                          case BATT_RANGE_END:  // 44
-                              if (BLUBATT_RANGE_END != BLUBATT_RANGE_ENDold)
-                                {
-                                  valBLUBATT_RANGE_END = BLUBATT_RANGE_END;
-                                  errMQTT = (int8_t) mqtt.publish(topBLUBATT_RANGE_END.c_str(), (uint8_t*) valBLUBATT_RANGE_END.c_str(), valBLUBATT_RANGE_END.length());
-                                  soutMQTTerr(valBLUBATT_RANGE_END.c_str(), errMQTT);
-                                      SVAL(topBLUBATT_RANGE_END, valBLUBATT_RANGE_END.c_str());
-                                  BLUBATT_RANGE_ENDold = BLUBATT_RANGE_END;
-                                }
-                            break;
-                          case BLUETOOTH_CONN:  // 45
-                              if (BLUBLUETOOTH_CONN != BLUBLUETOOTH_CONNold)
-                                {
-                                  valBLUBLUETOOTH_CONN = BLUBLUETOOTH_CONN;
-                                  errMQTT = (int8_t) mqtt.publish(topBLUBLUETOOTH_CONN.c_str(), (uint8_t*) valBLUBLUETOOTH_CONN.c_str(), valBLUBLUETOOTH_CONN.length());
-                                  soutMQTTerr(valBLUBLUETOOTH_CONN.c_str(), errMQTT);
-                                      SVAL(topBLUBLUETOOTH_CONN, valBLUBLUETOOTH_CONN.c_str());
-                                  BLUBLUETOOTH_CONNold = BLUBLUETOOTH_CONN;
-                                }
-                            break;
-                          case AUTO_SLEEP_MODE:  // 46
-                              if (BLUAUTO_SLEEP_MODE != BLUAUTO_SLEEP_MODEold)
-                                {
-                                  valBLUAUTO_SLEEP_MODE = BLUAUTO_SLEEP_MODE;
-                                  errMQTT = (int8_t) mqtt.publish(topBLUAUTO_SLEEP_MODE.c_str(), (uint8_t*) valBLUAUTO_SLEEP_MODE.c_str(), valBLUAUTO_SLEEP_MODE.length());
-                                  soutMQTTerr(valBLUAUTO_SLEEP_MODE.c_str(), errMQTT);
-                                      SVAL(topBLUAUTO_SLEEP_MODE, valBLUAUTO_SLEEP_MODE.c_str());
-                                  BLUAUTO_SLEEP_MODEold = BLUAUTO_SLEEP_MODE;
-                                }
-                            break;
-                          case LED_CONTROL:  // 47
-                              if (BLULED_CONTROL != BLULED_CONTROLold)
-                                {
-                                  valBLULED_CONTROL = BLULED_CONTROL;
-                                  errMQTT = (int8_t) mqtt.publish(topBLULED_CONTROL.c_str(), (uint8_t*) valBLULED_CONTROL.c_str(), valBLULED_CONTROL.length());
-                                  soutMQTTerr(valBLULED_CONTROL.c_str(), errMQTT);
-                                      SVAL(topBLULED_CONTROL, valBLULED_CONTROL.c_str());
-                                  BLULED_CONTROLold = BLULED_CONTROL;
-                                }
-                            break;
-                          case FIELD_UNDEFINED:  // 48
-                              if (BLUFIELD_UNDEFINED != BLUFIELD_UNDEFINEDold)
-                                {
-                                  valBLUFIELD_UNDEFINED = BLUFIELD_UNDEFINED;
-                                  errMQTT = (int8_t) mqtt.publish(topBLUFIELD_UNDEFINED.c_str(), (uint8_t*) valBLUFIELD_UNDEFINED.c_str(), valBLUFIELD_UNDEFINED.length());
-                                  soutMQTTerr(valBLUFIELD_UNDEFINED.c_str(), errMQTT);
-                                      SVAL(topBLUFIELD_UNDEFINED, valBLUFIELD_UNDEFINED.c_str());
-                                  BLUFIELD_UNDEFINEDold = BLUFIELD_UNDEFINED;
-                                }
-                            break;
-                          default:
-                            break;
+                        switch(outpIdx)
+                          {
+                            // INFO device offset sort
+                              case DEVICE_TYPE:         valBLU[outpIdx] = BLUDEVICE_TYPE;       break;
+                              case SERIAL_NUMBER:       valBLU[outpIdx] = BLUSERIAL_NUMBER;     break;
+                              case ARM_VERSION:         valBLU[outpIdx] = BLUARM_VERSION;       break;
+                              case DSP_VERSION:         valBLU[outpIdx] = BLUDSP_VERSION;       break;
+                              case DC_INPUT_POWER:      valBLU[outpIdx] = BLUDC_INPUT_POWER;    break;
+                              case AC_INPUT_POWER:      valBLU[outpIdx] = BLUAC_INPUT_POWER;    break;
+                              case AC_OUTPUT_POWER:     valBLU[outpIdx] = BLUAC_OUTPUT_POWER;   break;
+                              case DC_OUTPUT_POWER:     valBLU[outpIdx] = BLUDC_OUTPUT_POWER;   break;
+                              case POWER_GENERATION:    valBLU[outpIdx] = BLUPOWER_GENERATION;  break;
+                              case TOTAL_BATT_PERC:     valBLU[outpIdx] = BLUTOTAL_BATT_PERC;   break;
+                              case AC_OUTPUT_ON:        valBLU[outpIdx] = BLUAC_OUTPUT_ON;      break;
+                              case DC_OUTPUT_ON:        valBLU[outpIdx] = BLUDC_OUTPUT_ON;      break;
+                            // INFO internal
+                              case AC_OUTPUT_MODE:      valBLU[outpIdx] = BLUAC_OUTPUT_MODE;    break;
+                              case INTERN_AC_VOLT:      valBLU[outpIdx] = BLUINTERN_AC_VOLT;    break;
+                              case INTERN_CURR_1:       valBLU[outpIdx] = BLUINTERN_CURR_1;     break;
+                              case INTERN_POWER_1:      valBLU[outpIdx] = BLUINTERN_POWER_1;    break;
+                              case INTERN_AC_FREQ:      valBLU[outpIdx] = BLUINTERN_AC_FREQ;    break;
+                              case INTERN_CURR_2:       valBLU[outpIdx] = BLUINTERN_CURR_2;     break;
+                              case INTERN_POWER_2:      valBLU[outpIdx] = BLUINTERN_POWER_2;    break;
+                              case AC_INPUT_VOLT:       valBLU[outpIdx] = BLUAC_INPUT_VOLT;     break;
+                              case INTERN_CURR_3:       valBLU[outpIdx] = BLUINTERN_CURR_3;     break;
+                              case INTERN_POWER_3:      valBLU[outpIdx] = BLUINTERN_POWER_3;    break;
+                              case AC_INPUT_FREQ:       valBLU[outpIdx] = BLUAC_INPUT_FREQ;     break;
+                              case INT_DC_INP_VOLT:     valBLU[outpIdx] = BLUINT_DC_INP_VOLT;   break;
+                              case INT_DC_INP_POW:      valBLU[outpIdx] = BLUINT_DC_INP_POW;    break;
+                              case INT_DC_INP_CURR:     valBLU[outpIdx] = BLUINT_DC_INP_CURR;   break;
+                              case PACK_NUM_MAX:        valBLU[outpIdx] = BLUPACK_NUM_MAX;      break;
+                              case TOTAL_BATT_VOLT:     valBLU[outpIdx] = BLUTOTAL_BATT_VOLT;   break;
+                              case TOTAL_BATT_CURR:     valBLU[outpIdx] = BLUTOTAL_BATT_CURR;   break;
+                              case PACK_NUM:            valBLU[outpIdx] = BLUPACK_NUM;          break;
+                              case PACK_STATUS:         valBLU[outpIdx] = BLUPACK_STATUS;       break;
+                              case PACK_VOLTAGE:        valBLU[outpIdx] = BLUPACK_VOLTAGE;      break;
+                              case PACK_BATT_PERC:      valBLU[outpIdx] = BLUPACK_BATT_PERC;    break;
+                              //case CELL_VOTAGES:      valBLU[outpIdx] = BLUCELL_VOTAGES; break;
+                              case PACK_BMS_VERSION:    valBLU[outpIdx] = BLUPACK_BMS_VERSION;  break;
+                            // CONTROL elements
+                              case UPS_MODE:            valBLU[outpIdx] = BLUUPS_MODE;          break;
+                              case SPLIT_PHASE_ON:      valBLU[outpIdx] = BLUSPLIT_PHASE_ON;    break;
+                              case SPLIT_PH_MACH_MODE:  valBLU[outpIdx] = BLUSPLIT_PH_MACH_MODE;break;
+                              case SET_PACK_NUM:        valBLU[outpIdx] = BLUSET_PACK_NUM;      break;
+                              case SET_AC_OUT_ON:       valBLU[outpIdx] = BLUSET_AC_OUT_ON;     break;
+                              case SET_DC_OUT_ON:       valBLU[outpIdx] = BLUSET_DC_OUT_ON;     break;
+                              case GRID_CHANGE_ON:      valBLU[outpIdx] = BLUGRID_CHANGE_ON;    break;
+                              case TIME_CTRL_ON:        valBLU[outpIdx] = BLUTIME_CTRL_ON;      break;
+                              case BATT_RANGE_START:    valBLU[outpIdx] = BLUBATT_RANGE_START;  break;
+                              case BATT_RANGE_END:      valBLU[outpIdx] = BLUBATT_RANGE_END;    break;
+                              case BLUETOOTH_CONN:      valBLU[outpIdx] = BLUBLUETOOTH_CONN;    break;
+                              case AUTO_SLEEP_MODE:     valBLU[outpIdx] = BLUAUTO_SLEEP_MODE;   break;
+                              case LED_CONTROL:         valBLU[outpIdx] = BLULED_CONTROL;       break;
+                              case FIELD_UNDEFINED:     valBLU[outpIdx] = BLUFIELD_UNDEFINED;   break;
+                              default:   break;
+                          }
+                        errMQTT = (int8_t) mqtt.publish(topBLU[outpIdx].c_str(), (uint8_t*) valBLU[outpIdx].c_str(), valBLU[outpIdx].length());
+                        soutMQTTerr(valBLU[outpIdx].c_str(), errMQTT);
+                        pbluetti_dev_state[outpIdx].f_new = FALSE;
+                        S2VAL(" publish ", topBLU[outpIdx], valBLU[outpIdx].c_str());
                       }
                     outpIdx++;
                     if (outpIdx >= FIELD_IDX_MAX)
                       { outpIdx  = 0; }
-
                   }
               }
           #endif
@@ -1245,361 +805,167 @@
 
           void connectMQTT() // TODO: move all subcribes to here -> reconnect
             {
+              char cout[50] = "";
               SVAL(" MQTT connect... errMQTT", errMQTT);
               errMQTT = (int8_t) mqtt.connectTo(MQTT_HOST, MQTT_PORT);
               soutMQTTerr(" MQTT connect", errMQTT);
               if (errMQTT == MD_OK)
                 {
                   #if (BLUETTI_TYPE == BLUETTI_AC300)
-                      // INFO device offset sort
-                        // DEVICE_TYPE
-                          pbluetti_dev_state[DEVICE_TYPE].p_f_value = (void*) &BLUDEVICE_TYPE;
-                          topBLUDEVICE_TYPE = topDevice + topBLUDEVICE_TYPE;
-                          errMQTT = (int8_t) mqtt.subscribe(topBLUDEVICE_TYPE.c_str());
-                              soutMQTTerr(" MQTT subscribe MQTT_BLU_DEV_TYPE", errMQTT);
-                          //    S3HEXVAL(" MQTT subscribe MQTT_BLU_DEV_TYPE", errMQTT, (uint32_t) &BLUDEVICE_TYPE, (uint32_t) &(pbluetti_dev_state[DEVICE_TYPE]).p_f_value);
-
-                        // SERIAL_NUMBER
-                          pbluetti_dev_state[SERIAL_NUMBER].p_f_value = (void*) &BLUSERIAL_NUMBER;
-                          topBLUSERIAL_NUMBER = topDevice + topBLUSERIAL_NUMBER;
-                          errMQTT = (int8_t) mqtt.subscribe(topBLUSERIAL_NUMBER.c_str());
-                              soutMQTTerr(" MQTT subscribe MQTT_BLU_SER_NUM", errMQTT);
-                          //    S3HEXVAL(" MQTT subscribe MQTT_BLU_SER_NUM", errMQTT, (uint32_t) &BLUSERIAL_NUMBER, (uint32_t) &(pbluetti_dev_state[SERIAL_NUMBER]).p_f_value);
-
-                        // ARM_VERSION
-                          pbluetti_dev_state[ARM_VERSION].p_f_value = (void*) &BLUARM_VERSION;
-                          topBLUARM_VERSION = topDevice + topBLUARM_VERSION;
-                          errMQTT = (int8_t) mqtt.subscribe(topBLUARM_VERSION.c_str());
-                              soutMQTTerr(" MQTT subscribe MQTT_BLU_ARM_VERS", errMQTT);
-                          //    S3HEXVAL(" MQTT subscribe MQTT_BLU_ARM_VERS", errMQTT, (uint32_t) &BLUARM_VERSION, (uint32_t) &(pbluetti_dev_state[ARM_VERSION]).p_f_value);
-
-                        // DSP_VERSION
-                          pbluetti_dev_state[DSP_VERSION].p_f_value = (void*) &BLUDSP_VERSION;
-                          topBLUDSP_VERSION = topDevice + topBLUDSP_VERSION;
-                          errMQTT = (int8_t) mqtt.subscribe(topBLUDSP_VERSION.c_str());
-                              soutMQTTerr(" MQTT subscribe MQTT_BLU_DSP_VERS", errMQTT);
-                          //    S3HEXVAL(" MQTT subscribe MQTT_BLU_DSP_VERS", errMQTT, (uint32_t) &BLUDSP_VERSION, (uint32_t) &(pbluetti_dev_state[DSP_VERSION]).p_f_value);
-
-                        // DC_INPUT_POWER
-                          pbluetti_dev_state[DC_INPUT_POWER].p_f_value = (void*) &BLUDC_INPUT_POWER;
-                          topBLUDC_INPUT_POWER = topDevice + topBLUDC_INPUT_POWER;
-                          errMQTT = (int8_t) mqtt.subscribe(topBLUDC_INPUT_POWER.c_str());
-                              soutMQTTerr(" MQTT subscribe MQTT_BLU_DCIN_POW", errMQTT);
-                          //    S3HEXVAL(" MQTT subscribe MQTT_BLU_DCIN_POW", errMQTT, (uint32_t) &BLUDC_INPUT_POWER, (uint32_t) &(pbluetti_dev_state[DC_INPUT_POWER]).p_f_value);
-
-                        // AC_INPUT_POWER
-                          pbluetti_dev_state[AC_INPUT_POWER].p_f_value = (void*) &BLUAC_INPUT_POWER;
-                          topBLUAC_INPUT_POWER = topDevice + topBLUAC_INPUT_POWER;
-                          errMQTT = (int8_t) mqtt.subscribe(topBLUAC_INPUT_POWER.c_str());
-                              soutMQTTerr(" MQTT subscribe MQTT_BLU_ACIN_POW", errMQTT);
-                              S3HEXVAL(" MQTT subscribe MQTT_BLU_ACIN_POW", errMQTT, (uint32_t) &BLUAC_INPUT_POWER, (uint32_t) &(pbluetti_dev_state[AC_INPUT_POWER]).p_f_value);
-
-                        // AC_OUTPUT_POWER
-                          (pbluetti_dev_state[AC_OUTPUT_POWER]).p_f_value = (void*) &BLUAC_OUTPUT_POWER;
-                          topBLUDC_OUTPUT_POWER = topDevice + topBLUDC_OUTPUT_POWER;
-                          errMQTT = (int8_t) mqtt.subscribe(topBLUDC_OUTPUT_POWER.c_str());
-                              soutMQTTerr(" MQTT subscribe MQTT_BLU_ACOUT_POW", errMQTT);
-                              //S3HEXVAL(" MQTT subscribe MQTT_BLU_ACOUT_POW", errMQTT, (uint32_t) &BLUAC_OUTPUT_POWER, (uint32_t) &(pbluetti_dev_state[AC_OUTPUT_POWER]).p_f_value);
-
-                        // DC_OUTPUT_POWER
-                          //S4HEXVAL(" conn MQTT idx pblu pblu[idx] size ", DC_OUTPUT_POWER, (uint32_t) pbluetti_dev_state,
-                          //                                              (uint32_t) &(pbluetti_dev_state[DC_OUTPUT_POWER]), sizeof(device_field_data_t) );
-                          pbluetti_dev_state[DC_OUTPUT_POWER].p_f_value = (void*) &BLUDC_OUTPUT_POWER;
-                          topBLUDC_OUTPUT_ON = topDevice + topBLUDC_OUTPUT_ON;
-                          errMQTT = (int8_t) mqtt.subscribe(topBLUDC_OUTPUT_ON.c_str());
-                              soutMQTTerr(" MQTT subscribe MQTT_BLU_DCOUT_POW", errMQTT);
-                              //S3HEXVAL(" MQTT subscribe MQTT_BLU_DCOUT_POW", DC_OUTPUT_POWER, (uint32_t) &BLUDC_OUTPUT_POWER, (uint32_t) &(pbluetti_dev_state[DC_OUTPUT_POWER].p_f_value));
-
-                        // POWER_GENERATION
-                          pbluetti_dev_state[POWER_GENERATION].p_f_value = (void*) &BLUAC_OUTPUT_POWER;
-                          topBLUPOWER_GENERATION = topDevice + topBLUPOWER_GENERATION;
-                          errMQTT = (int8_t) mqtt.subscribe(topBLUPOWER_GENERATION.c_str());
-                              soutMQTTerr(" MQTT subscribe MQTT_BLU_POWER_GENERATION", errMQTT);
-                          //    S3HEXVAL(" MQTT subscribe MQTT_BLU_POWER_GENERATION", errMQTT, (uint32_t) &BLUPOWER_GENERATION, (uint32_t) &(pbluetti_dev_state[POWER_GENERATION]).p_f_value);
-
-                        // TOTAL_BATT_PERC
-                          pbluetti_dev_state[TOTAL_BATT_PERC].p_f_value = (void*) &BLUTOTAL_BATT_PERC;
-                          topBLUTOTAL_BATT_PERC = topDevice + topBLUTOTAL_BATT_PERC;
-                          errMQTT = (int8_t) mqtt.subscribe(topBLUTOTAL_BATT_PERC.c_str());
-                              soutMQTTerr(" MQTT subscribe MQTT_BLU_TOTAL_BATT_PERC", errMQTT);
-                          //    S3HEXVAL(" MQTT subscribe MQTT_BLU_TOTAL_BATT_PERC", errMQTT, (uint32_t) &BLUTOTAL_BATT_PERC, (uint32_t) &(pbluetti_dev_state[TOTAL_BATT_PERC]).p_f_value);
-
-                        // AC_OUTPUT_ON
-                          //S4HEXVAL(" conn MQTT idx pblu pblu[idx] size ", AC_OUTPUT_ON, (uint32_t) pbluetti_dev_state,
-                          //                                              (uint32_t) &(pbluetti_dev_state[AC_OUTPUT_ON]), sizeof(device_field_data_t) );
-                          pbluetti_dev_state[AC_OUTPUT_ON].p_f_value = (void*) &BLUARM_VERSION;
-                          topBLUAC_OUTPUT_POWER = topDevice + topBLUAC_OUTPUT_POWER;
-                          errMQTT = (int8_t) mqtt.subscribe(topBLUAC_OUTPUT_POWER.c_str());
-                              soutMQTTerr(" MQTT subscribe MQTT_BLU_AC_OUTPUT_ON", errMQTT);
-                          //    S3HEXVAL(" MQTT subscribe MQTT_BLU_AC_OUTPUT_ON", errMQTT, (uint32_t) &BLUAC_OUTPUT_ON, (uint32_t) &(pbluetti_dev_state[AC_OUTPUT_ON]).p_f_value);
-
-                        // DC_OUTPUT_ON
-                          pbluetti_dev_state[DC_OUTPUT_ON].p_f_value = (void*) &BLUDC_OUTPUT_ON;
-                          topBLUDC_OUTPUT_ON = topDevice + topBLUDC_OUTPUT_ON;
-                          errMQTT = (int8_t) mqtt.subscribe(topBLUDC_OUTPUT_ON.c_str());
-                              soutMQTTerr(" MQTT subscribe MQTT_BLU_DC_OUTPUT_ON", errMQTT);
-                              //S3HEXVAL(" MQTT subscribe MQTT_BLU_DC_OUTPUT_ON", DC_OUTPUT_ON, (uint32_t) &BLUDC_OUTPUT_ON, (uint32_t) &(pbluetti_dev_state[DC_OUTPUT_ON]).p_f_value);
-
-                      // INFO internal
-                        // AC_OUTPUT_MODE
-                          pbluetti_dev_state[AC_OUTPUT_MODE].p_f_value = (void*) &BLUAC_OUTPUT_MODE;
-                          topBLUAC_OUTPUT_MODE = topDevice + topBLUAC_OUTPUT_MODE;
-                          errMQTT = (int8_t) mqtt.subscribe(topBLUAC_OUTPUT_MODE.c_str());
-                              soutMQTTerr(" MQTT subscribe MQTT_BLUAC_OUTPUT_MODE", errMQTT);
-                          //    S3HEXVAL(" MQTT subscribe MQTT_BLUAC_OUTPUT_MODE", errMQTT, (uint32_t) &BLUAC_OUTPUT_MODE, (uint32_t) &(pbluetti_dev_state[BLUAC_OUTPUT_MODE]).p_f_value);
-
-                        // INTERN_AC_VOLT
-                          pbluetti_dev_state[INTERN_AC_VOLT].p_f_value = (void*) &BLUINTERN_AC_VOLT;
-                          topBLUINTERN_AC_VOLT = topDevice + topBLUINTERN_AC_VOLT;
-                          errMQTT = (int8_t) mqtt.subscribe(topBLUINTERN_AC_VOLT.c_str());
-                              soutMQTTerr(" MQTT subscribe MQTT_BLU_INT_AC_VOLT", errMQTT);
-                          //    S3HEXVAL(" MQTT subscribe MQTT_BLU_INT_AC_VOLT", errMQTT, (uint32_t) &BLUINTERN_AC_VOLT, (uint32_t) &(pbluetti_dev_state[INTERN_AC_VOLT]).p_f_value);
-
-                        // INTERN_CURR_1
-                          pbluetti_dev_state[INTERN_CURR_1].p_f_value = (void*) &BLUINTERN_CURR_1;
-                          topBLUINTERN_CURR_1 = topDevice + topBLUINTERN_CURR_1;
-                          errMQTT = (int8_t) mqtt.subscribe(topBLUINTERN_CURR_1.c_str());
-                              soutMQTTerr(" MQTT subscribe MQTT_BLU_INT_CURR1", errMQTT);
-                          //    S3HEXVAL(" MQTT subscribe MQTT_BLU_INT_CURR1", errMQTT, (uint32_t) &BLUINTERN_CURR_1, (uint32_t) &(pbluetti_dev_state[INTERN_CURR_1]).p_f_value);
-
-                        // INTERN_POWER_1
-                          pbluetti_dev_state[INTERN_POWER_1].p_f_value = (void*) &BLUINTERN_POWER_1;
-                          topBLUINTERN_POWER_1 = topDevice + topBLUINTERN_POWER_1;
-                          errMQTT = (int8_t) mqtt.subscribe(topBLUINTERN_POWER_1.c_str());
-                              soutMQTTerr(" MQTT subscribe MQTT_INTERN_POWER_1", errMQTT);
-                          //    S3HEXVAL(" MQTT subscribe MQTTINTERN_POWER_1", errMQTT, (uint32_t) &BLUINTERN_POWER_1, (uint32_t) &(pbluetti_dev_state[INTERN_POWER_1]).p_f_value);
-
-                        // INTERN_AC_FREQ
-                          pbluetti_dev_state[INTERN_AC_FREQ].p_f_value = (void*) &BLUINTERN_AC_FREQ;
-                          topBLUINTERN_AC_FREQ = topDevice + topBLUINTERN_AC_FREQ;
-                          errMQTT = (int8_t) mqtt.subscribe(topBLUINTERN_AC_FREQ.c_str());
-                              soutMQTTerr(" MQTT subscribe MQTT_BLUINTERN_AC_FREQ", errMQTT);
-                          //    S3HEXVAL(" MQTT subscribe MQTT_BLUINTERN_AC_FREQ", errMQTT, (uint32_t) &BLUINTERN_AC_FREQ, (uint32_t) &(pbluetti_dev_state[INTERN_AC_FREQ]).p_f_value);
-
-                        // INTERN_CURR_2
-                          pbluetti_dev_state[INTERN_CURR_2].p_f_value = (void*) &BLUINTERN_CURR_2;
-                          topBLUINTERN_CURR_2 = topDevice + topBLUINTERN_CURR_2;
-                          errMQTT = (int8_t) mqtt.subscribe(topBLUINTERN_CURR_2.c_str());
-                              soutMQTTerr(" MQTT subscribe MQTT_BLU_INT_CURR2", errMQTT);
-                          //    S3HEXVAL(" MQTT subscribe MQTT_BLU_INT_CURR2", errMQTT, (uint32_t) &BLUINTERN_CURR_2, (uint32_t) &(pbluetti_dev_state[INTERN_CURR_2]).p_f_value);
-
-                        // INTERN_POWER_2
-                          pbluetti_dev_state[INTERN_POWER_2].p_f_value = (void*) &BLUINTERN_POWER_2;
-                          topBLUINTERN_POWER_2 = topDevice + topBLUINTERN_POWER_2;
-                          errMQTT = (int8_t) mqtt.subscribe(topBLUINTERN_POWER_2.c_str());
-                              soutMQTTerr(" MQTT subscribe MQTT_INTERN_POWER_2", errMQTT);
-                          //    S3HEXVAL(" MQTT subscribe MQTT_INTERN_POWER_2", errMQTT, (uint32_t) &BLUINTERN_POWER_2, (uint32_t) &(pbluetti_dev_state[INTERN_POWER_2]).p_f_value);
-
-                        // AC_INPUT_VOLT
-                          pbluetti_dev_state[AC_INPUT_VOLT].p_f_value = (void*) &BLUAC_INPUT_VOLT;
-                          topBLUAC_INPUT_VOLT = topDevice + topBLUAC_INPUT_VOLT;
-                          errMQTT = (int8_t) mqtt.subscribe(topBLUAC_INPUT_VOLT.c_str());
-                              soutMQTTerr(" MQTT subscribe MQTT_AC_INPUT_VOLT", errMQTT);
-                          //    S3HEXVAL(" MQTT subscribe MQTT_AC_INPUT_VOLT", errMQTT, (uint32_t) &BLUAC_INPUT_VOLT, (uint32_t) &(pbluetti_dev_state[AC_INPUT_VOLT]).p_f_value);
-
-                        // INTERN_CURR_3
-                          pbluetti_dev_state[INTERN_CURR_3].p_f_value = (void*) &BLUINTERN_CURR_3;
-                          topBLUINTERN_CURR_3 = topDevice + topBLUINTERN_CURR_3;
-                          errMQTT = (int8_t) mqtt.subscribe(topBLUINTERN_CURR_3.c_str());
-                              soutMQTTerr(" MQTT subscribe MQTT_INTERN_CURR_3", errMQTT);
-                          //    S3HEXVAL(" MQTT subscribe MQTT_INTERN_CURR_3", errMQTT, (uint32_t) &BLUINTERN_CURR_3, (uint32_t) &(pbluetti_dev_state[INTERN_CURR_3]).p_f_value);
-
-                        // INTERN_POWER_3
-                          pbluetti_dev_state[INTERN_POWER_3].p_f_value = (void*) &BLUINTERN_POWER_3;
-                          topBLUINTERN_POWER_3 = topDevice + topBLUINTERN_POWER_3;
-                          errMQTT = (int8_t) mqtt.subscribe(topBLUINTERN_POWER_3.c_str());
-                              soutMQTTerr(" MQTT subscribe MQTT_INTERN_POWER_3", errMQTT);
-                          //    S3HEXVAL(" MQTT subscribe MQTT_INTERN_POWER_3", errMQTT, (uint32_t) &BLUINTERN_POWER_3, (uint32_t) &(pbluetti_dev_state[INTERN_POWER_3]).p_f_value);
-
-                        // AC_INPUT_FREQ
-                          pbluetti_dev_state[AC_INPUT_FREQ].p_f_value = (void*) &BLUAC_INPUT_FREQ;
-                          topBLUAC_INPUT_FREQ = topDevice + topBLUAC_INPUT_FREQ;
-                          errMQTT = (int8_t) mqtt.subscribe(topBLUAC_INPUT_FREQ.c_str());
-                              soutMQTTerr(" MQTT subscribe MQTT_BLU_AC_INPUT_FREQ", errMQTT);
-                          //    S3HEXVAL(" MQTT subscribe MQTT_BLU_AC_INPUT_FREQ", errMQTT, (uint32_t) &BLUAC_INPUT_FREQ, (uint32_t) &(pbluetti_dev_state[AC_INPUT_FREQ]).p_f_value);
-
-                        // INT_DC_INP_VOLT
-                          pbluetti_dev_state[INT_DC_INP_VOLT].p_f_value = (void*) &BLUINT_DC_INP_VOLT;
-                          topBLUINT_DC_INP_VOLT = topDevice + topBLUINT_DC_INP_VOLT;
-                          errMQTT = (int8_t) mqtt.subscribe(topBLUINT_DC_INP_VOLT.c_str());
-                              soutMQTTerr(" MQTT subscribe MQTT_BLU_INT_DC_INP_VOLT", errMQTT);
-                          //    S3HEXVAL(" MQTT subscribe MQTT_BLU_INT_DC_INP_VOLT", errMQTT, (uint32_t) &BLUINT_DC_INP_VOLT, (uint32_t) &(pbluetti_dev_state[INT_DC_INP_VOLT]).p_f_value);
-
-                        // INT_DC_INP_POW
-                          pbluetti_dev_state[INT_DC_INP_POW].p_f_value = (void*) &BLUINT_DC_INP_POW;
-                          topBLUINT_DC_INP_POW = topDevice + topBLUINT_DC_INP_POW;
-                          errMQTT = (int8_t) mqtt.subscribe(topBLUINT_DC_INP_POW.c_str());
-                              soutMQTTerr(" MQTT subscribe MQTT_BLU_INT_DC_INP_POW", errMQTT);
-                          //    S3HEXVAL(" MQTT subscribe MQTT_BLU_INT_DC_INP_POW", errMQTT, (uint32_t) &BLUINT_DC_INP_POW, (uint32_t) &(pbluetti_dev_state[INT_DC_INP_POW]).p_f_value);
-
-                        // INT_DC_INP_CURR
-                          pbluetti_dev_state[INT_DC_INP_CURR].p_f_value = (void*) &BLUINT_DC_INP_CURR;
-                          topBLUINT_DC_INP_CURR = topDevice + topBLUINT_DC_INP_CURR;
-                          errMQTT = (int8_t) mqtt.subscribe(topBLUINT_DC_INP_CURR.c_str());
-                              soutMQTTerr(" MQTT subscribe MQTT_BLU_INT_DC_INP_CURR", errMQTT);
-                          //    S3HEXVAL(" MQTT subscribe MQTT_BLU_INT_DC_INP_CURR", errMQTT, (uint32_t) &BLUINT_DC_INP_CURR, (uint32_t) &(pbluetti_dev_state[INT_DC_INP_CURR]).p_f_value);
-
-                        // PACK_NUM_MAX
-                          pbluetti_dev_state[PACK_NUM_MAX].p_f_value = (void*) &BLUPACK_NUM_MAX;
-                          topBLUPACK_NUM_MAX = topDevice + topBLUPACK_NUM_MAX;
-                          errMQTT = (int8_t) mqtt.subscribe(topBLUPACK_NUM_MAX.c_str());
-                              soutMQTTerr(" MQTT subscribe PACK_NUM_MAX", errMQTT);
-                          //    S3HEXVAL(" MQTT subscribe PACK_NUM_MAX", errMQTT, (uint32_t) &BLUPACK_NUM_MAX, (uint32_t) &(pbluetti_dev_state[PACK_NUM_MAX]).p_f_value);
-
-                        // TOTAL_BATT_VOLT
-                          pbluetti_dev_state[TOTAL_BATT_VOLT].p_f_value = (void*) &BLUTOTAL_BATT_VOLT;
-                          topBLUTOTAL_BATT_VOLT = topDevice + topBLUTOTAL_BATT_VOLT;
-                          errMQTT = (int8_t) mqtt.subscribe(topBLUTOTAL_BATT_VOLT.c_str());
-                              soutMQTTerr(" MQTT subscribe MQTT_BLU_TOTAL_BATT_VOLT", errMQTT);
-                          //    S3HEXVAL(" MQTT subscribe MQTT_BLU_TOTAL_BATT_VOLT", errMQTT, (uint32_t) &BLUTOTAL_BATT_VOLT, (uint32_t) &(pbluetti_dev_state[TOTAL_BATT_VOLT]).p_f_value);
-
-                        // TOTAL_BATT_CURR
-                          pbluetti_dev_state[TOTAL_BATT_CURR].p_f_value = (void*) &BLUTOTAL_BATT_CURR;
-                          topBLUTOTAL_BATT_CURR = topDevice + topBLUTOTAL_BATT_CURR;
-                          errMQTT = (int8_t) mqtt.subscribe(topBLUTOTAL_BATT_CURR.c_str());
-                              soutMQTTerr(" MQTT subscribe MQTT_BLU_TOTAL_BATT_CURR", errMQTT);
-                          //    S3HEXVAL(" MQTT subscribe MQTT_BLU_TOTAL_BATT_CURR", errMQTT, (uint32_t) &BLUTOTAL_BATT_CURR, (uint32_t) &(pbluetti_dev_state[TOTAL_BATT_CURR]).p_f_value);
-
-                        // PACK_NUM
-                          pbluetti_dev_state[PACK_NUM].p_f_value = (void*) &BLUPACK_NUM;
-                          topBLUPACK_NUM = topDevice + topBLUPACK_NUM;
-                          errMQTT = (int8_t) mqtt.subscribe(topBLUPACK_NUM.c_str());
-                              soutMQTTerr(" MQTT subscribe MQTT_BLU_PACK_NUM", errMQTT);
-                          //    S3HEXVAL(" MQTT subscribe MQTT_BLU_PACK_NUM", errMQTT, (uint32_t) &BLUPACK_NUM, (uint32_t) &(pbluetti_dev_state[PACK_NUM]).p_f_value);
-
-                        // PACK_STATUS
-                          pbluetti_dev_state[PACK_STATUS].p_f_value = (void*) &BLUPACK_STATUS;
-                          topBLUPACK_STATUS = topDevice + topBLUPACK_STATUS;
-                          errMQTT = (int8_t) mqtt.subscribe(topBLUPACK_STATUS.c_str());
-                              soutMQTTerr(" MQTT subscribe MQTT_BLU_PACK_STATUS", errMQTT);
-                          //    S3HEXVAL(" MQTT subscribe MQTT_BLU_PACK_STATUS", errMQTT, (uint32_t) &BLUPACK_STATUS, (uint32_t) &(pbluetti_dev_state[PACK_STATUS]).p_f_value);
-
-                        // PACK_VOLTAGE
-                          pbluetti_dev_state[PACK_VOLTAGE].p_f_value = (void*) &BLUPACK_VOLTAGE;
-                          topBLUPACK_VOLTAGE = topDevice + topBLUPACK_VOLTAGE;
-                          errMQTT = (int8_t) mqtt.subscribe(topBLUPACK_VOLTAGE.c_str());
-                              soutMQTTerr(" MQTT subscribe MQTT_BLU_PACK_U", errMQTT);
-                          //    S3HEXVAL(" MQTT subscribe MQTT_BLU_PACK_U", errMQTT, (uint32_t) &BLUPACK_VOLTAGE, (uint32_t) &(pbluetti_dev_state[PACK_VOLTAGE]).p_f_value);
-
-                        // PACK_BATT_PERC
-                          pbluetti_dev_state[PACK_BATT_PERC].p_f_value = (void*) &BLUPACK_BATT_PERC;
-                          topBLUPACK_BATT_PERC = topDevice + topBLUPACK_BATT_PERC;
-                          errMQTT = (int8_t) mqtt.subscribe(topBLUPACK_BATT_PERC.c_str());
-                              soutMQTTerr(" MQTT subscribe MQTT_BLU_PACK_BATT_PERC", errMQTT);
-                          //    S3HEXVAL(" MQTT subscribe MQTT_BLU_PACK_BATT_PERC", errMQTT, (uint32_t) &BLUPACK_BATT_PERC, (uint32_t) &(pbluetti_dev_state[PACK_BATT_PERC]).p_f_value);
-
-                        // CELL_VOTAGES
-                          /*
-                            pbluetti_dev_state[CELL_VOTAGES].p_f_value = (void*) &BLUCELL_VOTAGES;
-                            topBLUCELL_VOTAGES = topDevice + topBLUCELL_VOTAGES;
-                            errMQTT = (int8_t) mqtt.subscribe(topBLUCELL_VOTAGES.c_str());
-                                soutMQTTerr(" MQTT subscribe MQTT_BLU_CELL_VOTAGES", errMQTT);
-                            //    S3HEXVAL(" MQTT subscribe MQTT_BLU_CELL_VOTAGES", errMQTT, (uint32_t) &BLUCELL_VOTAGES, (uint32_t) &(pbluetti_dev_state[CELL_VOTAGES]).p_f_value);
-                           */
-                        // PACK_BMS_VERSION
-                          pbluetti_dev_state[PACK_BMS_VERSION].p_f_value = (void*) &BLUPACK_BMS_VERSION;
-                          topBLUPACK_BMS_VERSION = topDevice + topBLUPACK_BMS_VERSION;
-                          errMQTT = (int8_t) mqtt.subscribe(topBLUPACK_BMS_VERSION.c_str());
-                              soutMQTTerr(" MQTT subscribe MQTT_BLU_PACK_BMS_VERSION", errMQTT);
-                          //    S3HEXVAL(" MQTT subscribe MQTT_BLU_PACK_BMS_VERSION", errMQTT, (uint32_t) &BLUPACK_BMS_VERSION, (uint32_t) &(pbluetti_dev_state[PACK_BMS_VERSION]).p_f_value);
-
-                      // CONTROL elements
-                        // UPS_MODE
-                          pbluetti_dev_state[UPS_MODE].p_f_value = (void*) &BLUUPS_MODE;
-                          topBLUUPS_MODE = topDevice + topBLUUPS_MODE;
-                          errMQTT = (int8_t) mqtt.subscribe(topBLUUPS_MODE.c_str());
-                              soutMQTTerr(" MQTT subscribe MQTT_BLU_UPS_MODE", errMQTT);
-                          //    S3HEXVAL(" MQTT subscribe MQTT_BLU_UPS_MODE", errMQTT, (uint32_t) &BLUUPS_MODE, (uint32_t) &(pbluetti_dev_state[UPS_MODE]).p_f_value);
-
-                        // SPLIT_PHASE_ON
-                          pbluetti_dev_state[SPLIT_PHASE_ON].p_f_value = (void*) &BLUSPLIT_PHASE_ON;
-                          topBLUSPLIT_PHASE_ON = topDevice + topBLUSPLIT_PHASE_ON;
-                          errMQTT = (int8_t) mqtt.subscribe(topBLUSPLIT_PHASE_ON.c_str());
-                              soutMQTTerr(" MQTT subscribe MQTT_BLU_UPS_MODESPLIT_PHASE_ON", errMQTT);
-                          //    S3HEXVAL(" MQTT subscribe MQTT_BLU_SPLIT_PHASE_ON", errMQTT, (uint32_t) &BLUSPLIT_PHASE_ON, (uint32_t) &(pbluetti_dev_state[SPLIT_PHASE_ON]).p_f_value);
-
-                        // SPLIT_PH_MACH_MODE
-                          pbluetti_dev_state[SPLIT_PH_MACH_MODE].p_f_value = (void*) &BLUSPLIT_PH_MACH_MODE;
-                          topBLUSPLIT_PH_MACH_MODE = topDevice + topBLUSPLIT_PH_MACH_MODE;
-                          errMQTT = (int8_t) mqtt.subscribe(topBLUUPS_MODE.c_str());
-                              soutMQTTerr(" MQTT subscribe MQTT_BLU_SPLIT_PH_MACH_MODE", errMQTT);
-                          //    S3HEXVAL(" MQTT subscribe MQTT_BLU_SPLIT_PH_MACH_MODE", errMQTT, (uint32_t) &BLUSPLIT_PH_MACH_MODE, (uint32_t) &(pbluetti_dev_state[SPLIT_PH_MACH_MODE]).p_f_value);
-
-                        // SET_PACK_NUM
-                          pbluetti_dev_state[SET_PACK_NUM].p_f_value = (void*) &BLUSET_PACK_NUM;
-                          topBLUSET_PACK_NUM = topDevice + topBLUSET_PACK_NUM;
-                          errMQTT = (int8_t) mqtt.subscribe(topBLUSET_PACK_NUM.c_str());
-                              soutMQTTerr(" MQTT subscribe MQTT_BLU_SET_PACK_NUM", errMQTT);
-                          //    S3HEXVAL(" MQTT subscribe MQTT_BLU_SET_PACK_NUM", errMQTT, (uint32_t) &BLUSET_PACK_NUM, (uint32_t) &(pbluetti_dev_state[SET_PACK_NUM]).p_f_value);
-
-                        // SET_AC_OUT_ON
-                          pbluetti_dev_state[SET_AC_OUT_ON].p_f_value = (void*) &BLUSET_AC_OUT_ON;
-                          topBLUSET_AC_OUT_ON = topDevice + topBLUSET_AC_OUT_ON;
-                          errMQTT = (int8_t) mqtt.subscribe(topBLUSET_AC_OUT_ON.c_str());
-                              soutMQTTerr(" MQTT subscribe MQTT_BLU_SET_AC_OUT_ON", errMQTT);
-                          //    S3HEXVAL(" MQTT subscribe MQTT_BLU_SET_AC_OUT_ON", errMQTT, (uint32_t) &BLUSET_AC_OUT_ON, (uint32_t) &(pbluetti_dev_state[SET_AC_OUT_ON]).p_f_value);
-
-                        // SET_DC_OUT_ON
-                          pbluetti_dev_state[SET_DC_OUT_ON].p_f_value = (void*) &BLUSET_DC_OUT_ON;
-                          topBLUSET_DC_OUT_ON = topDevice + topBLUSET_DC_OUT_ON;
-                          errMQTT = (int8_t) mqtt.subscribe(topBLUUPS_MODE.c_str());
-                              soutMQTTerr(" MQTT subscribe MQTT_BLU_UPS_MODE", errMQTT);
-                          //    S3HEXVAL(" MQTT subscribe MQTT_BLU_SET_DC_OUT_ON", errMQTT, (uint32_t) &BLUSET_DC_OUT_ON, (uint32_t) &(pbluetti_dev_state[SET_DC_OUT_ON]).p_f_value);
-
-                        // GRID_CHANGE_ON
-                          pbluetti_dev_state[GRID_CHANGE_ON].p_f_value = (void*) &BLUGRID_CHANGE_ON;
-                          topBLUGRID_CHANGE_ON = topDevice + topBLUGRID_CHANGE_ON;
-                          errMQTT = (int8_t) mqtt.subscribe(topBLUGRID_CHANGE_ON.c_str());
-                              soutMQTTerr(" MQTT subscribe MQTT_BLU_GRID_CHANGE_ON", errMQTT);
-                          //    S3HEXVAL(" MQTT subscribe MQTT_BLU_GRID_CHANGE_ON", errMQTT, (uint32_t) &BLUGRID_CHANGE_ON, (uint32_t) &(pbluetti_dev_state[GRID_CHANGE_ON]).p_f_value);
-
-                        // TIME_CTRL_ON
-                          pbluetti_dev_state[TIME_CTRL_ON].p_f_value = (void*) &BLUTIME_CTRL_ON;
-                          topBLUTIME_CTRL_ON = topDevice + topBLUTIME_CTRL_ON;
-                          errMQTT = (int8_t) mqtt.subscribe(topBLUTIME_CTRL_ON.c_str());
-                              soutMQTTerr(" MQTT subscribe MQTT_BLU_TIME_CTRL_ON", errMQTT);
-                          //    S3HEXVAL(" MQTT subscribe MQTT_BLU_TIME_CTRL_ON", errMQTT, (uint32_t) &BLUTIME_CTRL_ON, (uint32_t) &(pbluetti_dev_state[TIME_CTRL_ON]).p_f_value);
-
-                        // BATT_RANGE_START
-                          pbluetti_dev_state[BATT_RANGE_START].p_f_value = (void*) &BLUBATT_RANGE_START;
-                          topBLUBATT_RANGE_START = topDevice + topBLUBATT_RANGE_START;
-                          errMQTT = (int8_t) mqtt.subscribe(topBLUBATT_RANGE_START.c_str());
-                              soutMQTTerr(" MQTT subscribe MQTT_BLU_BATT_RANGE_START", errMQTT);
-                          //    S3HEXVAL(" MQTT subscribe MQTT_BLU_BATT_RANGE_START", errMQTT, (uint32_t) &BLUBATT_RANGE_START, (uint32_t) &(pbluetti_dev_state[BATT_RANGE_START]).p_f_value);
-
-                        // BATT_RANGE_END
-                          pbluetti_dev_state[BATT_RANGE_END].p_f_value = (void*) &BLUBATT_RANGE_END;
-                          topBLUBATT_RANGE_END = topDevice + topBLUBATT_RANGE_END;
-                          errMQTT = (int8_t) mqtt.subscribe(topBLUBATT_RANGE_END.c_str());
-                              soutMQTTerr(" MQTT subscribe MQTT_BLU_BATT_RANGE_END", errMQTT);
-                          //    S3HEXVAL(" MQTT subscribe MQTT_BLU_BATT_RANGE_END", errMQTT, (uint32_t) &BLUBATT_RANGE_END, (uint32_t) &(pbluetti_dev_state[BATT_RANGE_END]).p_f_value);
-
-                        // BLUETOOTH_CONN
-                          pbluetti_dev_state[BLUETOOTH_CONN].p_f_value = (void*) &BLUBLUETOOTH_CONN;
-                          topBLUBLUETOOTH_CONN = topDevice + topBLUBLUETOOTH_CONN;
-                          errMQTT = (int8_t) mqtt.subscribe(topBLUBLUETOOTH_CONN.c_str());
-                              soutMQTTerr(" MQTT subscribe MQTT_BLU_BLUETOOTH_CONN", errMQTT);
-                          //    S3HEXVAL(" MQTT subscribe MQTT_BLU_BLUETOOTH_CONN", errMQTT, (uint32_t) &BLBLUETOOTH_CONN, (uint32_t) &(pbluetti_dev_state[BLUETOOTH_CONN]).p_f_value);
-
-                        // AUTO_SLEEP_MODE
-                          pbluetti_dev_state[AUTO_SLEEP_MODE].p_f_value = (void*) &BLUAUTO_SLEEP_MODE;
-                          topBLUAUTO_SLEEP_MODE = topDevice + topBLUAUTO_SLEEP_MODE;
-                          errMQTT = (int8_t) mqtt.subscribe(topBLUAUTO_SLEEP_MODE.c_str());
-                              soutMQTTerr(" MQTT subscribe MQTT_BLU_AUTO_SLEEP_MODE", errMQTT);
-                          //    S3HEXVAL(" MQTT subscribe MQTT_BLU_AUTO_SLEEP_MODE", errMQTT, (uint32_t) &BLUAUTO_SLEEP_MODE, (uint32_t) &(pbluetti_dev_state[AUTO_SLEEP_MODE]).p_f_value);
-
-                        // LED_CONTROL
-                          pbluetti_dev_state[LED_CONTROL].p_f_value = (void*) &BLULED_CONTROL;
-                          topBLULED_CONTROL = topDevice + topBLULED_CONTROL;
-                          errMQTT = (int8_t) mqtt.subscribe(topBLULED_CONTROL.c_str());
-                              soutMQTTerr(" MQTT subscribe MQTT_BLU_LED_CONTROL", errMQTT);
-                          //    S3HEXVAL(" MQTT subscribe MQTT_BLU_LED_CONTROL", errMQTT, (uint32_t) &BLULED_CONTROL, (uint32_t) &(pbluetti_dev_state[LED_CONTROL]).p_f_value);
-                        // FIELD_UNDEFINED
-                          pbluetti_dev_state[FIELD_UNDEFINED].p_f_value = (void*) &BLUFIELD_UNDEFINED;
-                          topBLUFIELD_UNDEFINED = topDevice + topBLUFIELD_UNDEFINED;
-                          errMQTT = (int8_t) mqtt.subscribe(topBLUFIELD_UNDEFINED.c_str());
-                              soutMQTTerr(" MQTT subscribe MQTT_BLU_FIELD_UNDEFINED", errMQTT);
-                          //    S3HEXVAL(" MQTT subscribe MQTT_BLU_FIELD_UNDEFINED", errMQTT, (uint32_t) &BLUFIELD_UNDEFINED, (uint32_t) &(pbluetti_dev_state[FIELD_UNDEFINED]).p_f_value);
+                      for (uint8_t i = 0; i < FIELD_IDX_MAX ; i++)
+                        {
+                          switch (i)
+                            {
+                              // INFO device offset sort
+                                case DEVICE_TYPE:
+                                    pbluetti_dev_state[i].p_f_value = (void*) &BLUDEVICE_TYPE;
+                                  break;
+                                case SERIAL_NUMBER:
+                                      pbluetti_dev_state[i].p_f_value = (void*) &BLUSERIAL_NUMBER;
+                                  break;
+                                case  ARM_VERSION:
+                                      pbluetti_dev_state[i].p_f_value = (void*) &BLUARM_VERSION;
+                                  break;
+                                case  DSP_VERSION:
+                                      pbluetti_dev_state[i].p_f_value = (void*) &BLUDSP_VERSION;
+                                  break;
+                                case  DC_INPUT_POWER:
+                                      pbluetti_dev_state[DC_INPUT_POWER].p_f_value = (void*) &BLUDC_INPUT_POWER;
+                                  break;
+                                case  AC_INPUT_POWER:
+                                      pbluetti_dev_state[AC_INPUT_POWER].p_f_value = (void*) &BLUAC_INPUT_POWER;
+                                  break;
+                                case  AC_OUTPUT_POWER:
+                                      (pbluetti_dev_state[AC_OUTPUT_POWER]).p_f_value = (void*) &BLUAC_OUTPUT_POWER;
+                                  break;
+                                case  DC_OUTPUT_POWER:
+                                      pbluetti_dev_state[DC_OUTPUT_POWER].p_f_value = (void*) &BLUDC_OUTPUT_POWER;
+                                  break;
+                                case  POWER_GENERATION:
+                                      pbluetti_dev_state[POWER_GENERATION].p_f_value = (void*) &BLUAC_OUTPUT_POWER;
+                                  break;
+                                case  TOTAL_BATT_PERC:
+                                      pbluetti_dev_state[TOTAL_BATT_PERC].p_f_value = (void*) &BLUTOTAL_BATT_PERC;
+                                  break;
+                                case  AC_OUTPUT_ON:
+                                      pbluetti_dev_state[AC_OUTPUT_ON].p_f_value = (void*) &BLUARM_VERSION;
+                                  break;
+                                case  DC_OUTPUT_ON:
+                                      pbluetti_dev_state[DC_OUTPUT_ON].p_f_value = (void*) &BLUDC_OUTPUT_ON;
+                                  break;
+                              // INFO internal
+                                case  AC_OUTPUT_MODE:
+                                      pbluetti_dev_state[AC_OUTPUT_MODE].p_f_value = (void*) &BLUAC_OUTPUT_MODE;
+                                  break;
+                                case  INTERN_AC_VOLT:
+                                      pbluetti_dev_state[INTERN_AC_VOLT].p_f_value = (void*) &BLUINTERN_AC_VOLT;
+                                  break;
+                                case  INTERN_CURR_1:
+                                      pbluetti_dev_state[INTERN_CURR_1].p_f_value = (void*) &BLUINTERN_CURR_1;
+                                  break;
+                                case  INTERN_POWER_1:
+                                      pbluetti_dev_state[INTERN_POWER_1].p_f_value = (void*) &BLUINTERN_POWER_1;
+                                  break;
+                                case  INTERN_AC_FREQ:
+                                      pbluetti_dev_state[INTERN_AC_FREQ].p_f_value = (void*) &BLUINTERN_AC_FREQ;
+                                  break;
+                                case  INTERN_CURR_2:
+                                      pbluetti_dev_state[INTERN_CURR_2].p_f_value = (void*) &BLUINTERN_CURR_2;
+                                  break;
+                                case  INTERN_POWER_2:
+                                      pbluetti_dev_state[INTERN_POWER_2].p_f_value = (void*) &BLUINTERN_POWER_2;
+                                  break;
+                                case  AC_INPUT_VOLT:
+                                      pbluetti_dev_state[AC_INPUT_VOLT].p_f_value = (void*) &BLUAC_INPUT_VOLT;
+                                  break;
+                                case  INTERN_CURR_3:
+                                      pbluetti_dev_state[INTERN_CURR_3].p_f_value = (void*) &BLUINTERN_CURR_3;
+                                  break;
+                                case  INTERN_POWER_3:
+                                      pbluetti_dev_state[INTERN_POWER_3].p_f_value = (void*) &BLUINTERN_POWER_3;
+                                  break;
+                                case  AC_INPUT_FREQ:
+                                      pbluetti_dev_state[AC_INPUT_FREQ].p_f_value = (void*) &BLUAC_INPUT_FREQ;
+                                  break;
+                                case  INT_DC_INP_VOLT:
+                                      pbluetti_dev_state[INT_DC_INP_VOLT].p_f_value = (void*) &BLUINT_DC_INP_VOLT;
+                                  break;
+                                case  INT_DC_INP_POW:
+                                      pbluetti_dev_state[INT_DC_INP_POW].p_f_value = (void*) &BLUINT_DC_INP_POW;
+                                  break;
+                                case  INT_DC_INP_CURR:
+                                      pbluetti_dev_state[INT_DC_INP_CURR].p_f_value = (void*) &BLUINT_DC_INP_CURR;
+                                  break;
+                                case  PACK_NUM_MAX:
+                                      pbluetti_dev_state[PACK_NUM_MAX].p_f_value = (void*) &BLUPACK_NUM_MAX;
+                                  break;
+                                case  TOTAL_BATT_VOLT:
+                                      pbluetti_dev_state[TOTAL_BATT_VOLT].p_f_value = (void*) &BLUTOTAL_BATT_VOLT;
+                                  break;
+                                case  TOTAL_BATT_CURR:
+                                      pbluetti_dev_state[TOTAL_BATT_CURR].p_f_value = (void*) &BLUTOTAL_BATT_CURR;
+                                  break;
+                                case  PACK_NUM:
+                                      pbluetti_dev_state[PACK_NUM].p_f_value = (void*) &BLUPACK_NUM;
+                                  break;
+                                case  PACK_STATUS:
+                                      pbluetti_dev_state[PACK_STATUS].p_f_value = (void*) &BLUPACK_STATUS;
+                                  break;
+                                case  PACK_VOLTAGE:
+                                      pbluetti_dev_state[PACK_VOLTAGE].p_f_value = (void*) &BLUPACK_VOLTAGE;
+                                  break;
+                                case  PACK_BATT_PERC:
+                                      pbluetti_dev_state[PACK_BATT_PERC].p_f_value = (void*) &BLUPACK_BATT_PERC;
+                                  break;
+                                //case  CELL_VOTAGES:
+                                  //break;
+                              // CONTROL elements
+                                case  UPS_MODE:
+                                      pbluetti_dev_state[UPS_MODE].p_f_value = (void*) &BLUUPS_MODE;
+                                  break;
+                                case  SPLIT_PHASE_ON:
+                                      pbluetti_dev_state[SPLIT_PHASE_ON].p_f_value = (void*) &BLUSPLIT_PHASE_ON;
+                                  break;
+                                case  SPLIT_PH_MACH_MODE:
+                                      pbluetti_dev_state[SPLIT_PH_MACH_MODE].p_f_value = (void*) &BLUSPLIT_PH_MACH_MODE;
+                                  break;
+                                case  SET_PACK_NUM:
+                                      pbluetti_dev_state[SET_PACK_NUM].p_f_value = (void*) &BLUSET_PACK_NUM;
+                                  break;
+                                case  SET_AC_OUT_ON:
+                                      pbluetti_dev_state[SET_AC_OUT_ON].p_f_value = (void*) &BLUSET_AC_OUT_ON;
+                                  break;
+                                case  SET_DC_OUT_ON:
+                                      pbluetti_dev_state[SET_DC_OUT_ON].p_f_value = (void*) &BLUSET_DC_OUT_ON;
+                                  break;
+                                case  GRID_CHANGE_ON:
+                                      pbluetti_dev_state[GRID_CHANGE_ON].p_f_value = (void*) &BLUGRID_CHANGE_ON;
+                                  break;
+                                case  TIME_CTRL_ON:
+                                      pbluetti_dev_state[TIME_CTRL_ON].p_f_value = (void*) &BLUTIME_CTRL_ON;
+                                  break;
+                                case  BATT_RANGE_START:
+                                      pbluetti_dev_state[BATT_RANGE_START].p_f_value = (void*) &BLUBATT_RANGE_START;
+                                  break;
+                                case  BATT_RANGE_END:
+                                      pbluetti_dev_state[BATT_RANGE_END].p_f_value = (void*) &BLUBATT_RANGE_END;
+                                  break;
+                                case  BLUETOOTH_CONN:
+                                      pbluetti_dev_state[BLUETOOTH_CONN].p_f_value = (void*) &BLUBLUETOOTH_CONN;
+                                  break;
+                                case  AUTO_SLEEP_MODE:
+                                      pbluetti_dev_state[AUTO_SLEEP_MODE].p_f_value = (void*) &BLUAUTO_SLEEP_MODE;
+                                  break;
+                                case  LED_CONTROL:
+                                      pbluetti_dev_state[LED_CONTROL].p_f_value = (void*) &BLULED_CONTROL;
+                                  break;
+                            }
+                          topBLU[i] = topDevice + DEVICE_F_NAMES[i];
+                          S2VAL(" make topBLU ", DEVICE_F_NAMES[i], topBLU[i]);
+                          errMQTT = (int8_t) mqtt.subscribe(topBLU[i].c_str());
+                          sprintf(cout, "MQTT subscribe %s\n", DEVICE_F_NAMES[i]);
+                          soutMQTTerr(cout, errMQTT);
+                        }
                     #endif
                   #if (USE_BME280_I2C > OFF) // 1
                       topBME280t = topDevice + topBME280t;
