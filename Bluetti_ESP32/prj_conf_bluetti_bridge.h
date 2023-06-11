@@ -15,7 +15,7 @@
   // --- bluetti
     #define BLUETTI_TYPE BLUETTI_AC300
     //#define BLUETTI_TYPE BLUETTI_EP500P
-    #define BLUETOOTH_QUERY_MESSAGE_DELAY 3000
+    #define BLUETOOTH_QUERY_MESSAGE_DELAY 1000
 
     //#define RELAISMODE 1
     //#define RELAIS_PIN 22
@@ -66,7 +66,7 @@
             #define WIFI_SSID0_PW   "M&M2KsR&N#"
             #define WIFI_GATEWAY0   0x0100A8C0ul // 192.168.0.1      // Bauwagen
           // Router Moosgraben 192.168.0.1
-            #define WIFI_FIXIP1     0x1F00000Aul // 10.0.0.231
+            #define WIFI_FIXIP1     0x1F00000Aul // 10.0.0.31
             #define WIFI_SSID1      "MAMD-HomeG"  // WLAN Moosgrabenstrasse 26
             #define WIFI_SSID1_PW   "ElaNanniRalf3"
             #define WIFI_GATEWAY1   0x8B00000Aul // 10.0.0.139      // Moosgraben
@@ -91,6 +91,7 @@
     // --- bluetooth
       #if (BLUETTI_TYPE == BLUETTI_AC300)
           // The remote Bluetti service we wish to connect to.
+          #define BLUETTI_AC300_SN      "AC300223500057654"
           #define BLUETTI_UUID_SERVICE  "0000ff00-0000-1000-8000-00805f9b34fb"
           // The characteristics of Bluetti Devices
           #define BLUETTI_UUID_WRITE    "0000ff02-0000-1000-8000-00805f9b34fb"

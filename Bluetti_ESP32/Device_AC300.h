@@ -36,6 +36,7 @@
        DECIMAL_FIELD,
        VERSION_FIELD,
        SN_FIELD,
+       DATIME_FIELD,        // String YY MM DD hh mm ss
        TYPE_UNDEFINED
     };
   enum field_index
@@ -92,6 +93,7 @@
         BATT_RANGE_END,
         BLUETOOTH_CONN,
         AUTO_SLEEP_MODE,
+        DATE_TIME,
         LED_CONTROL,
         FIELD_UNDEFINED,
         FIELD_IDX_MAX
@@ -148,6 +150,7 @@
         "BATT_RANGE_END",
         "BLUETOOTH_CONN",
         "AUTO_SLEEP_MODE",
+        "DATE_TIME",
         "LED_CONTROL",
         "FIELD_UNDEFINED"
     };

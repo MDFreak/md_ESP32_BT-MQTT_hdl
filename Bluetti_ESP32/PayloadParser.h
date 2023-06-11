@@ -9,12 +9,12 @@
 #define HEADER_SIZE 4
 #define CHECKSUM_SIZE 2
 
-void     init_dev_fields(device_field_data_t* _pdev_state,
-                         device_field_data_t* _pdev_comm,
-                         device_field_data_t* ppoll_comm);
+void     init_dev_fields(device_field_data_t* _pdev_state, device_field_data_t* _pdev_comm,
+                         device_field_data_t* _ppoll_comm, device_field_data_t* _pscan_comm);
 uint16_t parse_uint_field(uint8_t data[]);
 bool     parse_bool_field(uint8_t data[]);
-float    parse_decimal_field(uint8_t data[], uint8_t scale);
+float    parse_decimal_field(uint8_t data[]);
+uint64_t parse_datime_field(uint8_t data[]);
 uint64_t parse_serial_field(uint8_t data[]);
 float    parse_version_field(uint8_t data[]);
 String   parse_string_field(uint8_t data[]);

@@ -6,7 +6,7 @@
 
 static boolean doConnect = false;
 static boolean connected = false;
-static boolean doScan = false;
+static boolean doScan    = false;
 static BLERemoteCharacteristic* pRemoteWriteCharacteristic;
 static BLERemoteCharacteristic* pRemoteNotifyCharacteristic;
 static BLEAdvertisedDevice*     pbluettiDevice;
@@ -15,14 +15,16 @@ static BLEAdvertisedDevice*     pbluettiDevice;
 static BLEUUID serviceUUID("0000ff00-0000-1000-8000-00805f9b34fb");
 
 // The characteristics of Bluetti Devices
-static BLEUUID    WRITE_UUID("0000ff02-0000-1000-8000-00805f9b34fb");
-static BLEUUID    NOTIFY_UUID("0000ff01-0000-1000-8000-00805f9b34fb");
+static BLEUUID WRITE_UUID ("0000ff02-0000-1000-8000-00805f9b34fb");
+static BLEUUID NOTIFY_UUID("0000ff01-0000-1000-8000-00805f9b34fb");
 
 int publishErrorCount = 0;
 unsigned long lastMQTTMessage = 0;
 unsigned long previousDeviceStatePublish = 0;
 
-int pollTick = 0;
+int      pollTick = 0;
+uint16_t scanTick = 0;
+uint8_t  isScan   = FALSE;
 ESPBluettiSettings _settings;
 
 // initialize bluetti device data
@@ -70,20 +72,21 @@ ESPBluettiSettings _settings;
         //{CELL_VOTAGES,          NULL,  0x00,  0x48,  1,   1, 0, 0,  },
         {PACK_BMS_VERSION,      NULL,  0x00,  0xC9,  1,   0, 0, 0,  UINT_FIELD},
       // CONTROL elements
-        {UPS_MODE,              NULL,  0x00,  0xB9,  1,   0, 0, 0,  UINT_FIELD},
-        {SPLIT_PHASE_ON,        NULL,  0x00,  0xBC,  1,   0, 0, 0,  UINT_FIELD},
-        {SPLIT_PH_MACH_MODE,    NULL,  0x00,  0xBD,  1,   0, 0, 0,  UINT_FIELD},
-        {SET_PACK_NUM,          NULL,  0x00,  0xBE,  1,   0, 0, 0,  UINT_FIELD},
+        {UPS_MODE,              NULL,  0x0B,  0xB9,  1,   0, 0, 0,  UINT_FIELD},
+        {SPLIT_PHASE_ON,        NULL,  0x0B,  0xBC,  1,   0, 0, 0,  UINT_FIELD},
+        {SPLIT_PH_MACH_MODE,    NULL,  0x0B,  0xBD,  1,   0, 0, 0,  UINT_FIELD},
+        {SET_PACK_NUM,          NULL,  0x0B,  0xBE,  1,   0, 0, 0,  UINT_FIELD},
         {SET_AC_OUT_ON,         NULL,  0x0B,  0xBF,  1,   0, 0, 0,  BOOL_FIELD},
         {SET_DC_OUT_ON,         NULL,  0x0B,  0xC0,  1,   0, 0, 0,  BOOL_FIELD},
-        {GRID_CHANGE_ON,        NULL,  0x00,  0xC3,  1,   0, 0, 0,  UINT_FIELD},
-        {TIME_CTRL_ON,          NULL,  0x00,  0xC5,  1,   0, 0, 0,  UINT_FIELD},
-        {BATT_RANGE_START,      NULL,  0x00,  0xC7,  1,   0, 0, 0,  UINT_FIELD},
-        {BATT_RANGE_END,        NULL,  0x00,  0xC8,  1,   0, 0, 0,  UINT_FIELD},
-        {BLUETOOTH_CONN,        NULL,  0x00,  0xDD,  1,   0, 0, 0,  UINT_FIELD},
-        {AUTO_SLEEP_MODE,       NULL,  0x00,  0xF5,  1,   0, 0, 0,  UINT_FIELD},
-        {LED_CONTROL,           NULL,  0x00,  0xDA,  1,   0, 0, 0,  UINT_FIELD},
-        {FIELD_UNDEFINED,       NULL,  0x00,  0xDF,  1,   0, 0, 0,  UINT_FIELD},
+        {GRID_CHANGE_ON,        NULL,  0x0B,  0xC3,  1,   0, 0, 0,  UINT_FIELD},
+        {TIME_CTRL_ON,          NULL,  0x0B,  0xC5,  1,   0, 0, 0,  UINT_FIELD},
+        {BATT_RANGE_START,      NULL,  0x0B,  0xC7,  1,   0, 0, 0,  UINT_FIELD},
+        {BATT_RANGE_END,        NULL,  0x0B,  0xC8,  1,   0, 0, 0,  UINT_FIELD},
+        {BLUETOOTH_CONN,        NULL,  0x0B,  0xDD,  1,   0, 0, 0,  UINT_FIELD},
+        {AUTO_SLEEP_MODE,       NULL,  0x0B,  0xF5,  1,   0, 0, 0,  UINT_FIELD},
+        {DATE_TIME,             NULL,  0x0B,  0xD7,  3,   0, 0, 0,  DATIME_FIELD},
+        {LED_CONTROL,           NULL,  0x0B,  0xDA,  1,   0, 0, 0,  UINT_FIELD},
+        {FIELD_UNDEFINED,       NULL,  0x0B,  0xDF,  1,   0, 0, 0,  UINT_FIELD},
     };
 
   static device_field_data_t bluetti_device_command[] =
@@ -94,18 +97,28 @@ ESPBluettiSettings _settings;
       };
   static device_field_data_t bluetti_polling_command[] =
     {
-      {FIELD_UNDEFINED,         NULL,  0x00, 0x0A, 0x12 ,0 , 0, 0,  TYPE_UNDEFINED},
-      {FIELD_UNDEFINED,         NULL,  0x00, 0x24, 0x08 ,0 , 0, 0,  TYPE_UNDEFINED},
-      {FIELD_UNDEFINED,         NULL,  0x00, 0x46, 0x14 ,0 , 0, 0,  TYPE_UNDEFINED},
-      {FIELD_UNDEFINED,         NULL,  0x00, 0x56, 0x0E ,0 , 0, 0,  TYPE_UNDEFINED},
-      {FIELD_UNDEFINED,         NULL,  0x00, 0x6E, 0x20 ,0 , 0, 0,  TYPE_UNDEFINED},
-      {FIELD_UNDEFINED,         NULL,  0x00, 0xC9, 0x01 ,0 , 0, 0,  TYPE_UNDEFINED},
+      {FIELD_UNDEFINED,         NULL,  0x00, 0x0A, 0x12 ,0 , 0, 0,  TYPE_UNDEFINED}, // Device_TYPE     - DSP_VERSION
+      {FIELD_UNDEFINED,         NULL,  0x00, 0x24, 0x08 ,0 , 0, 0,  TYPE_UNDEFINED}, // DC_INPUT_POWER  - TOTAL_BATT_PERC
+      {FIELD_UNDEFINED,         NULL,  0x00, 0x46, 0x14 ,0 , 0, 0,  TYPE_UNDEFINED}, // AC_OUTPUT_MODE  - INT_DC_INP_CURR
+      {FIELD_UNDEFINED,         NULL,  0x00, 0x56, 0x0E ,0 , 0, 0,  TYPE_UNDEFINED}, // INT_DC_INP_VOLT - PACK_BATT_PERC
+      {FIELD_UNDEFINED,         NULL,  0x00, 0x6E, 0x20 ,0 , 0, 0,  TYPE_UNDEFINED}, // alles 0
+      {FIELD_UNDEFINED,         NULL,  0x00, 0xC9, 0x01 ,0 , 0, 0,  TYPE_UNDEFINED}, //     = 0
       //{FIELD_UNDEFINED,         NULL,  0x0B, 0x00, 0x30 ,0 , 0, 0,  TYPE_UNDEFINED},
       //{FIELD_UNDEFINED,         NULL,  0x0B, 0x30, 0x30 ,0 , 0, 0,  TYPE_UNDEFINED},
-      {FIELD_UNDEFINED,         NULL,  0x0B, 0xB9, 0x10 ,0 , 0, 0,  TYPE_UNDEFINED},
-      {FIELD_UNDEFINED,         NULL,  0x0B, 0xD7, 0x03 ,0 , 0, 0,  TYPE_UNDEFINED},
-      {FIELD_UNDEFINED,         NULL,  0x0B, 0xDF, 0x24 ,0 , 0, 0,  TYPE_UNDEFINED},
-      {FIELD_UNDEFINED,         NULL,  0x0B, 0xDA, 0x01 ,0 , 0, 0,  TYPE_UNDEFINED}
+      {FIELD_UNDEFINED,         NULL,  0x0B, 0xB9, 0x10 ,0 , 0, 0,  TYPE_UNDEFINED}, // SET_AC_OUT_ON   - SET_DC_OUT_ON
+      {FIELD_UNDEFINED,         NULL,  0x0B, 0xD7, 0x03 ,0 , 0, 0,  TYPE_UNDEFINED}, // time-date  JJ MM DD hh mm ss
+      {FIELD_UNDEFINED,         NULL,  0x0B, 0xDA, 0x05 ,0 , 0, 0,  TYPE_UNDEFINED},
+      {FIELD_UNDEFINED,         NULL,  0x0B, 0xDF, 0x11 ,0 , 0, 0,  TYPE_UNDEFINED},
+      {FIELD_UNDEFINED,         NULL,  0x0B, 0xF1, 0x01 ,0 , 0, 0,  TYPE_UNDEFINED},
+      {FIELD_UNDEFINED,         NULL,  0x0B, 0xF2, 0x01 ,0 , 0, 0,  TYPE_UNDEFINED},
+      {FIELD_UNDEFINED,         NULL,  0x0B, 0xF3, 0x01 ,0 , 0, 0,  TYPE_UNDEFINED},
+      {FIELD_UNDEFINED,         NULL,  0x0B, 0xF4, 0x01 ,0 , 0, 0,  TYPE_UNDEFINED},
+      {FIELD_UNDEFINED,         NULL,  0x0B, 0xF5, 0x01 ,0 , 0, 0,  TYPE_UNDEFINED}
+    };
+  static device_field_data_t bluetti_scan_command[] =
+    {
+      {FIELD_UNDEFINED,         NULL,  0x00, 0x00, 0x01 ,0 , 0, 0,  TYPE_UNDEFINED}, // temporary request storage
+      {FIELD_UNDEFINED,         NULL,  0x00, 0x03, 0x40 ,0 , 0, 0,  TYPE_UNDEFINED}  // storage for scan params  pages 0-3, 64 words/scan
     };
 
 struct command_handle
@@ -118,9 +131,8 @@ struct command_handle
 QueueHandle_t commandHandleQueue;
 QueueHandle_t sendQueue;
 unsigned long lastBTMessage = 0;
-
 /*
-String map_field_name(enum field_index f_index)
+  String map_field_name(enum field_index f_index)
   {
    switch(f_name)
     {
@@ -186,7 +198,7 @@ String map_field_name(enum field_index f_index)
         break;
     }
   }
-*/
+ */
 class MyClientCallback : public BLEClientCallbacks
   {
     void onConnect(BLEClient* pclient)
@@ -197,12 +209,6 @@ class MyClientCallback : public BLEClientCallbacks
       {
         connected = false;
         Serial.println(F("onDisconnect"));
-        #ifdef RELAISMODE
-          #ifdef DEBUG
-            Serial.println(F("deactivate relais contact"));
-          #endif
-          digitalWrite(RELAIS_PIN, RELAIS_LOW);
-        #endif
       }
   };
 MyClientCallback  locClientCallback   = MyClientCallback();
@@ -234,15 +240,14 @@ class BluettiAdvertisedDeviceCallbacks: public BLEAdvertisedDeviceCallbacks
 BluettiAdvertisedDeviceCallbacks  BluettiAdvDevCallbacks  =  BluettiAdvertisedDeviceCallbacks();
 BluettiAdvertisedDeviceCallbacks* pBluettiAdvDevCallbacks = &BluettiAdvDevCallbacks;
 
-
 device_field_data_t* getpDevField()
   {
     S2HEXVAL(" getpDevField pBluetti", (uint32_t) &bluetti_device_state[0], (uint32_t) bluetti_device_state);
-    init_dev_fields(&bluetti_device_state[0], &bluetti_device_command[0], &bluetti_polling_command[0]);
+    init_dev_fields(&bluetti_device_state[0], &bluetti_device_command[0], &bluetti_polling_command[0], &bluetti_scan_command[0]);
     return &bluetti_device_state[0];
   }
 
-void initBluetooth()
+void     initBluetooth()
   {
     BLEDevice::init("");
     BLEScan* pBLEScan = BLEDevice::getScan();
@@ -251,30 +256,46 @@ void initBluetooth()
     pBLEScan->setInterval(1349);
     pBLEScan->setWindow(449);
     pBLEScan->setActiveScan(true);
-    pBLEScan->start(5, false);
+    pBLEScan->start(8, false);
 
     commandHandleQueue = xQueueCreate( 5, sizeof(bt_command_t ) );
     sendQueue = xQueueCreate( 5, sizeof(bt_command_t) );
+    lastBTMessage =  millis();
   }
 
 static void notifyCallback( BLERemoteCharacteristic* pBLERemoteCharacteristic,
                             uint8_t* pData, size_t length,   bool isNotify)
   {
     #ifdef DEBUG
-        S2VAL("notifyCallback F01 - Write Response ", length, "Bytes");
-        /* pData Debug... */
-        serHEXdump(pData, length);
-          Serial.println();
+        // pData Debug...
+          //S2VAL("notifyCallback Response ", length, "Bytes");
+        if (isScan == FALSE)
+          {
+            //Serial.println();
+            serHEXdump(pData, length);
+            //Serial.println();
+          }
+        else
+          {
+            //Serial.println();
+            //serHEXdump(pData, length, FALSE);
+            //Serial.println();
+          }
       #endif
-
     bt_command_t command_handle;
+    //SOUT((uint32_t) &command_handle); SOUT("    ");
+    //if(xQueueReceive(commandHandleQueue, &command_handle, 500))
     if(xQueueReceive(commandHandleQueue, &command_handle, 500))
       {
-        parse_bluetooth_data(NULL, command_handle.page, command_handle.offset, pData, length);
+        //SOUT(isScan); SOUT("  ");
+        if (isScan == FALSE) // normal mode
+          { parse_bluetooth_data(NULL, command_handle.page, command_handle.offset, pData, length); }
+        else
+          { parse_bluetooth_data(NULL, command_handle.page, command_handle.offset, pData, length + 0x100); }
       }
   }
 
-bool connectToServer()
+bool     connectToServer()
   {
     // create client
         SVAL("Forming a connection to ", pbluettiDevice->getAddress().toString().c_str());
@@ -325,26 +346,26 @@ bool connectToServer()
     return true;
   }
 
-void handleBTCommandQueue()
+void     handleBTCommandQueue()
   {
     bt_command_t command;
     if(xQueueReceive(sendQueue, &command, 0))
       {
         #ifdef DEBUG
-            STXT("handleBTComm Write Request FF02 - Value: ");
-            serHEXdump((uint8_t*)&command, 8);
+            //STXT("handleBTComm Write Request FF02 - Value: ");
+            if (isScan == FALSE) serHEXdump((uint8_t*)&command, 8);
+            //else                 serHEXdump((uint8_t*)&command, 8, FALSE);
               //for(int i=0; i<8; i++)
               //  {
               //     if ( i % 2 == 0){ Serial.print(" "); };
               //     Serial.printf("%02x", ((uint8_t*)&command)[i]);
               //  }
-            Serial.println("");
           #endif
         pRemoteWriteCharacteristic->writeValue((uint8_t*)&command, sizeof(command),true);
       };
   }
 
-void sendBTCommand(bt_command_t command)
+void     sendBTCommand(bt_command_t command)
   {
     bt_command_t cmd = command;
     xQueueSend(sendQueue, &cmd, 0);
@@ -373,10 +394,12 @@ uint16_t bt_modbus_crc(uint8_t buf[], int len)
      return crc;
   }
 
-void handleBluetooth()
+void     handleBluetooth()
   {
+    //STXT(" handleBluetooth ");
     if (doConnect == true)
       {
+        //STXT("  doConnect ");
         if (connectToServer())
           {
             Serial.println(F("We are now connected to the Bluetti BLE Server."));
@@ -398,6 +421,7 @@ void handleBluetooth()
       }
     if (connected)
       {
+        //STXT("   is connected ");
         // poll for device state
         if ( millis() - lastBTMessage > BLUETOOTH_QUERY_MESSAGE_DELAY)
           {
@@ -426,13 +450,17 @@ void handleBluetooth()
           }
         handleBTCommandQueue();
       }
-    else if(doScan)
+    else
       {
-        BLEDevice::getScan()->start(0);
+        //STXT("   else ");
+        if(doScan)
+          {
+            BLEDevice::getScan()->start(0);
+          }
       }
   }
 
-void pollBluetti()
+void     pollBluetti()
   {
     if (doConnect == true)
       {
@@ -445,15 +473,6 @@ void pollBluetti()
             Serial.println(F("We have failed to connect to the server; there is nothing more we will do."));
           }
         doConnect = false;
-      }
-    if ((millis() - lastBTMessage) > (MAX_DISCONNECTED_TIME_UNTIL_REBOOT * 60000))
-      {
-        Serial.println(F("BT is disconnected over allowed limit, reboot device"));
-        if (SLEEP_TIME_ON_BT_NOT_AVAIL > OFF)
-            { ESP.restart(); }
-            //{ esp_deep_sleep_start(); }
-          else
-            { ESP.restart(); }
       }
     if (connected)
       {
@@ -491,9 +510,78 @@ void pollBluetti()
       {
         BLEDevice::getScan()->start(0);
       }
+    if ((millis() - lastBTMessage) > (MAX_DISCONNECTED_TIME_UNTIL_REBOOT * 60000))
+      {
+        Serial.println(F("BT is disconnected over allowed limit, reboot device"));
+        if (SLEEP_TIME_ON_BT_NOT_AVAIL > OFF)
+          { ESP.restart();
+            //esp_deep_sleep_start();
+          }
+          else
+          { ESP.restart(); }
+      }
+  }
+void     scanBluetti(const uint8_t _page, const uint8_t _offset, uint8_t _words)
+  {
+    uint8_t i;
+    bt_command_t command;
+    if (doConnect == true)
+      { if (connectToServer()) Serial.println(F("We are now connected to the Bluetti BLE Server."));
+        else                   Serial.println(F("We have failed to connect to the server; there is nothing more we will do."));
+        doConnect = false;
+      }
+    if ((millis() - lastBTMessage) > (MAX_DISCONNECTED_TIME_UNTIL_REBOOT * 60000))
+      {
+        Serial.println(F("BT is disconnected over allowed limit, reboot device"));
+        if (SLEEP_TIME_ON_BT_NOT_AVAIL > OFF)
+            { ESP.restart(); }
+            //{ esp_deep_sleep_start(); }
+          else
+            { ESP.restart(); }
+      }
+    if (connected)
+      { // scan for device entries - only used for monitoring
+        isScan = TRUE;
+        for (i = 0 ; i < _words ; i++ )
+          {
+            SOUT(" scanBluetti page offs i "); SOUT(_page); SOUT(" "); SOUT(_offset); SOUT(" ");SOUT(i); SOUT(" ");
+            if ( millis() - lastBTMessage > BLUETOOTH_QUERY_MESSAGE_DELAY)
+              {
+                // build command[index: polltick]
+                  command.prefix = 0x01;
+                  command.field_update_cmd = 0x03;
+                  command.page   = _page;
+                  command.offset = _offset + i;
+                  command.len    = (uint16_t) 1 << 8;
+                  command.check_sum = bt_modbus_crc((uint8_t*) &command,6);
+                  //serHEXdump((uint8_t*) &command, 8 , FALSE);
+
+                xQueueSend(commandHandleQueue, &command, portMAX_DELAY);
+                xQueueSend(sendQueue, &command, portMAX_DELAY);
+                lastBTMessage = millis();
+                handleBTCommandQueue();
+                sleep(1);
+              }
+          }
+        isScan = FALSE;
+      }
+    else if(doScan)
+      {
+        BLEDevice::getScan()->start(0);
+      }
+    if ((millis() - lastBTMessage) > (MAX_DISCONNECTED_TIME_UNTIL_REBOOT * 60000))
+      {
+        Serial.println(F("BT is disconnected over allowed limit, reboot device"));
+        if (SLEEP_TIME_ON_BT_NOT_AVAIL > OFF)
+          { ESP.restart();
+            //esp_deep_sleep_start();
+          }
+          else
+          { ESP.restart(); }
+      }
   }
 
-bool isBTconnected()
+bool     isBTconnected()
   {
     return connected;
   }

@@ -98,280 +98,282 @@
     device_field_data_t* pbluetti_dev_state = NULL;
     // --- value storage
       // INFO device offset sort
-        static String    BLUDEVICE_TYPE           = "";
-        static String    BLUSERIAL_NUMBER         = "";
-        static float     BLUARM_VERSION           = 0.0;
-        static float     BLUDSP_VERSION           = 0.0;
-        static uint16_t  BLUDC_INPUT_POWER        = 0;
-        static uint16_t  BLUAC_INPUT_POWER        = 0;
-        static uint16_t  BLUAC_OUTPUT_POWER       = 0;
-        static uint16_t  BLUDC_OUTPUT_POWER       = 0;
-        static float     BLUPOWER_GENERATION      = 0;
-        static uint16_t  BLUTOTAL_BATT_PERC       = 0;
-        static bool      BLUAC_OUTPUT_ON          = 0;
-        static bool      BLUDC_OUTPUT_ON          = 0;
+        static String    BLUDEVICE_TYPE           = "---";
+        static String    BLUSERIAL_NUMBER         = "---";
+        static float     BLUARM_VERSION           = 100.0;
+        static float     BLUDSP_VERSION           = 100.0;
+        static uint16_t  BLUDC_INPUT_POWER        = 100;
+        static uint16_t  BLUAC_INPUT_POWER        = 100;
+        static uint16_t  BLUAC_OUTPUT_POWER       = 100;
+        static uint16_t  BLUDC_OUTPUT_POWER       = 100;
+        static float     BLUPOWER_GENERATION      = 100;
+        static uint16_t  BLUTOTAL_BATT_PERC       = 100;
+        static bool      BLUAC_OUTPUT_ON          = 100;
+        static bool      BLUDC_OUTPUT_ON          = 100;
       // INFO internal
-        static uint16_t  BLUAC_OUTPUT_MODE        = 0;
-        static float     BLUINTERN_AC_VOLT        = 0.0;
-        static float     BLUINTERN_CURR_1         = 0.0;
-        static uint16_t  BLUINTERN_POWER_1        = 0;
-        static float     BLUINTERN_AC_FREQ        = 0.0;
-        static float     BLUINTERN_CURR_2         = 0.0;
-        static uint16_t  BLUINTERN_POWER_2        = 0;
-        static float     BLUAC_INPUT_VOLT         = 0.0;
-        static float     BLUINTERN_CURR_3         = 0.0;
-        static uint16_t  BLUINTERN_POWER_3        = 0;
-        static float     BLUAC_INPUT_FREQ         = 0.0;
-        static float     BLUINT_DC_INP_VOLT       = 0.0;
-        static uint16_t  BLUINT_DC_INP_POW        = 0;
-        static float     BLUINT_DC_INP_CURR       = 0.0;
-        static uint16_t  BLUPACK_NUM_MAX          = 0;
-        static float     BLUTOTAL_BATT_VOLT       = 0.0;
-        static float     BLUTOTAL_BATT_CURR       = 0.0;
-        static uint16_t  BLUPACK_NUM              = 0;
-        static uint16_t  BLUPACK_STATUS           = 0;
-        static float     BLUPACK_VOLTAGE          = 0.0;
-        static uint16_t  BLUPACK_BATT_PERC        = 0;
-        //static uint16_t  BLUCELL_VOTAGES        = 0;
-        static uint16_t  BLUPACK_BMS_VERSION      = 0;
+        static uint16_t  BLUAC_OUTPUT_MODE        = 100;
+        static float     BLUINTERN_AC_VOLT        = 100.0;
+        static float     BLUINTERN_CURR_1         = 100.0;
+        static uint16_t  BLUINTERN_POWER_1        = 100;
+        static float     BLUINTERN_AC_FREQ        = 100.0;
+        static float     BLUINTERN_CURR_2         = 100.0;
+        static uint16_t  BLUINTERN_POWER_2        = 100;
+        static float     BLUAC_INPUT_VOLT         = 100.0;
+        static float     BLUINTERN_CURR_3         = 100.0;
+        static uint16_t  BLUINTERN_POWER_3        = 100;
+        static float     BLUAC_INPUT_FREQ         = 100.0;
+        static float     BLUINT_DC_INP_VOLT       = 100.0;
+        static uint16_t  BLUINT_DC_INP_POW        = 100;
+        static float     BLUINT_DC_INP_CURR       = 100.0;
+        static uint16_t  BLUPACK_NUM_MAX          = 100;
+        static float     BLUTOTAL_BATT_VOLT       = 100.0;
+        static float     BLUTOTAL_BATT_CURR       = 100.0;
+        static uint16_t  BLUPACK_NUM              = 100;
+        static uint16_t  BLUPACK_STATUS           = 100;
+        static float     BLUPACK_VOLTAGE          = 100.0;
+        static uint16_t  BLUPACK_BATT_PERC        = 100;
+        //static uint16_t  BLUCELL_VOTAGES        = 100;
+        static uint16_t  BLUPACK_BMS_VERSION      = 100;
       // CONTROL elements
-        static uint16_t  BLUUPS_MODE              = 0;
-        static uint16_t  BLUSPLIT_PHASE_ON        = 0;
-        static uint16_t  BLUSPLIT_PH_MACH_MODE    = 0;
-        static uint16_t  BLUSET_PACK_NUM          = 0;
-        static uint16_t  BLUSET_AC_OUT_ON         = 0;
-        static uint16_t  BLUSET_DC_OUT_ON         = 0;
-        static bool      BLUGRID_CHANGE_ON        = 0;
-        static uint16_t  BLUTIME_CTRL_ON          = 0;
-        static uint16_t  BLUBATT_RANGE_START      = 0;
-        static uint16_t  BLUBATT_RANGE_END        = 0;
-        static uint16_t  BLUBLUETOOTH_CONN        = 0;
-        static uint16_t  BLUAUTO_SLEEP_MODE       = 0;
-        static uint16_t  BLULED_CONTROL           = 0;
-        static uint16_t  BLUFIELD_UNDEFINED       = 0;
-    // --- old value
-      // INFO device offset sort
-        static String    BLUDEVICE_TYPEold       = "---";
-        static String    BLUSERIAL_NUMBERold      = "---";
-        static float     BLUARM_VERSIONold        = 1000.0;
-        static float     BLUDSP_VERSIONold        = 1000.0;
-        static uint16_t  BLUDC_INPUT_POWERold     = 1000;
-        static uint16_t  BLUAC_INPUT_POWERold     = 1000;
-        static uint16_t  BLUAC_OUTPUT_POWERold    = 1000;
-        static uint16_t  BLUDC_OUTPUT_POWERold    = 1000;
-        static float     BLUPOWER_GENERATIONold   = 1000.0;
-        static uint16_t  BLUTOTAL_BATT_PERCold    = 1000;
-        static bool      BLUAC_OUTPUT_ONold       = 100;
-        static bool      BLUDC_OUTPUT_ONold       = 100;
-      // INFO internal
-        static uint16_t  BLUAC_OUTPUT_MODEold     = 1000;
-        static float     BLUINTERN_AC_VOLTold     = 1000.0;
-        static float     BLUINTERN_CURR_1old      = 1000.0;
-        static uint16_t  BLUINTERN_POWER_1old     = 1000;
-        static float     BLUINTERN_AC_FREQold     = 1000.0;
-        static float     BLUINTERN_CURR_2old      = 1000.0;
-        static uint16_t  BLUINTERN_POWER_2old     = 1000;
-        static float     BLUAC_INPUT_VOLTold      = 1000.0;
-        static float     BLUINTERN_CURR_3old      = 1000.0;
-        static uint16_t  BLUINTERN_POWER_3old     = 1000;
-        static float     BLUAC_INPUT_FREQold      = 1000.0;
-        static float     BLUINT_DC_INP_VOLTold    = 1000.0;
-        static uint16_t  BLUINT_DC_INP_POWold     = 1000;
-        static float     BLUINT_DC_INP_CURRold    = 1000.0;
-        static uint16_t  BLUPACK_NUM_MAXold       = 1000;
-        static float     BLUTOTAL_BATT_VOLTold    = 1000.0;
-        static float     BLUTOTAL_BATT_CURRold    = 1000.0;
-        static uint16_t  BLUPACK_NUMold           = 1000;
-        static uint16_t  BLUPACK_STATUSold        = 1000;
-        static float     BLUPACK_VOLTAGEold       = 1000.0;
-        static uint16_t  BLUPACK_BATT_PERCold     = 1000;
-        //static uint16_t  BLUCELL_VOTAGESold     = 1000;
-        static uint16_t  BLUPACK_BMS_VERSIONold   = 1000;
-      // CONTROL elements
-        static uint16_t  BLUUPS_MODEold           = 1000;
-        static uint16_t  BLUSPLIT_PHASE_ONold     = 1000;
-        static uint16_t  BLUSPLIT_PH_MACH_MODEold = 1000;
-        static uint16_t  BLUSET_PACK_NUMold       = 1000;
-        static uint16_t  BLUSET_AC_OUT_ONold      = 1000;
-        static uint16_t  BLUSET_DC_OUT_ONold      = 1000;
-        static bool      BLUGRID_CHANGE_ONold     = 100;
-        static uint16_t  BLUTIME_CTRL_ONold       = 1000;
-        static uint16_t  BLUBATT_RANGE_STARTold   = 1000;
-        static uint16_t  BLUBATT_RANGE_ENDold     = 1000;
-        static uint16_t  BLUBLUETOOTH_CONNold     = 1000;
-        static uint16_t  BLUAUTO_SLEEP_MODEold    = 1000;
-        static uint16_t  BLULED_CONTROLold        = 1000;
-        static uint16_t  BLUFIELD_UNDEFINEDold    = 1000;
+        static uint16_t  BLUUPS_MODE              = 100;
+        static uint16_t  BLUSPLIT_PHASE_ON        = 100;
+        static uint16_t  BLUSPLIT_PH_MACH_MODE    = 100;
+        static uint16_t  BLUSET_PACK_NUM          = 100;
+        static uint16_t  BLUSET_AC_OUT_ON         = 100;
+        static uint16_t  BLUSET_DC_OUT_ON         = 100;
+        static bool      BLUGRID_CHANGE_ON        = 100;
+        static uint16_t  BLUTIME_CTRL_ON          = 100;
+        static uint16_t  BLUBATT_RANGE_START      = 100;
+        static uint16_t  BLUBATT_RANGE_END        = 100;
+        static uint16_t  BLUBLUETOOTH_CONN        = 100;
+        static uint16_t  BLUAUTO_SLEEP_MODE       = 100;
+        static uint16_t  BLULED_CONTROL           = 100;
+        static uint16_t  BLUFIELD_UNDEFINED       = 100;
+          /* --- old value
+            // INFO device offset sort
+              static String    BLUDEVICE_TYPEold       = "---";
+              static String    BLUSERIAL_NUMBERold      = "---";
+              static float     BLUARM_VERSIONold        = 1000.0;
+              static float     BLUDSP_VERSIONold        = 1000.0;
+              static uint16_t  BLUDC_INPUT_POWERold     = 1000;
+              static uint16_t  BLUAC_INPUT_POWERold     = 1000;
+              static uint16_t  BLUAC_OUTPUT_POWERold    = 1000;
+              static uint16_t  BLUDC_OUTPUT_POWERold    = 1000;
+              static float     BLUPOWER_GENERATIONold   = 1000.0;
+              static uint16_t  BLUTOTAL_BATT_PERCold    = 1000;
+              static bool      BLUAC_OUTPUT_ONold       = 100;
+              static bool      BLUDC_OUTPUT_ONold       = 100;
+            // INFO internal
+              static uint16_t  BLUAC_OUTPUT_MODEold     = 1000;
+              static float     BLUINTERN_AC_VOLTold     = 1000.0;
+              static float     BLUINTERN_CURR_1old      = 1000.0;
+              static uint16_t  BLUINTERN_POWER_1old     = 1000;
+              static float     BLUINTERN_AC_FREQold     = 1000.0;
+              static float     BLUINTERN_CURR_2old      = 1000.0;
+              static uint16_t  BLUINTERN_POWER_2old     = 1000;
+              static float     BLUAC_INPUT_VOLTold      = 1000.0;
+              static float     BLUINTERN_CURR_3old      = 1000.0;
+              static uint16_t  BLUINTERN_POWER_3old     = 1000;
+              static float     BLUAC_INPUT_FREQold      = 1000.0;
+              static float     BLUINT_DC_INP_VOLTold    = 1000.0;
+              static uint16_t  BLUINT_DC_INP_POWold     = 1000;
+              static float     BLUINT_DC_INP_CURRold    = 1000.0;
+              static uint16_t  BLUPACK_NUM_MAXold       = 1000;
+              static float     BLUTOTAL_BATT_VOLTold    = 1000.0;
+              static float     BLUTOTAL_BATT_CURRold    = 1000.0;
+              static uint16_t  BLUPACK_NUMold           = 1000;
+              static uint16_t  BLUPACK_STATUSold        = 1000;
+              static float     BLUPACK_VOLTAGEold       = 1000.0;
+              static uint16_t  BLUPACK_BATT_PERCold     = 1000;
+              //static uint16_t  BLUCELL_VOTAGESold     = 1000;
+              static uint16_t  BLUPACK_BMS_VERSIONold   = 1000;
+            // CONTROL elements
+              static uint16_t  BLUUPS_MODEold           = 1000;
+              static uint16_t  BLUSPLIT_PHASE_ONold     = 1000;
+              static uint16_t  BLUSPLIT_PH_MACH_MODEold = 1000;
+              static uint16_t  BLUSET_PACK_NUMold       = 1000;
+              static uint16_t  BLUSET_AC_OUT_ONold      = 1000;
+              static uint16_t  BLUSET_DC_OUT_ONold      = 1000;
+              static bool      BLUGRID_CHANGE_ONold     = 100;
+              static uint16_t  BLUTIME_CTRL_ONold       = 1000;
+              static uint16_t  BLUBATT_RANGE_STARTold   = 1000;
+              static uint16_t  BLUBATT_RANGE_ENDold     = 1000;
+              static uint16_t  BLUBLUETOOTH_CONNold     = 1000;
+              static uint16_t  BLUAUTO_SLEEP_MODEold    = 1000;
+              static uint16_t  BLULED_CONTROLold        = 1000;
+              static uint16_t  BLUFIELD_UNDEFINEDold    = 1000;
+           */
     // --- MQTT value as string
       static String valBLU[FIELD_IDX_MAX];
-      /*
-      // INFO device offset sort
-        static String    valBLUDEVICE_TYPE        = "";
-        static String    valBLUSERIAL_NUMBER      = "";
-        static String    valBLUARM_VERSION        = "";
-        static String    valBLUDSP_VERSION        = "";
-        static String    valBLUDC_INPUT_POWER     = "";
-        static String    valBLUAC_INPUT_POWER     = "";
-        static String    valBLUAC_OUTPUT_POWER    = "";
-        static String    valBLUDC_OUTPUT_POWER    = "";
-        static String    valBLUPOWER_GENERATION   = "";
-        static String    valBLUTOTAL_BATT_PERC    = "";
-        static String    valBLUAC_OUTPUT_ON       = "";
-        static String    valBLUDC_OUTPUT_ON       = "";
-      // INFO internal
-        static String    valBLUAC_OUTPUT_MODE     = "";
-        static String    valBLUINTERN_AC_VOLT     = "";
-        static String    valBLUINTERN_CURR_1      = "";
-        static String    valBLUINTERN_POWER_1     = "";
-        static String    valBLUINTERN_AC_FREQ     = "";
-        static String    valBLUINTERN_CURR_2      = "";
-        static String    valBLUINTERN_POWER_2     = "";
-        static String    valBLUAC_INPUT_VOLT      = "";
-        static String    valBLUINTERN_CURR_3      = "";
-        static String    valBLUINTERN_POWER_3     = "";
-        static String    valBLUAC_INPUT_FREQ      = "";
-        static String    valBLUINT_DC_INP_VOLT    = "";
-        static String    valBLUINT_DC_INP_POW     = "";
-        static String    valBLUINT_DC_INP_CURR    = "";
-        static String    valBLUPACK_NUM_MAX       = "";
-        static String    valBLUTOTAL_BATT_VOLT    = "";
-        static String    valBLUTOTAL_BATT_CURR    = "";
-        static String    valBLUPACK_NUM           = "";
-        static String    valBLUPACK_STATUS        = "";
-        static String    valBLUPACK_VOLTAGE       = "";
-        static String    valBLUPACK_BATT_PERC     = "";
-        //static String  valBLUCELL_VOTAGES       = "";
-        static String    valBLUPACK_BMS_VERSION   = "";
-      // CONTROL elements
-        static String    valBLUUPS_MODE           = "";
-        static String    valBLUSPLIT_PHASE_ON     = "";
-        static String    valBLUSPLIT_PH_MACH_MODE = "";
-        static String    valBLUSET_PACK_NUM       = "";
-        static String    valBLUSET_AC_OUT_ON      = "";
-        static String    valBLUSET_DC_OUT_ON      = "";
-        static String    valBLUGRID_CHANGE_ON     = "";
-        static String    valBLUTIME_CTRL_ON       = "";
-        static String    valBLUBATT_RANGE_START   = "";
-        static String    valBLUBATT_RANGE_END     = "";
-        static String    valBLUBLUETOOTH_CONN      = "";
-        static String    valBLUAUTO_SLEEP_MODE    = "";
-        static String    valBLULED_CONTROL        = "";
-        static String    valBLUFIELD_UNDEFINED    = "";
-      */
+        /*
+          // INFO device offset sort
+            static String    valBLUDEVICE_TYPE        = "";
+            static String    valBLUSERIAL_NUMBER      = "";
+            static String    valBLUARM_VERSION        = "";
+            static String    valBLUDSP_VERSION        = "";
+            static String    valBLUDC_INPUT_POWER     = "";
+            static String    valBLUAC_INPUT_POWER     = "";
+            static String    valBLUAC_OUTPUT_POWER    = "";
+            static String    valBLUDC_OUTPUT_POWER    = "";
+            static String    valBLUPOWER_GENERATION   = "";
+            static String    valBLUTOTAL_BATT_PERC    = "";
+            static String    valBLUAC_OUTPUT_ON       = "";
+            static String    valBLUDC_OUTPUT_ON       = "";
+          // INFO internal
+            static String    valBLUAC_OUTPUT_MODE     = "";
+            static String    valBLUINTERN_AC_VOLT     = "";
+            static String    valBLUINTERN_CURR_1      = "";
+            static String    valBLUINTERN_POWER_1     = "";
+            static String    valBLUINTERN_AC_FREQ     = "";
+            static String    valBLUINTERN_CURR_2      = "";
+            static String    valBLUINTERN_POWER_2     = "";
+            static String    valBLUAC_INPUT_VOLT      = "";
+            static String    valBLUINTERN_CURR_3      = "";
+            static String    valBLUINTERN_POWER_3     = "";
+            static String    valBLUAC_INPUT_FREQ      = "";
+            static String    valBLUINT_DC_INP_VOLT    = "";
+            static String    valBLUINT_DC_INP_POW     = "";
+            static String    valBLUINT_DC_INP_CURR    = "";
+            static String    valBLUPACK_NUM_MAX       = "";
+            static String    valBLUTOTAL_BATT_VOLT    = "";
+            static String    valBLUTOTAL_BATT_CURR    = "";
+            static String    valBLUPACK_NUM           = "";
+            static String    valBLUPACK_STATUS        = "";
+            static String    valBLUPACK_VOLTAGE       = "";
+            static String    valBLUPACK_BATT_PERC     = "";
+            //static String  valBLUCELL_VOTAGES       = "";
+            static String    valBLUPACK_BMS_VERSION   = "";
+          // CONTROL elements
+            static String    valBLUUPS_MODE           = "";
+            static String    valBLUSPLIT_PHASE_ON     = "";
+            static String    valBLUSPLIT_PH_MACH_MODE = "";
+            static String    valBLUSET_PACK_NUM       = "";
+            static String    valBLUSET_AC_OUT_ON      = "";
+            static String    valBLUSET_DC_OUT_ON      = "";
+            static String    valBLUGRID_CHANGE_ON     = "";
+            static String    valBLUTIME_CTRL_ON       = "";
+            static String    valBLUBATT_RANGE_START   = "";
+            static String    valBLUBATT_RANGE_END     = "";
+            static String    valBLUBLUETOOTH_CONN      = "";
+            static String    valBLUAUTO_SLEEP_MODE    = "";
+            static String    valBLULED_CONTROL        = "";
+            static String    valBLUFIELD_UNDEFINED    = "";
+        */
     // --- MQTT publish flag
       static int8_t pubBLU[FIELD_IDX_MAX];
-      /*
-      // INFO device offset sort
-        static int8_t    pubBLUDEVICE_TYPE        = 0;
-        static int8_t    pubBLUSERIAL_NUMBER      = 0;
-        static int8_t    pubBLUARM_VERSION        = 0;
-        static int8_t    pubBLUDSP_VERSION        = 0;
-        static int8_t    pubBLUDC_INPUT_POWER     = 0;
-        static int8_t    pubBLUAC_INPUT_POWER     = 0;
-        static int8_t    pubBLUAC_OUTPUT_POWER    = 0;
-        static int8_t    pubBLUDC_OUTPUT_POWER    = 0;
-        static int8_t    pubBLUPOWER_GENERATION   = 0;
-        static int8_t    pubBLUTOTAL_BATT_PERC    = 0;
-        static int8_t    pubBLUAC_OUTPUT_ON       = 0;
-        static int8_t    pubBLUDC_OUTPUT_ON       = 0;
-      // INFO internal
-        static int8_t    pubBLUAC_OUTPUT_MODE     = 0;
-        static int8_t    pubBLUINTERN_AC_VOLT     = 0;
-        static int8_t    pubBLUINTERN_CURR_1      = 0;
-        static int8_t    pubBLUINTERN_POWER_1     = 0;
-        static int8_t    pubBLUINTERN_AC_FREQ     = 0;
-        static int8_t    pubBLUINTERN_CURR_2      = 0;
-        static int8_t    pubBLUINTERN_POWER_2     = 0;
-        static int8_t    pubBLUAC_INPUT_VOLT      = 0;
-        static int8_t    pubBLUINTERN_CURR_3      = 0;
-        static int8_t    pubBLUINTERN_POWER_3     = 0;
-        static int8_t    pubBLUAC_INPUT_FREQ      = 0;
-        static int8_t    pubBLUINT_DC_INP_VOLT    = 0;
-        static int8_t    pubBLUINT_DC_INP_POW     = 0;
-        static int8_t    pubBLUINT_DC_INP_CURR    = 0;
-        static int8_t    pubBLUPACK_NUM_MAX       = 0;
-        static int8_t    pubBLUTOTAL_BATT_VOLT    = 0;
-        static int8_t    pubBLUTOTAL_BATT_CURR    = 0;
-        static int8_t    pubBLUPACK_NUM           = 0;
-        static int8_t    pubBLUPACK_STATUS        = 0;
-        static int8_t    pubBLUPACK_VOLTAGE       = 0;
-        static int8_t    pubBLUPACK_BATT_PERC     = 0;
-        //static int8_t  pubBLUCELL_VOTAGES       = 0;
-        static int8_t    pubBLUPACK_BMS_VERSION     = 0;
-      // CONTROL elements
-        static int8_t    pubBLUUPS_MODE           = 0;
-        static int8_t    pubBLUSPLIT_PHASE_ON     = 0;
-        static int8_t    pubBLUSPLIT_PH_MACH_MODE = 0;
-        static int8_t    pubBLUSET_PACK_NUM       = 0;
-        static int8_t    pubBLUSET_AC_OUT_ON      = 0;
-        static int8_t    pubBLUSET_DC_OUT_ON      = 0;
-        static int8_t    pubBLUGRID_CHANGE_ON     = 0;
-        static int8_t    pubBLUTIME_CTRL_ON       = 0;
-        static int8_t    pubBLUBATT_RANGE_START   = 0;
-        static int8_t    pubBLUBATT_RANGE_END     = 0;
-        static int8_t    pubBLUBLUETOOTH_CONN     = 0;
-        static int8_t    pubBLUAUTO_SLEEP_MODE    = 0;
-        static int8_t    pubBLULED_CONTROL        = 0;
-        static int8_t    pubBLUFIELD_UNDEFINED    = 0;
-      */
+        /*
+          // INFO device offset sort
+            static int8_t    pubBLUDEVICE_TYPE        = 0;
+            static int8_t    pubBLUSERIAL_NUMBER      = 0;
+            static int8_t    pubBLUARM_VERSION        = 0;
+            static int8_t    pubBLUDSP_VERSION        = 0;
+            static int8_t    pubBLUDC_INPUT_POWER     = 0;
+            static int8_t    pubBLUAC_INPUT_POWER     = 0;
+            static int8_t    pubBLUAC_OUTPUT_POWER    = 0;
+            static int8_t    pubBLUDC_OUTPUT_POWER    = 0;
+            static int8_t    pubBLUPOWER_GENERATION   = 0;
+            static int8_t    pubBLUTOTAL_BATT_PERC    = 0;
+            static int8_t    pubBLUAC_OUTPUT_ON       = 0;
+            static int8_t    pubBLUDC_OUTPUT_ON       = 0;
+          // INFO internal
+            static int8_t    pubBLUAC_OUTPUT_MODE     = 0;
+            static int8_t    pubBLUINTERN_AC_VOLT     = 0;
+            static int8_t    pubBLUINTERN_CURR_1      = 0;
+            static int8_t    pubBLUINTERN_POWER_1     = 0;
+            static int8_t    pubBLUINTERN_AC_FREQ     = 0;
+            static int8_t    pubBLUINTERN_CURR_2      = 0;
+            static int8_t    pubBLUINTERN_POWER_2     = 0;
+            static int8_t    pubBLUAC_INPUT_VOLT      = 0;
+            static int8_t    pubBLUINTERN_CURR_3      = 0;
+            static int8_t    pubBLUINTERN_POWER_3     = 0;
+            static int8_t    pubBLUAC_INPUT_FREQ      = 0;
+            static int8_t    pubBLUINT_DC_INP_VOLT    = 0;
+            static int8_t    pubBLUINT_DC_INP_POW     = 0;
+            static int8_t    pubBLUINT_DC_INP_CURR    = 0;
+            static int8_t    pubBLUPACK_NUM_MAX       = 0;
+            static int8_t    pubBLUTOTAL_BATT_VOLT    = 0;
+            static int8_t    pubBLUTOTAL_BATT_CURR    = 0;
+            static int8_t    pubBLUPACK_NUM           = 0;
+            static int8_t    pubBLUPACK_STATUS        = 0;
+            static int8_t    pubBLUPACK_VOLTAGE       = 0;
+            static int8_t    pubBLUPACK_BATT_PERC     = 0;
+            //static int8_t  pubBLUCELL_VOTAGES       = 0;
+            static int8_t    pubBLUPACK_BMS_VERSION     = 0;
+          // CONTROL elements
+            static int8_t    pubBLUUPS_MODE           = 0;
+            static int8_t    pubBLUSPLIT_PHASE_ON     = 0;
+            static int8_t    pubBLUSPLIT_PH_MACH_MODE = 0;
+            static int8_t    pubBLUSET_PACK_NUM       = 0;
+            static int8_t    pubBLUSET_AC_OUT_ON      = 0;
+            static int8_t    pubBLUSET_DC_OUT_ON      = 0;
+            static int8_t    pubBLUGRID_CHANGE_ON     = 0;
+            static int8_t    pubBLUTIME_CTRL_ON       = 0;
+            static int8_t    pubBLUBATT_RANGE_START   = 0;
+            static int8_t    pubBLUBATT_RANGE_END     = 0;
+            static int8_t    pubBLUBLUETOOTH_CONN     = 0;
+            static int8_t    pubBLUAUTO_SLEEP_MODE    = 0;
+            static int8_t    pubBLULED_CONTROL        = 0;
+            static int8_t    pubBLUFIELD_UNDEFINED    = 0;
+        */
       // MQTT topic
       static String topBLU[FIELD_IDX_MAX];
-      /*
-      // INFO device offset sort
-        static String topBLUDEVICE_TYPE        = DEVICE_F_NAMES[DEVICE_TYPE];
-        static String topBLUSERIAL_NUMBER      = DEVICE_F_NAMES[SERIAL_NUMBER];
-        static String topBLUARM_VERSION        = DEVICE_F_NAMES[ARM_VERSION];
-        static String topBLUDSP_VERSION        = DEVICE_F_NAMES[DSP_VERSION];
-        static String topBLUDC_INPUT_POWER     = DEVICE_F_NAMES[DC_INPUT_POWER];
-        static String topBLUAC_INPUT_POWER     = DEVICE_F_NAMES[AC_INPUT_POWER];
-        static String topBLUAC_OUTPUT_POWER    = DEVICE_F_NAMES[AC_OUTPUT_POWER];
-        static String topBLUDC_OUTPUT_POWER    = DEVICE_F_NAMES[DC_OUTPUT_POWER];
-        static String topBLUPOWER_GENERATION   = DEVICE_F_NAMES[POWER_GENERATION];
-        static String topBLUTOTAL_BATT_PERC    = DEVICE_F_NAMES[TOTAL_BATT_PERC];
-        static String topBLUAC_OUTPUT_ON       = DEVICE_F_NAMES[AC_OUTPUT_ON];
-        static String topBLUDC_OUTPUT_ON       = DEVICE_F_NAMES[DC_OUTPUT_ON];
-      // INFO internal
-        static String topBLUAC_OUTPUT_MODE     = DEVICE_F_NAMES[AC_OUTPUT_MODE];
-        static String topBLUINTERN_AC_VOLT     = DEVICE_F_NAMES[INTERN_AC_VOLT];
-        static String topBLUINTERN_CURR_1      = DEVICE_F_NAMES[INTERN_CURR_1];
-        static String topBLUINTERN_POWER_1     = DEVICE_F_NAMES[INTERN_POWER_1];
-        static String topBLUINTERN_AC_FREQ     = DEVICE_F_NAMES[INTERN_AC_FREQ];
-        static String topBLUINTERN_CURR_2      = DEVICE_F_NAMES[INTERN_CURR_2];
-        static String topBLUINTERN_POWER_2     = DEVICE_F_NAMES[INTERN_POWER_2];
-        static String topBLUAC_INPUT_VOLT      = DEVICE_F_NAMES[AC_INPUT_VOLT];
-        static String topBLUINTERN_CURR_3      = DEVICE_F_NAMES[INTERN_CURR_3];
-        static String topBLUINTERN_POWER_3     = DEVICE_F_NAMES[INTERN_POWER_3];
-        static String topBLUAC_INPUT_FREQ      = DEVICE_F_NAMES[AC_INPUT_FREQ];
-        static String topBLUINT_DC_INP_VOLT    = DEVICE_F_NAMES[INT_DC_INP_VOLT];
-        static String topBLUINT_DC_INP_POW     = DEVICE_F_NAMES[INT_DC_INP_POW];
-        static String topBLUINT_DC_INP_CURR    = DEVICE_F_NAMES[INT_DC_INP_CURR];
-        static String topBLUPACK_NUM_MAX       = DEVICE_F_NAMES[PACK_NUM_MAX];
-        static String topBLUTOTAL_BATT_VOLT    = DEVICE_F_NAMES[TOTAL_BATT_VOLT];
-        static String topBLUTOTAL_BATT_CURR    = DEVICE_F_NAMES[TOTAL_BATT_CURR];
-        static String topBLUPACK_NUM           = DEVICE_F_NAMES[PACK_NUM];
-        static String topBLUPACK_STATUS        = DEVICE_F_NAMES[PACK_STATUS];
-        static String topBLUPACK_VOLTAGE       = DEVICE_F_NAMES[PACK_VOLTAGE];
-        static String topBLUPACK_BATT_PERC     = DEVICE_F_NAMES[PACK_BATT_PERC];
-        //static String topBLUCELL_VOTAGES     = DEVICE_F_NAMES[CELL_VOTAGES];
-        static String topBLUPACK_BMS_VERSION   = DEVICE_F_NAMES[PACK_BMS_VERSION];
-      // CONTROL elements
-        static String topBLUUPS_MODE           = DEVICE_F_NAMES[UPS_MODE];
-        static String topBLUSPLIT_PHASE_ON     = DEVICE_F_NAMES[SPLIT_PHASE_ON];
-        static String topBLUSPLIT_PH_MACH_MODE = DEVICE_F_NAMES[SPLIT_PH_MACH_MODE];
-        static String topBLUSET_PACK_NUM       = DEVICE_F_NAMES[SET_PACK_NUM];
-        static String topBLUSET_AC_OUT_ON      = DEVICE_F_NAMES[SET_AC_OUT_ON];
-        static String topBLUSET_DC_OUT_ON      = DEVICE_F_NAMES[SET_DC_OUT_ON];
-        static String topBLUGRID_CHANGE_ON     = DEVICE_F_NAMES[GRID_CHANGE_ON];
-        static String topBLUTIME_CTRL_ON       = DEVICE_F_NAMES[TIME_CTRL_ON];
-        static String topBLUBATT_RANGE_START   = DEVICE_F_NAMES[BATT_RANGE_START];
-        static String topBLUBATT_RANGE_END     = DEVICE_F_NAMES[BATT_RANGE_END];
-        static String topBLUBLUETOOTH_CONN     = DEVICE_F_NAMES[BLUETOOTH_CONN];
-        static String topBLUAUTO_SLEEP_MODE    = DEVICE_F_NAMES[AUTO_SLEEP_MODE];
-        static String topBLULED_CONTROL        = DEVICE_F_NAMES[LED_CONTROL];
-        static String topBLUFIELD_UNDEFINED    = DEVICE_F_NAMES[FIELD_UNDEFINED];
-      */
+        /*
+          // INFO device offset sort
+            static String topBLUDEVICE_TYPE        = DEVICE_F_NAMES[DEVICE_TYPE];
+            static String topBLUSERIAL_NUMBER      = DEVICE_F_NAMES[SERIAL_NUMBER];
+            static String topBLUARM_VERSION        = DEVICE_F_NAMES[ARM_VERSION];
+            static String topBLUDSP_VERSION        = DEVICE_F_NAMES[DSP_VERSION];
+            static String topBLUDC_INPUT_POWER     = DEVICE_F_NAMES[DC_INPUT_POWER];
+            static String topBLUAC_INPUT_POWER     = DEVICE_F_NAMES[AC_INPUT_POWER];
+            static String topBLUAC_OUTPUT_POWER    = DEVICE_F_NAMES[AC_OUTPUT_POWER];
+            static String topBLUDC_OUTPUT_POWER    = DEVICE_F_NAMES[DC_OUTPUT_POWER];
+            static String topBLUPOWER_GENERATION   = DEVICE_F_NAMES[POWER_GENERATION];
+            static String topBLUTOTAL_BATT_PERC    = DEVICE_F_NAMES[TOTAL_BATT_PERC];
+            static String topBLUAC_OUTPUT_ON       = DEVICE_F_NAMES[AC_OUTPUT_ON];
+            static String topBLUDC_OUTPUT_ON       = DEVICE_F_NAMES[DC_OUTPUT_ON];
+          // INFO internal
+            static String topBLUAC_OUTPUT_MODE     = DEVICE_F_NAMES[AC_OUTPUT_MODE];
+            static String topBLUINTERN_AC_VOLT     = DEVICE_F_NAMES[INTERN_AC_VOLT];
+            static String topBLUINTERN_CURR_1      = DEVICE_F_NAMES[INTERN_CURR_1];
+            static String topBLUINTERN_POWER_1     = DEVICE_F_NAMES[INTERN_POWER_1];
+            static String topBLUINTERN_AC_FREQ     = DEVICE_F_NAMES[INTERN_AC_FREQ];
+            static String topBLUINTERN_CURR_2      = DEVICE_F_NAMES[INTERN_CURR_2];
+            static String topBLUINTERN_POWER_2     = DEVICE_F_NAMES[INTERN_POWER_2];
+            static String topBLUAC_INPUT_VOLT      = DEVICE_F_NAMES[AC_INPUT_VOLT];
+            static String topBLUINTERN_CURR_3      = DEVICE_F_NAMES[INTERN_CURR_3];
+            static String topBLUINTERN_POWER_3     = DEVICE_F_NAMES[INTERN_POWER_3];
+            static String topBLUAC_INPUT_FREQ      = DEVICE_F_NAMES[AC_INPUT_FREQ];
+            static String topBLUINT_DC_INP_VOLT    = DEVICE_F_NAMES[INT_DC_INP_VOLT];
+            static String topBLUINT_DC_INP_POW     = DEVICE_F_NAMES[INT_DC_INP_POW];
+            static String topBLUINT_DC_INP_CURR    = DEVICE_F_NAMES[INT_DC_INP_CURR];
+            static String topBLUPACK_NUM_MAX       = DEVICE_F_NAMES[PACK_NUM_MAX];
+            static String topBLUTOTAL_BATT_VOLT    = DEVICE_F_NAMES[TOTAL_BATT_VOLT];
+            static String topBLUTOTAL_BATT_CURR    = DEVICE_F_NAMES[TOTAL_BATT_CURR];
+            static String topBLUPACK_NUM           = DEVICE_F_NAMES[PACK_NUM];
+            static String topBLUPACK_STATUS        = DEVICE_F_NAMES[PACK_STATUS];
+            static String topBLUPACK_VOLTAGE       = DEVICE_F_NAMES[PACK_VOLTAGE];
+            static String topBLUPACK_BATT_PERC     = DEVICE_F_NAMES[PACK_BATT_PERC];
+            //static String topBLUCELL_VOTAGES     = DEVICE_F_NAMES[CELL_VOTAGES];
+            static String topBLUPACK_BMS_VERSION   = DEVICE_F_NAMES[PACK_BMS_VERSION];
+          // CONTROL elements
+            static String topBLUUPS_MODE           = DEVICE_F_NAMES[UPS_MODE];
+            static String topBLUSPLIT_PHASE_ON     = DEVICE_F_NAMES[SPLIT_PHASE_ON];
+            static String topBLUSPLIT_PH_MACH_MODE = DEVICE_F_NAMES[SPLIT_PH_MACH_MODE];
+            static String topBLUSET_PACK_NUM       = DEVICE_F_NAMES[SET_PACK_NUM];
+            static String topBLUSET_AC_OUT_ON      = DEVICE_F_NAMES[SET_AC_OUT_ON];
+            static String topBLUSET_DC_OUT_ON      = DEVICE_F_NAMES[SET_DC_OUT_ON];
+            static String topBLUGRID_CHANGE_ON     = DEVICE_F_NAMES[GRID_CHANGE_ON];
+            static String topBLUTIME_CTRL_ON       = DEVICE_F_NAMES[TIME_CTRL_ON];
+            static String topBLUBATT_RANGE_START   = DEVICE_F_NAMES[BATT_RANGE_START];
+            static String topBLUBATT_RANGE_END     = DEVICE_F_NAMES[BATT_RANGE_END];
+            static String topBLUBLUETOOTH_CONN     = DEVICE_F_NAMES[BLUETOOTH_CONN];
+            static String topBLUAUTO_SLEEP_MODE    = DEVICE_F_NAMES[AUTO_SLEEP_MODE];
+            static String topBLULED_CONTROL        = DEVICE_F_NAMES[LED_CONTROL];
+            static String topBLUFIELD_UNDEFINED    = DEVICE_F_NAMES[FIELD_UNDEFINED];
+        */
     unsigned long lastTime1 = 0;
     unsigned long timerDelay1 = 3000;
+    uint8_t       scanBluIdx  = 0;
 // ----------------------------------------------------------------
 // --- system setup -----------------------------------
 // ----------------------------------------------------------------
@@ -440,7 +442,15 @@
   void loop()
     {
       // head of loop
-        anzUsCycles++;
+        if (firstrun == true)
+            {
+              String taskMessage = "loop task running on core ";
+              taskMessage = taskMessage + xPortGetCoreID();
+              STXT(taskMessage);
+              usLast = micros();
+              //firstrun = false;
+              anzUsCycles = 0;
+            }
         //SOUT(" "); SOUT(millis());
         #if ( USE_DISP > 0 )
             outStr   = "";
@@ -484,7 +494,13 @@
           #endif
       // --- direct output ---
         #if (USE_BTOOTH)
-            handleBluetooth();
+            // handleBluetooth();
+            if (scanBluIdx < 63)
+              {
+                SVAL(" scanBluetti scanIdx ", scanBluIdx);
+                scanBluetti(scanBluIdx, (scanBluIdx % 4) * 0x40, 64);
+                scanBluIdx++;
+              }
           #endif
       // --- standard output cycle ---
         #ifdef USE_OUTPUT_CYCLE
@@ -555,7 +571,7 @@
                         errMQTT = (int8_t) mqtt.publish(topBLU[outpIdx].c_str(), (uint8_t*) valBLU[outpIdx].c_str(), valBLU[outpIdx].length());
                         soutMQTTerr(valBLU[outpIdx].c_str(), errMQTT);
                         pbluetti_dev_state[outpIdx].f_new = FALSE;
-                        S2VAL(" publish ", topBLU[outpIdx], valBLU[outpIdx].c_str());
+                        //S2VAL(" publish ", topBLU[outpIdx], valBLU[outpIdx].c_str());
                       }
                     outpIdx++;
                     if (outpIdx >= FIELD_IDX_MAX)
@@ -566,13 +582,19 @@
       // --- system control --------------------------------
         if (firstrun == true)
             {
-              String taskMessage = "loop task running on core ";
-              taskMessage = taskMessage + xPortGetCoreID();
-              STXT(taskMessage);
+              //String taskMessage = "loop task running on core ";
+              //taskMessage = taskMessage + xPortGetCoreID();
+              //STXT(taskMessage);
               usLast = micros();
               firstrun = false;
             }
         anzUsCycles++;
+        if (anzUsCycles >= 1000)
+          {
+            usPerCycle  = (micros() - usLast) / anzUsCycles;
+            usLast      = micros();
+            anzUsCycles = 0;
+          }
       usleep(5000);
     }
 
@@ -806,7 +828,7 @@
           void connectMQTT() // TODO: move all subcribes to here -> reconnect
             {
               char cout[50] = "";
-              SVAL(" MQTT connect... errMQTT", errMQTT);
+              //SVAL(" MQTT connect... errMQTT", errMQTT);
               errMQTT = (int8_t) mqtt.connectTo(MQTT_HOST, MQTT_PORT);
               soutMQTTerr(" MQTT connect", errMQTT);
               if (errMQTT == MD_OK)
@@ -836,13 +858,13 @@
                                       pbluetti_dev_state[AC_INPUT_POWER].p_f_value = (void*) &BLUAC_INPUT_POWER;
                                   break;
                                 case  AC_OUTPUT_POWER:
-                                      (pbluetti_dev_state[AC_OUTPUT_POWER]).p_f_value = (void*) &BLUAC_OUTPUT_POWER;
+                                      pbluetti_dev_state[AC_OUTPUT_POWER].p_f_value = (void*) &BLUAC_OUTPUT_POWER;
                                   break;
                                 case  DC_OUTPUT_POWER:
                                       pbluetti_dev_state[DC_OUTPUT_POWER].p_f_value = (void*) &BLUDC_OUTPUT_POWER;
                                   break;
                                 case  POWER_GENERATION:
-                                      pbluetti_dev_state[POWER_GENERATION].p_f_value = (void*) &BLUAC_OUTPUT_POWER;
+                                      pbluetti_dev_state[POWER_GENERATION].p_f_value = (void*) &BLUPOWER_GENERATION;
                                   break;
                                 case  TOTAL_BATT_PERC:
                                       pbluetti_dev_state[TOTAL_BATT_PERC].p_f_value = (void*) &BLUTOTAL_BATT_PERC;
@@ -960,6 +982,7 @@
                                       pbluetti_dev_state[LED_CONTROL].p_f_value = (void*) &BLULED_CONTROL;
                                   break;
                             }
+                          //S2VAL(" init ", DEVICE_F_NAMES[i], (uint32_t) pbluetti_dev_state[i].p_f_value);
                           topBLU[i] = topDevice + DEVICE_F_NAMES[i];
                           S2VAL(" make topBLU ", DEVICE_F_NAMES[i], topBLU[i]);
                           errMQTT = (int8_t) mqtt.subscribe(topBLU[i].c_str());
@@ -997,10 +1020,10 @@
                 {
                   errMQTT == MD_OK;
                 }
-              if (errMQTT == MD_OK)
-                {
-                  errMQTTold = MD_OK;
-                }
+              //if (errMQTT == MD_OK)
+                //{
+                  //errMQTTold = MD_OK;
+                //}
               else
                 {
                   if ((errMQTT != errMQTTold)) // display new error

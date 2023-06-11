@@ -54,6 +54,7 @@ typedef struct{
   void handleBluetooth();
   bool connectToServer();
   void handleBTCommandQueue();
+  void scanBluetti(uint8_t _page, uint8_t _offset = 0, uint8_t _words = 0x40);
   void sendBTCommand(bt_command_t command);
   bool isBTconnected();
   unsigned long getLastBTMessageTime();
