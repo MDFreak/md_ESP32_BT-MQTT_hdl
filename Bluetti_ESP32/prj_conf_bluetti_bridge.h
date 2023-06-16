@@ -12,8 +12,8 @@
       #define USE_FLASH_MEM  ON
       #define USE_NTP_SERVER ON
       #define USE_MQTT       ON
-      #define USE_BLUETTI    OFF// ON
-      #define USE_CONRAD_UIP ON
+      #define USE_BLUETTI    ON
+      #define USE_CONRAD_UIP OFF
   // --- bluetti
     #if (USE_BLUETTI > OFF)
         #define BLUETTI_TYPE BLUETTI_AC300

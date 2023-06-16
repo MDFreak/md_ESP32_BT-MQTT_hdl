@@ -383,7 +383,7 @@
         #if (USE_CONRAD_UIP)
             VoltCraft voltcraft;
 
-            std::string addressVoltcraft = "a3:00:00:00:4f:52";
+            std::string addressVoltcraft = "0c:b2:b7:11:8a:ef"; //0c:b2:b7:11:8a:ef
             //std::string addressList[2] = {"d2:a2:68:c9:33:35","fc:c8:2d:59:6b:fb" };
 
             hw_timer_t *timer = NULL; // define Timer Variable
@@ -470,6 +470,7 @@
                 #endif
               #if (USE_CONRAD_UIP)
                   //btooth_FIELD_IDX_MAX += CONRAD_UIP_FIELD_IDX_MAX;
+                  voltcraft.InitBLE();
                   Serial.println("Init Timer");
                   timer = timerBegin(0, 80, true); // Timer initialisieren mit Timer-Nummer 0, Teiler auf 80 setzen wegen der 80MHz (80 000 000 Hz / 80 = 1 000 000 mal/Sekunden wird der Timer hochgezählt -> Messung erfolgt also in Microsekunden)
                   timerAttachInterrupt(timer, &onTimer, true);
@@ -638,6 +639,32 @@
                     if (outpIdx >= btooth_FIELD_IDX_MAX)
                       { outpIdx  = 0; }
                   }
+              }
+          #endif
+      // --- standard input cycle ---
+        #if (USE_CONRAD_UIP)
+            secondsPowerMeasure += 1;
+            secondsPowerDaily += 1;
+            if (secondsPowerMeasure >= intervalPowerMeasure)
+              {
+                Serial.print("POWER MEASUR: ");
+                Serial.print(secondsPowerMeasure);
+                Serial.print(" >= ");
+                Serial.println(intervalPowerMeasure);
+
+                voltcraft.ReadVoltCraft(addressVoltcraft);
+                secondsPowerMeasure = 0;
+              }
+
+            if (secondsPowerDaily >= intervalPowerDaily)
+              {
+                Serial.print("POWER DAILY: ");
+                Serial.print(secondsPowerDaily);
+                Serial.print(" >= ");
+                Serial.println(intervalPowerDaily);
+
+                voltcraft.ReadVoltCraft(addressVoltcraft,true);
+                secondsPowerDaily = 0;
               }
           #endif
       // --- system control --------------------------------
@@ -897,7 +924,7 @@
                     {
 
                       #if (BLUETTI_TYPE == BLUETTI_AC300)
-                            for (uint8_t i = 0; i < FIELD_IDX_MAX ; i++)
+                            //for (uint8_t i = 0; i < FIELD_IDX_MAX ; i++)
                           for (uint8_t i = 0; i < btooth_FIELD_IDX_MAX ; i++)
                             {
                               switch (i)

@@ -43,7 +43,7 @@
           char mqtt_username[40] = "";
           char mqtt_password[40] = "";
           //char bluetti_device_id[40] = "Bluetti Blutetooth Id";
-          #if (USE_BLUETTI_UIP > OFF)
+          #if (USE_BLUETTI > OFF)
               char bluetti_device_id[40] = "AC3002235000574654";
             #endif
           #if (USE_CONRAD_UIP > OFF)

@@ -28,7 +28,7 @@
   int      pollTick = 0;
   uint16_t scanTick = 0;
   uint8_t  isScan   = FALSE;
-  #if (USE_CONRAD_UIP > OFF)
+  #if (USE_BLUETTI > OFF)
       ESPBluettiSettings _settings;
       // initialize bluetti device data
         // { FIELD_NAME, PAGE, OFFSET, SIZE, SCALE (if scale is needed e.g. decimal value, defaults to 0) , ENUM (if data is enum, defaults to 0) , FIELD_TYPE }
@@ -604,6 +604,7 @@
 
     // Create a single global instance of the callback class to be used by all clients
     static ClientCallbacksVolt clientCBVolt;
+    // e0cbf06c-cd8b-4647-bb8a-263b43f0f974
     NimBLEUUID bmeVoltServiceUUID("FFF0");
     NimBLEUUID bmeVoltNotifyCharacteristicsUUID("FFF4");
     NimBLEUUID bmeVoltWriteCharacteristicsUUID("FFF3");
@@ -652,7 +653,7 @@
       {}
     void VoltCraft::InitBLE()
       {
-          NimBLEDevice::init("");
+        NimBLEDevice::init("SEM6000");
       	NimBLEDevice::setSecurityAuth(/*BLE_SM_PAIR_AUTHREQ_BOND | BLE_SM_PAIR_AUTHREQ_MITM |*/ BLE_SM_PAIR_AUTHREQ_SC);
       	NimBLEDevice::setMTU(160); // ?????
           // Optional: set the transmit power, default is 3db */
@@ -765,212 +766,215 @@
 
     void VoltCraft::ReadVoltCraft(std::string address, bool daily)
       {
-    		ReadVoltCraft(*new NimBLEAddress(address,BLE_ADDR_PUBLIC),daily);
+        ReadVoltCraft(*new NimBLEAddress(address,BLE_ADDR_PUBLIC),daily);
       }
 
-    void VoltCraft::ReadVoltCraft(NimBLEAddress address, bool daily) {
-      NimBLEClient* pClient = nullptr;
-      if(NimBLEDevice::getClientListSize())
-        {
-          Serial.println(" - RE CONNECT ...");
-          pClient = NimBLEDevice::getClientByPeerAddress(address);
-          Serial.println(" - RE CONNECT  2 ...");
-          if(pClient)
-            {
-                Serial.println(" - CLIENT VORHANDEN -- CONNECTING");
-                if(!pClient->connect(address))
+    void VoltCraft::ReadVoltCraft(NimBLEAddress address, bool daily)
+      {
+        NimBLEClient* pClient = nullptr;
+        if(NimBLEDevice::getClientListSize())
+          {
+            Serial.println(" - RE CONNECT ...");
+            pClient = NimBLEDevice::getClientByPeerAddress(address);
+            Serial.println(" - RE CONNECT  2 ...");
+            if(pClient)
+              {
+                  Serial.println(" - CLIENT VORHANDEN -- CONNECTING");
+                  if(!pClient->connect(address))
+                    {
+                      Serial.println("Reconnect 2 failed");
+                      //delay(40000);
+                    }
+                  else
+                    {
+                      Serial.println("Reconnected client");
+                    }
+              }
+            else
+              {
+                  Serial.println("no Client in Reconnect");
+                  //pClient = NimBLEDevice::getDisconnectedClient();
+              }
+          }
+        if (!pClient)
+          {
+                  //S2VAL("  ReadVoltCraft_createClient NimBLEaddress NimBLEClient", (uint32_t) address, (uint32_t) pClient);
+            pClient = NimBLEDevice::createClient();
+                  //S2VAL("  ReadVoltCraft_createClient NimBLEaddress NimBLEClient", (uint32_t) address, (uint32_t) pClient);
+            pClient->setClientCallbacks(&clientCBVolt, false);
+            // Set initial connection parameters: These settings are 15ms interval, 0 latency, 120ms timout.
+            // These settings are safe for 3 clients to connect reliably, can go faster if you have less
+            // connections. Timeout should be a multiple of the interval, minimum is 100ms.
+            // Min interval: 12 * 1.25ms = 15, Max interval: 12 * 1.25ms = 15, 0 latency, 51 * 10ms = 510ms timeout
+            pClient->setConnectionParams(12,12,0,51);
+            // Set how long we are willing to wait for the connection to complete (seconds), default is 30.
+            pClient->setConnectTimeout(10);
+            Serial.println(" - Connecting device...");
+            if (pClient->connect(address))
+              {
+                Serial.println(" - Connected to server");
+              }
+            else
+              {
+                NimBLEDevice::deleteClient(pClient);
+                Serial.println(" - Failed to connect, deleted client");
+                volt = -1;
+                return;
+              }
+          }
+        if(!pClient->isConnected())
+          {
+            Serial.println(" - not connected");
+            volt = -1;
+            return;
+          }
+        Serial.println("Hole SERVICE");
+        NimBLERemoteService* pRemoteService = pClient->getService(bmeVoltServiceUUID);
+        if(pRemoteService)
+          {     // make sure it's not null
+            Serial.println("Service gefunden");
+            NimBLERemoteCharacteristic* pRemoteCharacteristic = pRemoteService->getCharacteristic(bmeVoltNotifyCharacteristicsUUID);
+            Serial.println("Char ermittelt?");
+            if(pRemoteCharacteristic)
+              {     // make sure it's not null
+                Serial.println("Char nicht null");
+                //  Subscribe parameter defaults are: notifications=true, notifyCallback=nullptr, response=false.
+                //  Unsubscribe parameter defaults are: response=false.
+                if(pRemoteCharacteristic->canNotify())
                   {
-                    Serial.println("Reconnect 2 failed");
-                    //delay(40000);
-                  }
-                else
-                  {
-                    Serial.println("Reconnected client");
-                  }
-            }
-          else
-            {
-                Serial.println("no Client in Reconnect");
-                //pClient = NimBLEDevice::getDisconnectedClient();
-            }
-        }
-      if (!pClient)
-        {
-          pClient = NimBLEDevice::createClient();
-          pClient->setClientCallbacks(&clientCBVolt, false);
-          // Set initial connection parameters: These settings are 15ms interval, 0 latency, 120ms timout.
-          // These settings are safe for 3 clients to connect reliably, can go faster if you have less
-          // connections. Timeout should be a multiple of the interval, minimum is 100ms.
-          // Min interval: 12 * 1.25ms = 15, Max interval: 12 * 1.25ms = 15, 0 latency, 51 * 10ms = 510ms timeout
-          pClient->setConnectionParams(12,12,0,51);
-          // Set how long we are willing to wait for the connection to complete (seconds), default is 30.
-          pClient->setConnectTimeout(10);
-          Serial.println(" - Connecting device...");
-          if (pClient->connect(address))
-            {
-              Serial.println(" - Connected to server");
-            }
-          else
-            {
-              NimBLEDevice::deleteClient(pClient);
-              Serial.println(" - Failed to connect, deleted client");
-              volt = -1;
-              return;
-            }
-        }
-      if(!pClient->isConnected())
-        {
-          Serial.println(" - not connected");
-          volt = -1;
-          return;
-        }
-      Serial.println("Hole SERVICE");
-      NimBLERemoteService* pRemoteService = pClient->getService(bmeVoltServiceUUID);
-      if(pRemoteService)
-        {     // make sure it's not null
-          Serial.println("Service gefunden");
-          NimBLERemoteCharacteristic* pRemoteCharacteristic = pRemoteService->getCharacteristic(bmeVoltNotifyCharacteristicsUUID);
-          Serial.println("Char ermittelt?");
-          if(pRemoteCharacteristic)
-            {     // make sure it's not null
-              Serial.println("Char nicht null");
-              //  Subscribe parameter defaults are: notifications=true, notifyCallback=nullptr, response=false.
-              //  Unsubscribe parameter defaults are: response=false.
-              if(pRemoteCharacteristic->canNotify())
-                {
-                  Serial.println("CAN NOTIFY = OK");
-                  bool subscribeSucess = false ;
+                    Serial.println("CAN NOTIFY = OK");
+                    bool subscribeSucess = false ;
 
-                  Serial.println("VOLT SUBSCRIBE");
-                  subscribeSucess = pRemoteCharacteristic->subscribe(true, NotifyCallbackVolt);
-                  Serial.println("SUBSCRIBE erfolgreich?");
-                  if(!subscribeSucess)
-                    {
-                      // Disconnect if subscribe failed
-                      Serial.print("Fehler beim Subscribe");
-                      pClient->disconnect();
-                      volt = -1;
-                      return;
-                    }
-                  else
-                    {
-                      Serial.print("SUBSCRIBED SUCCESSFULLY ");
-                    }
-                }
-              else
-                {
-                  Serial.print("Kein CanNotify ");
-                  volt = -1;
-                }
-            }
-          else
-            {
-              Serial.println("Char nicht ermittelt = NULL");
-            }
-          Serial.println("Hole RemoteChar");
-          pRemoteCharacteristic = pRemoteService->getCharacteristic(bmeVoltWriteCharacteristicsUUID);
-          if(pRemoteCharacteristic)
-            {     // make sure it's not null
-              Serial.println("RemoteChar erfolgreich");
-              if(pRemoteCharacteristic->canWriteNoResponse())
-                {
-                   Serial.println("CanWrite ist True");
-                  //AUTH
-                  //0f0c170000000000000000000018ffff
-                    //| | |   | |     | |       | +  static end sequence of message, 0xffff
-                    //| | |   | |     | |       + checksum byte starting with length-byte, ending w/ byte before
-                    //| | |   | |     | + always 0x00000000
-                    //| | |   | + PIN, 4 bytes e.g. 01020304
-                    //| | |   + 0x00 for authorization request
-                    //| | + Authorization command 0x1700
-                    //| + Length of payload starting w/ next byte incl. checksum
-                    //+ static start sequence for message, 0x0f
-                  byte reqAuth[16] = { 0x0f,0x0c,0x17,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x18,0xff,0xff };
-                  Serial.println("put regAuth Byte");
-                  if(pRemoteCharacteristic->writeValue(reqAuth, 16, false))
-                    {
-                        Serial.print("Wrote new value to: ");
-                        Serial.println(pRemoteCharacteristic->getUUID().toString().c_str());
-                    }
-                  else
-                    {
-                        // Disconnect if write failed
-                        Serial.println("Error WriteValue");
+                    Serial.println("VOLT SUBSCRIBE");
+                    subscribeSucess = pRemoteCharacteristic->subscribe(true, NotifyCallbackVolt);
+                    Serial.println("SUBSCRIBE erfolgreich?");
+                    if(!subscribeSucess)
+                      {
+                        // Disconnect if subscribe failed
+                        Serial.print("Fehler beim Subscribe");
                         pClient->disconnect();
                         volt = -1;
                         return;
-                    }
-                  byte reqMeasure[9];
-                  if (daily)
-                    {
-                      //0f050b0000000cffff
-                      //| | | |     | + static end sequence of message, 0xffff
-                      //| | | |     + checksum byte starting with length-byte, ending w/ byte before
-                      //| | | + Static 0x000000
-                      //| | + 0a = last 24h per hour, 0b = last 30 days per day, 0c = last year per month
+                      }
+                    else
+                      {
+                        Serial.print("SUBSCRIBED SUCCESSFULLY ");
+                      }
+                  }
+                else
+                  {
+                    Serial.print("Kein CanNotify ");
+                    volt = -1;
+                  }
+              }
+            else
+              {
+                Serial.println("Char nicht ermittelt = NULL");
+              }
+            Serial.println("Hole RemoteChar");
+            pRemoteCharacteristic = pRemoteService->getCharacteristic(bmeVoltWriteCharacteristicsUUID);
+            if(pRemoteCharacteristic)
+              {     // make sure it's not null
+                Serial.println("RemoteChar erfolgreich");
+                if(pRemoteCharacteristic->canWriteNoResponse())
+                  {
+                     Serial.println("CanWrite ist True");
+                    //AUTH
+                    //0f0c170000000000000000000018ffff
+                      //| | |   | |     | |       | +  static end sequence of message, 0xffff
+                      //| | |   | |     | |       + checksum byte starting with length-byte, ending w/ byte before
+                      //| | |   | |     | + always 0x00000000
+                      //| | |   | + PIN, 4 bytes e.g. 01020304
+                      //| | |   + 0x00 for authorization request
+                      //| | + Authorization command 0x1700
                       //| + Length of payload starting w/ next byte incl. checksum
                       //+ static start sequence for message, 0x0f
-                      Serial.println("set Daily Byte?");
+                    byte reqAuth[16] = { 0x0f,0x0c,0x17,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x18,0xff,0xff };
+                    Serial.println("put regAuth Byte");
+                    if(pRemoteCharacteristic->writeValue(reqAuth, 16, false))
+                      {
+                          Serial.print("Wrote new value to: ");
+                          Serial.println(pRemoteCharacteristic->getUUID().toString().c_str());
+                      }
+                    else
+                      {
+                          // Disconnect if write failed
+                          Serial.println("Error WriteValue");
+                          pClient->disconnect();
+                          volt = -1;
+                          return;
+                      }
+                    byte reqMeasure[9];
+                    if (daily)
+                      {
+                        //0f050b0000000cffff
+                        //| | | |     | + static end sequence of message, 0xffff
+                        //| | | |     + checksum byte starting with length-byte, ending w/ byte before
+                        //| | | + Static 0x000000
+                        //| | + 0a = last 24h per hour, 0b = last 30 days per day, 0c = last year per month
+                        //| + Length of payload starting w/ next byte incl. checksum
+                        //+ static start sequence for message, 0x0f
+                        Serial.println("set Daily Byte?");
 
-                      reqMeasure[0] = 0x0f;
-                      reqMeasure[1] = 0x05;
-                      reqMeasure[2] = 0x0a;
-                      reqMeasure[3] = 0x00;
-                      reqMeasure[4] = 0x00;
-                      reqMeasure[5] = 0x00;
-                      reqMeasure[6] = 0x0b;
-                      reqMeasure[7] = 0xff;
-                      reqMeasure[8] = 0xff;
-                      Serial.println("Daily Byte done");
-                    }
-                  else
-                    {
-                      //0f050400000005ffff
-                      //| | |       | + static end sequence of message, 0xffff
-                      //| | |       + checksum byte starting with length-byte, ending w/ byte before
-                      //| | + Capture measurement command 0x040000
-                      //| + Length of payload starting w/ next byte incl. checksum
-                      //+ static start sequence for message, 0x0f
-                      Serial.println("set measure Byte?");
-                      reqMeasure[0] = 0x0f;
-                      reqMeasure[1] = 0x05;
-                      reqMeasure[2] = 0x04;
-                      reqMeasure[3] = 0x00;
-                      reqMeasure[4] = 0x00;
-                      reqMeasure[5] = 0x00;
-                      reqMeasure[6] = 0x05;
-                      reqMeasure[7] = 0xff;
-                      reqMeasure[8] = 0xff;
-                      //reqMeasure = { 0x0f,0x05,0x04,0x00,0x00,0x00,0x05,0xff,0xff };
-                      Serial.println("measure Byte done");
-                    }
-                  if(pRemoteCharacteristic->writeValue(reqMeasure, 9, false))
-                    {
-                      Serial.print("Wrote new value to: ");
-                      Serial.println(pRemoteCharacteristic->getUUID().toString().c_str());
-                    }
-                  else
-                    {
-                      // Disconnect if write failed
-                      Serial.println("TRENNE canwrite 2");
-                      pClient->disconnect();
-                      volt = -1;
-                      return;
-                    }
-                }
-              else
-                {
-                  Serial.println("no CANWRITE");
-                }
-            }
-        }
-      else
-        {
-          Serial.println("Remoteservice not found.");
-          volt = -1;
-        }
-    	return;
-    }
+                        reqMeasure[0] = 0x0f;
+                        reqMeasure[1] = 0x05;
+                        reqMeasure[2] = 0x0a;
+                        reqMeasure[3] = 0x00;
+                        reqMeasure[4] = 0x00;
+                        reqMeasure[5] = 0x00;
+                        reqMeasure[6] = 0x0b;
+                        reqMeasure[7] = 0xff;
+                        reqMeasure[8] = 0xff;
+                        Serial.println("Daily Byte done");
+                      }
+                    else
+                      {
+                        //0f050400000005ffff
+                        //| | |       | + static end sequence of message, 0xffff
+                        //| | |       + checksum byte starting with length-byte, ending w/ byte before
+                        //| | + Capture measurement command 0x040000
+                        //| + Length of payload starting w/ next byte incl. checksum
+                        //+ static start sequence for message, 0x0f
+                        Serial.println("set measure Byte?");
+                        reqMeasure[0] = 0x0f;
+                        reqMeasure[1] = 0x05;
+                        reqMeasure[2] = 0x04;
+                        reqMeasure[3] = 0x00;
+                        reqMeasure[4] = 0x00;
+                        reqMeasure[5] = 0x00;
+                        reqMeasure[6] = 0x05;
+                        reqMeasure[7] = 0xff;
+                        reqMeasure[8] = 0xff;
+                        //reqMeasure = { 0x0f,0x05,0x04,0x00,0x00,0x00,0x05,0xff,0xff };
+                        Serial.println("measure Byte done");
+                      }
+                    if(pRemoteCharacteristic->writeValue(reqMeasure, 9, false))
+                      {
+                        Serial.print("Wrote new value to: ");
+                        Serial.println(pRemoteCharacteristic->getUUID().toString().c_str());
+                      }
+                    else
+                      {
+                        // Disconnect if write failed
+                        Serial.println("TRENNE canwrite 2");
+                        pClient->disconnect();
+                        volt = -1;
+                        return;
+                      }
+                  }
+                else
+                  {
+                    Serial.println("no CANWRITE");
+                  }
+              }
+          }
+        else
+          {
+            Serial.println("Remoteservice not found.");
+            volt = -1;
+          }
+      	return;
+      }
 
   #endif
 
