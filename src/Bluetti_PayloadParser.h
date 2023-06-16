@@ -2,7 +2,7 @@
 #define PAYLOAD_PARSER_H
 #include "Arduino.h"
 //#include "DeviceType.h"
-#include "Device_AC300.h"
+#include "Bluetti_AC300.h"
 #include <md_util.h>
 //#include <md_defines.h>
 

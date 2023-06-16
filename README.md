@@ -1,6 +1,6 @@
 ## About
 This is an ESP32 based Bluetooth to MQTT Bride for BLUETTI power stations. The project is based on https://github.com/warhammerkid/bluetti_mqtt
-The code is tested on a AC300. Other Powerstations should also work but are untested yet. The discussion on https://diysolarforum.com/threads/monitoring-bluetti-systems.37870/ was a great help for understanding the protocol. 
+The code is tested on a AC300. Other Powerstations should also work but are untested yet. The discussion on https://diysolarforum.com/threads/monitoring-bluetti-systems.37870/ was a great help for understanding the protocol.
 
 ## Community
 Join the Discord Server https://discord.gg/fWDSBTCVmB
@@ -37,7 +37,7 @@ Join the Discord Server https://discord.gg/fWDSBTCVmB
 
 #### Arduino IDE
 
-You will need to install a board support package for your ESP32. Additionally the following libraries are needed: 
+You will need to install a board support package for your ESP32. Additionally the following libraries are needed:
 
 * https://github.com/tzapu/WiFiManager
 * https://github.com/knolleary/pubsubclient
@@ -53,7 +53,7 @@ Change the partition scheme with Tools -> Partition Scheme to
 
 This setting is required because the Bluetooth stack already uses a lot of the ESP32 memory.
 
-Optional: Do changes in config.h file. The device can be set by changing 'BLUETTI_TYPE'.
+Optional: Do changes in config.h file. The device can be set by implemetinging 'USE_<bluetti-type>' in prj_conf_BT_MQTT.h'.
 
 Finally upload the Sketch to your ESP32.
 

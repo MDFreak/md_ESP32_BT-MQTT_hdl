@@ -173,13 +173,15 @@ class BluettiAdvertisedDeviceCallbacks: public BLEAdvertisedDeviceCallbacks
   {
     void onResult(BLEAdvertisedDevice advertisedDevice)
       {
-        //Serial.print(F("BLE Advertised Device found: "));
-        //Serial.println(advertisedDevice.toString().c_str());
         SVAL("BLE Advertised Device found: ", advertisedDevice.toString().c_str());
-        //ESPBluettiSettings settings = get_esp32_bluetti_settings();
-        // We have found a device, let us now see if it contains the service we are looking for.
-        //if (advertisedDevice.haveServiceUUID() && advertisedDevice.isAdvertisingService(serviceUUID) && advertisedDevice.getName().compare(settings.bluetti_device_id))
-        if (advertisedDevice.haveServiceUUID() && advertisedDevice.isAdvertisingService(serviceUUID) && advertisedDevice.getName().compare(_settings.bluetti_device_id))
+          //Serial.print(F("BLE Advertised Device found: "));
+          //Serial.println(advertisedDevice.toString().c_str());
+          //ESPBluettiSettings settings = get_esp32_bluetti_settings();
+          // We have found a device, let us now see if it contains the service we are looking for.
+          //if (advertisedDevice.haveServiceUUID() && advertisedDevice.isAdvertisingService(serviceUUID) && advertisedDevice.getName().compare(settings.bluetti_device_id))
+        if (   advertisedDevice.haveServiceUUID()
+            && advertisedDevice.isAdvertisingService(serviceUUID)
+            && advertisedDevice.getName().compare(_settings.bluetti_device_id))
           {
             Serial.println(" onResult stop scan ");
             BLEDevice::getScan()->stop();
@@ -344,7 +346,7 @@ void handleBluetooth()
           }
         doConnect = false;
       }
-    if ((millis() - lastBTMessage) > (MAX_DISCONNECTED_TIME_UNTIL_REBOOT * 60000))
+    if ((millis() - lastBTMessage) > (MAX_DISCONN_TIME_TO_REBOOT * 60000))
       {
         Serial.println(F("BT is disconnected over allowed limit, reboot device"));
         if (SLEEP_TIME_ON_BT_NOT_AVAIL > OFF)
@@ -356,7 +358,7 @@ void handleBluetooth()
     if (connected)
       {
         // poll for device state
-        if ( millis() - lastBTMessage > BLUETOOTH_QUERY_MESSAGE_DELAY)
+        if ( millis() - lastBTMessage > BT_QUERY_MSG_DELAY)
           {
             bt_command_t command;
             // build command[index: polltick]

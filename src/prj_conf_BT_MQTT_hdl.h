@@ -1,37 +1,67 @@
-#ifndef _PRJ_CONF_BLUETTI_BRIDGE_H_
-  #define _PRJ_CONF_BLUETTI_BRIDGE_H_
+#ifndef _PRJ_CONF_BT_MQTT_HDL_H_
+  #define _PRJ_CONF_BT_MQTT_HDL_H_
 
   #include <Arduino.h>
   #include <md_defines.h>
   // ******************************************
+  // --- project
+    #define UTC_SEASONTIME UTC_SUMMERTIME
+    #define USE_MQTT       ON
+    #define USE_BTOOTH     ON
+    #define USE_WIFI       ON
+    #define USE_FLASH_MEM  ON
+    #define USE_NTP_SERVER ON
+    #define USE_BLUETTI    ON
+    #define USE_VOLTCRAFT  ON
+
   // --- system
-    // --- generic
-      #define UTC_SEASONTIME UTC_SUMMERTIME
-      #define USE_MQTT       ON
-      #define USE_BTOOTH     ON
-      #define USE_WIFI       ON
-      #define USE_FLASH_MEM  ON
-      #define USE_NTP_SERVER ON
-      #define USE_BLUETTI    ON
+    #define USE_OUTPUT_CYCLE
+    #define USE_INPUT_CYCLE
+    #define INPUT_CYCLE_MS          10
+    #define OUTPUT_CYCLE_MS         21
   // --- bluetti
-    #define BLUETTI_TYPE BLUETTI_AC300
-    //#define BLUETTI_TYPE BLUETTI_EP500P
-    #define BLUETOOTH_QUERY_MESSAGE_DELAY 3000
+    #if (USE_BLUETTI > OFF)
+        #define AC300               1
+        #define AC200M              2     // not implemented
+        #define EP500               3     // not implemented
+        #define EB3A                4     // not implemented
+        #define EP500P              5     // not implemented
+        #define AC500               6     // not implemented
 
-    //#define RELAISMODE 1
-    //#define RELAIS_PIN 22
-    //#define RELAIS_LOW LOW
-    //#define RELAIS_HIGH HIGH
+        #define USE_BLUETTI_AC300   ON
+        #define USE_BLUETTI_AC200M  OFF   // not implemented
+        #define USE_BLUETTI_EP500   OFF   // not implemented
+        #define USE_BLUETTI_EB3A    OFF   // not implemented
+        #define USE_BLUETTI_EP500P  OFF   // not implemented
+        #define USE_BLUETTI_AC500   OFF   // not implemented
 
-    #define MAX_DISCONNECTED_TIME_UNTIL_REBOOT 5 //device will reboot when wlan/BT/MQTT is not connectet within x Minutes
-    #define SLEEP_TIME_ON_BT_NOT_AVAIL 2 //device will sleep x minutes if restarted is triggered by bluetooth error
-                                         //set to 0 to disable
-    #define DEVICE_STATE_UPDATE  5
-    #define MSG_VIEWER_ENTRY_COUNT 20 //number of lines for web message viewer
-    #define MSG_VIEWER_REFRESH_CYCLE 5 //refresh time for website data in seconds
-    #if (BLUETTI_TYPE == BLUETTI_AC300)
-        #define DEVICE_NAME = "BLUETTI_AC300"
-        #include <Device_AC300.h>
+        #define BT_QUERY_MSG_DELAY  3000
+        #define MAX_DISCONN_TIME_TO_REBOOT  5 //device will reboot when wlan/BT/MQTT is not connectet within x Minutes
+        #define SLEEP_TIME_ON_BT_NOT_AVAIL  2 //device will sleep x minutes if restarted is triggered by bluetooth error
+                                              //set to 0 to disable
+        #define DEV_STATE_UPDATE_S          5 //time in sec
+        #define MSG_VIEWER_ENTRY_COUNT      20 //number of lines for web message viewer
+        #define MSG_VIEWER_REFRESH_CYC_S    5 //refresh time for website data in seconds
+        #if (USE_BLUETTI_AC300 > OFF)
+            //#define DEVICE_NAME = "BLUETTI_AC300"
+            #include <Bluetti_AC300.h>
+          #endif
+        #if (USE_BLUETTI_AC200 > OFF)
+            #include <Bluetti_AC200.h>
+          #endif
+        #if (USE_BLUETTI_EP500 > OFF)
+            #include <Bluetti_EP500.h>
+          #endif
+        #if (USE_BLUETTI_EB3A > OFF)
+            #include <Bluetti_EB3A.h>
+          #endif
+        #if (USE_BLUETTI_AC500 > OFF)
+            #include <Bluetti_AC500.h>
+          #endif
+        #if (USE_MQTT > OFF)
+            #define MQTT_DEVICE           "bluetti"
+            #define MQTT_TOPDEV           "bluetti/"
+          #endif
       #endif
   // --- network
     // wifi
@@ -90,7 +120,7 @@
             #define WIFI_SUBNET     0x00FFFFFFul // 255.255.255.0
         #endif
     // --- bluetooth
-      #if (BLUETTI_TYPE == BLUETTI_AC300)
+      #if (USE_BLUETTI_AC300 > OFF)
           // The remote Bluetti service we wish to connect to.
           #define BLUETTI_UUID_SERVICE  "0000ff00-0000-1000-8000-00805f9b34fb"
           // The characteristics of Bluetti Devices
@@ -98,30 +128,24 @@
           #define BLUETTI_UUID_NOTIFY   "0000ff01-0000-1000-8000-00805f9b34fb"
         #endif
     // --- MQTT Mosquitto client
-      #if (USE_MQTT > OFF)
-          #define MQTT_HOST             "10.0.0.203"
-          //#define MQTT_HOST             "10.13.37.27"
-          #define MQTT_PORT             1883
-          #define MQTT_SECURE           OFF
-          #define MQTT_DEVICE           "bluetti"
-          #define MQTT_TOPDEV           "bluetti/"
-          #define MQTT_TOPIC_MAXLEN     20
-          #define MQTT_PAYLOAD_MAXLEN   20
-          #define MQTT_MSG_MAXANZ       30
-          typedef struct // MQTT_MSG
-            {
-              char  topic[MQTT_TOPIC_MAXLEN];
-              char  payload[MQTT_PAYLOAD_MAXLEN];
-              void* pNext;
-            } MQTTmsg_t;
-          #if(MQTT_SECURE > OFF)
-              #define MQTT_BROKER_USER  "<user>"
-              #define MQTT_BROKER_PASS  "<pass>"
-            #endif
-          #ifndef USE_OUTPUT_CYCLE
-              #define USE_OUTPUT_CYCLE
-              #define OUTPUT_CYCLE_MS   10
-            #endif
-        #endif
+    #if (USE_MQTT > OFF)
+        #define MQTT_HOST             "10.0.0.203"
+        //#define MQTT_HOST             "10.13.37.27"
+        #define MQTT_PORT             1883
+        #define MQTT_SECURE           OFF
+        #define MQTT_TOPIC_MAXLEN     20
+        #define MQTT_PAYLOAD_MAXLEN   20
+        #define MQTT_MSG_MAXANZ       30
+        typedef struct // MQTT_MSG
+          {
+            char  topic[MQTT_TOPIC_MAXLEN];
+            char  payload[MQTT_PAYLOAD_MAXLEN];
+            void* pNext;
+          } MQTTmsg_t;
+        #if(MQTT_SECURE > OFF)
+            #define MQTT_BROKER_USER  "<user>"
+            #define MQTT_BROKER_PASS  "<pass>"
+          #endif
+      #endif
     // ******************************************
-#endif // _PRJ_CONF_BLUETTI_BRIDGE_H_
+#endif // _PRJ_CONF_BT_MQTT_HDL_H_

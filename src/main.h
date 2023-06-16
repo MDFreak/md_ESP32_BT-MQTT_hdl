@@ -9,7 +9,7 @@
     #include <md_time.hpp>
     #include <md_defines.h>
     #include <md_util.h>
-    #include <prj_conf_bluetti_bridge.h>
+    #include <prj_conf_BT_MQTT_hdl.h>
     #include <BTooth.h>
         //#include <driver\gpio.h>
         //#include <driver\adc.h>
@@ -17,7 +17,7 @@
         //#include "freertos/queue.h"
         //#include "driver/ledc.h"
         //#include "driver/mcpwm.h"
-    #include "driver/pcnt.h"
+    //#include "driver/pcnt.h"
         //#include "esp_attr.h"
         //#include "esp_log.h"
   // --- system components

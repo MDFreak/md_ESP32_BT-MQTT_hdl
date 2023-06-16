@@ -10,14 +10,14 @@
 #define DEVICE_NAME "BLUETTI_AC300"
 //#define BLUETTI_TYPE BLUETTI_EP500P
 
-#define BLUETOOTH_QUERY_MESSAGE_DELAY 3000
+#define BT_QUERY_MSG_DELAY 3000
 
 #define RELAISMODE 1
 #define RELAIS_PIN 22
 #define RELAIS_LOW LOW
 #define RELAIS_HIGH HIGH
 
-#define MAX_DISCONNECTED_TIME_UNTIL_REBOOT 5 //device will reboot when wlan/BT/MQTT is not connectet within x Minutes
+#define MAX_DISCONN_TIME_TO_REBOOT 5 //device will reboot when wlan/BT/MQTT is not connectet within x Minutes
 #define SLEEP_TIME_ON_BT_NOT_AVAIL 2 //device will sleep x minutes if restarted is triggered by bluetooth error
                                      //set to 0 to disable
 #define DEVICE_STATE_UPDATE  5

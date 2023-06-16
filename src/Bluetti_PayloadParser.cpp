@@ -1,7 +1,4 @@
-//#include "BluettiConfig.h"
-//#include "MQTT.h"
-#include "PayloadParser.h"
-//#include "BWifi.h"
+#include "Bluetti_PayloadParser.h"
 
 device_field_data_t* pbluetti_device_state    = NULL;
 device_field_data_t* pbluetti_device_command  = NULL;
@@ -57,7 +54,8 @@ String   parse_enum_field(uint8_t data[])
   }
 
 void     parse_bluetooth_data(device_field_data_t* pdev_field_data,
-                              uint8_t page, uint8_t offset, uint8_t* pData, size_t length){
+                              uint8_t page, uint8_t offset, uint8_t* pData, size_t length)
+  {
     //char mqttMessage[200];
     if (pdev_field_data)
       {
@@ -173,5 +171,4 @@ void     parse_bluetooth_data(device_field_data_t* pdev_field_data,
           //AddtoMsgView(String(millis()) + ":skip unknow request! page: "+ String(page) + " offset: " + offset);
           break;
       }
-
-}
+  }

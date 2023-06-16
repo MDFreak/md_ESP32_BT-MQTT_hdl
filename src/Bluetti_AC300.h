@@ -1,5 +1,5 @@
-#ifndef _DEVICE_AC300_H_
-  #define _DEVICE_AC300_H_
+#ifndef _BLUETTI_AC300_H_
+  #define _BLUETTI_AC300_H_
   #include <Arduino.h>
 
   /* Not implemented yet
@@ -105,4 +105,4 @@
   //extern device_field_data_t bluetti_device_state[];
   //extern device_field_data_t bluetti_device_command[];
   //extern device_field_data_t bluetti_polling_command[];
-#endif
+#endif // _BLUETTI_AC300_H_

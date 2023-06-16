@@ -840,7 +840,7 @@
               soutMQTTerr(" MQTT connect", errMQTT);
               if (errMQTT == MD_OK)
                 {
-                  #if (BLUETTI_TYPE == BLUETTI_AC300)
+                  #if (USE_BLUETTI_AC300 > OFF)
                       // AC_OUTPUT_ON
                         //S4HEXVAL(" conn MQTT idx pblu pblu[idx] size ", AC_OUTPUT_ON, (uint32_t) pbluetti_dev_state,
                         //                                              (uint32_t) &(pbluetti_dev_state[AC_OUTPUT_ON]), sizeof(device_field_data_t) );
@@ -1026,14 +1026,12 @@
                     }
                 }
             }
-
           void readMQTTmsg()
             {
               if (errMQTT != MD_OK) // not connected
                 {
                   connectMQTT();
                 }
-
               if (errMQTT == MD_OK) // connected
                 {
                   char* ptopic = NULL;

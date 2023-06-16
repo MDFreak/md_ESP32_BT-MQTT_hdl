@@ -195,7 +195,7 @@ String map_field_name(enum field_names f_name)
         }
     };
   void handleMQTT(){
-      if ((millis() - lastMQTTMessage) > (MAX_DISCONNECTED_TIME_UNTIL_REBOOT * 60000))
+      if ((millis() - lastMQTTMessage) > (MAX_DISCONN_TIME_TO_REBOOT * 60000))
         {
           Serial.println(F("MQTT is disconnected over allowed limit, reboot device"));
           ESP.restart();
