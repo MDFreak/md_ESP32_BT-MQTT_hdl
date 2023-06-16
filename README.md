@@ -1,6 +1,6 @@
 ## About
-This is an ESP32 based Bluetooth to MQTT Bride for BLUETTI power stations. The project is based on https://github.com/warhammerkid/bluetti_mqtt
-The code is tested on a AC300. Other Powerstations should also work but are untested yet. The discussion on https://diysolarforum.com/threads/monitoring-bluetti-systems.37870/ was a great help for understanding the protocol. 
+This is an ESP32 based Bluetooth to mqttblu Bride for BLUETTI power stations. The project is based on https://github.com/warhammerkid/bluetti_mqttblu
+The code is tested on a AC300. Other Powerstations should also work but are untested yet. The discussion on https://diysolarforum.com/threads/monitoring-bluetti-systems.37870/ was a great help for understanding the protocol.
 
 ## Community
 Join the Discord Server https://discord.gg/fWDSBTCVmB
@@ -8,7 +8,7 @@ Join the Discord Server https://discord.gg/fWDSBTCVmB
 ## Features
 
 * easy configuration with WiFi manager
-* mqtt support
+* mqttblu support
 * support for BLUETTI power stations
   * AC300 (tested)
   * AC200 (untested)
@@ -37,7 +37,7 @@ Join the Discord Server https://discord.gg/fWDSBTCVmB
 
 #### Arduino IDE
 
-You will need to install a board support package for your ESP32. Additionally the following libraries are needed: 
+You will need to install a board support package for your ESP32. Additionally the following libraries are needed:
 
 * https://github.com/tzapu/WiFiManager
 * https://github.com/knolleary/pubsubclient
@@ -94,18 +94,18 @@ Select "Configure WiFi"
 
 ![Wifi Manager start menu](doc/images/wifi_manager.png)
 
-Configure your WiFi and set the address of your MQTT server and enter the Bluetooth ID of your
+Configure your WiFi and set the address of your mqttblu server and enter the Bluetooth ID of your
 Bluetti Device. Optionally you can specify username and password to protect the web OTA interface.
 You can use a mobile phone and/or the Bluetti APP for finding the correct Bluetooth ID of your device.
 
 ![Wifi Manager start menu](doc/images/wifi_setup.png)
 
-Save the settings. The ESP32 starts sending messages to your MQTT server.
+Save the settings. The ESP32 starts sending messages to your mqttblu server.
 
 Example ( ioBroker ):
-![MQTT ioBroker](doc/images/iobroker.png)
+![mqttblu ioBroker](doc/images/iobroker.png)
 
-### MQTT Topics
+### mqttblu Topics
 
 #### Commands
 Commands are subscribed from

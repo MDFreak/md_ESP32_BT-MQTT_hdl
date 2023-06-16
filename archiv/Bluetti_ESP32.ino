@@ -1,10 +1,10 @@
 //#include "BWifi.h"
 #include "BTooth.h"
-//#include "MQTT.h"
+//#include "mqttblu.h"
 //#include "config.h"
 
-unsigned long lastTime1 = 0;
-unsigned long timerDelay1 = 3000;
+unsigned long lastbluTime1 = 0;
+unsigned long blutimerDelay1 = 3000;
 
 static uint32_t freeHeap    = 10000000;
 static int32_t  tmpval32;
@@ -32,7 +32,7 @@ void setup()
       #endif
     //initBWifi(false);
     initBluetooth();
-    //initMQTT();
+    //initmqttblu();
   }
 
 void loop()
@@ -45,7 +45,7 @@ void loop()
           heapFree(" loop ");
         }
     handleBluetooth();
-    //handleMQTT();
+    //handlemqttblu();
     //handleWebserver();
     usleep(5000);
   }

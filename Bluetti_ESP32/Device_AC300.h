@@ -39,7 +39,7 @@
        DATIME_FIELD,        // String YY MM DD hh mm ss
        TYPE_UNDEFINED
     };
-  enum field_index
+  enum blu_field_index
     {
       // INFO device offset sort
         DEVICE_TYPE,
@@ -96,9 +96,9 @@
         DATE_TIME,
         LED_CONTROL,
         FIELD_UNDEFINED,
-        FIELD_IDX_MAX
+        BLUETTI_FIELD_IDX_MAX
     };
-  const char DEVICE_F_NAMES [FIELD_IDX_MAX][40] =
+  const char DEVICE_F_NAMES [BLUETTI_FIELD_IDX_MAX][40] =
     {
       // INFO device offset sort
         "DEVICE_TYPE",
@@ -156,7 +156,7 @@
     };
   typedef struct __attribute__ ((packed)) //device_field_data
     {
-      enum field_index f_name;
+      enum    blu_field_index f_name;
       void*   p_f_value;
       uint8_t f_page;
       uint8_t f_offset;

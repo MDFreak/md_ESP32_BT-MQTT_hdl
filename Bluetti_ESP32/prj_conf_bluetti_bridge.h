@@ -7,30 +7,34 @@
   // --- system
     // --- generic
       #define UTC_SEASONTIME UTC_SUMMERTIME
-      #define USE_MQTT       ON
       #define USE_BTOOTH     ON
       #define USE_WIFI       ON
       #define USE_FLASH_MEM  ON
       #define USE_NTP_SERVER ON
+      #define USE_MQTT       ON
+      #define USE_BLUETTI    OFF// ON
+      #define USE_CONRAD_UIP ON
   // --- bluetti
-    #define BLUETTI_TYPE BLUETTI_AC300
-    //#define BLUETTI_TYPE BLUETTI_EP500P
-    #define BLUETOOTH_QUERY_MESSAGE_DELAY 1000
+    #if (USE_BLUETTI > OFF)
+        #define BLUETTI_TYPE BLUETTI_AC300
+        //#define BLUETTI_TYPE BLUETTI_EP500P
+        #define BLUETOOTH_QUERY_MESSAGE_DELAY 1000
 
-    //#define RELAISMODE 1
-    //#define RELAIS_PIN 22
-    //#define RELAIS_LOW LOW
-    //#define RELAIS_HIGH HIGH
+        //#define RELAISMODE 1
+        //#define RELAIS_PIN 22
+        //#define RELAIS_LOW LOW
+        //#define RELAIS_HIGH HIGH
 
-    #define MAX_DISCONNECTED_TIME_UNTIL_REBOOT 5 //device will reboot when wlan/BT/MQTT is not connectet within x Minutes
-    #define SLEEP_TIME_ON_BT_NOT_AVAIL 2 //device will sleep x minutes if restarted is triggered by bluetooth error
-                                         //set to 0 to disable
-    #define DEVICE_STATE_UPDATE  5
-    #define MSG_VIEWER_ENTRY_COUNT 20 //number of lines for web message viewer
-    #define MSG_VIEWER_REFRESH_CYCLE 5 //refresh time for website data in seconds
-    #if (BLUETTI_TYPE == BLUETTI_AC300)
-        #define DEVICE_NAME = "BLUETTI_AC300"
-        #include <Device_AC300.h>
+        #define MAX_DISCONNECTED_TIME_UNTIL_REBOOT 5 //device will reboot when wlan/BT/mqttblu is not connectet within x Minutes
+        #define SLEEP_TIME_ON_BT_NOT_AVAIL 2 //device will sleep x minutes if restarted is triggered by bluetooth error
+                                             //set to 0 to disable
+        #define DEVICE_STATE_UPDATE  5
+        #define MSG_VIEWER_ENTRY_COUNT 20 //number of lines for web message viewer
+        #define MSG_VIEWER_REFRESH_CYCLE 5 //refresh time for website data in seconds
+        #if (BLUETTI_TYPE == BLUETTI_AC300)
+            #define DEVICE_NAME = "BLUETTI_AC300"
+            #include <Device_AC300.h>
+          #endif
       #endif
   // --- network
     // wifi
@@ -89,39 +93,44 @@
             #define WIFI_SUBNET     0x00FFFFFFul // 255.255.255.0
         #endif
     // --- bluetooth
-      #if (BLUETTI_TYPE == BLUETTI_AC300)
-          // The remote Bluetti service we wish to connect to.
-          #define BLUETTI_AC300_SN      "AC300223500057654"
-          #define BLUETTI_UUID_SERVICE  "0000ff00-0000-1000-8000-00805f9b34fb"
-          // The characteristics of Bluetti Devices
-          #define BLUETTI_UUID_WRITE    "0000ff02-0000-1000-8000-00805f9b34fb"
-          #define BLUETTI_UUID_NOTIFY   "0000ff01-0000-1000-8000-00805f9b34fb"
+      #if (USE_BLUETTI > OFF)
+          #if (BLUETTI_TYPE == BLUETTI_AC300)
+              // The remote Bluetti service we wish to connect to.
+              #define BLUETTI_AC300_SN        "AC300223500057654"
+              #define BLUETTI_UUID_SERVICE    "0000ff00-0000-1000-8000-00805f9b34fb"
+              // The characteristics of Bluetti Devices
+              #define BLUETTI_UUID_WRITE      "0000ff02-0000-1000-8000-00805f9b34fb"
+              #define BLUETTI_UUID_NOTIFY     "0000ff01-0000-1000-8000-00805f9b34fb"
+              #define mqtt_BLUETTI_DEVICE  "bluetti"
+              #define mqtt_BLUETTI_TOPDEV  "bluetti/"
+            #endif
         #endif
-    // --- MQTT Mosquitto client
+      #if (USE_CONRAD_UIP > OFF)
+
+        #endif
+    // --- mqttblu Mosquitto client
       #if (USE_MQTT > OFF)
           #define MQTT_HOST             "10.0.0.203"
           //#define MQTT_HOST             "10.13.37.27"
           #define MQTT_PORT             1883
           #define MQTT_SECURE           OFF
-          #define MQTT_DEVICE           "bluetti"
-          #define MQTT_TOPDEV           "bluetti/"
           #define MQTT_TOPIC_MAXLEN     20
           #define MQTT_PAYLOAD_MAXLEN   20
           #define MQTT_MSG_MAXANZ       30
-          typedef struct // MQTT_MSG
+          typedef struct // mqtt_MSG
             {
               char  topic[MQTT_TOPIC_MAXLEN];
               char  payload[MQTT_PAYLOAD_MAXLEN];
               void* pNext;
             } MQTTmsg_t;
           #if(MQTT_SECURE > OFF)
-              #define MQTT_BROKER_USER  "<user>"
-              #define MQTT_BROKER_PASS  "<pass>"
+              #define MQTTBLU_BROKER_USER  "<user>"
+              #define MQTTBLU_BROKER_PASS  "<pass>"
             #endif
-          #ifndef USE_OUTPUT_CYCLE
-              #define USE_OUTPUT_CYCLE
-              #define OUTPUT_CYCLE_MS   10
-            #endif
+        #endif
+      #ifndef USE_OUTPUT_CYCLE
+          #define USE_OUTPUT_CYCLE
+          #define OUTPUT_CYCLE_MS   10
         #endif
     // ******************************************
 #endif // _PRJ_CONF_BLUETTI_BRIDGE_H_

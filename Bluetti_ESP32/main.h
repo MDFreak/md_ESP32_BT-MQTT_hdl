@@ -40,7 +40,7 @@
         #include <md_webserver.h>
         #include <ip_list.hpp>
         #if (USE_MQTT > OFF)
-            #include <Network/Clients/MQTT.hpp>
+            #include <Network/Clients/mqtt.hpp>
           #endif
       #endif
 
@@ -75,11 +75,11 @@
         #if (USE_BTOOTH > OFF)
 
           #endif
-      // --- MQTT
+      // --- mqttblu
         #if (USE_MQTT > OFF)
             void startMQTT();
             void connectMQTT();
-            void soutMQTTerr(String text, int8_t errMQTT);
+            void soutMQTTerr(String text, int8_t errmqttblu);
             void readMQTTmsg();
           #endif
     // ---------

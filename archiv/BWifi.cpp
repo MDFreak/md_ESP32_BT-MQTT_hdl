@@ -2,7 +2,7 @@
   #include "BluettiConfig.h"
   #include "BWifi.h"
   #include "BTooth.h"
-  #include "MQTT.h"
+  #include "mqttblu.h"
   #include "index.h"  //Web page header file
   //#include <EEPROM.h>
   #include <WiFiManager.h>
@@ -93,10 +93,10 @@
   void initBWifi(bool resetWifi)
     {
       //eeprom_read();
-        //WiFiManagerParameter custom_mqtt_server("server", "MQTT Server Address", mqtt_server, 40);
-        //WiFiManagerParameter custom_mqtt_port("port", "MQTT Server Port", mqtt_port, 6);
-        //WiFiManagerParameter custom_mqtt_username("username", "MQTT Username", "", 40);
-        //WiFiManagerParameter custom_mqtt_password("password", "MQTT Password", "", 40, "type=password");
+        //WiFiManagerParameter custom_mqtt_server("server", "mqttblu Server Address", mqtt_server, 40);
+        //WiFiManagerParameter custom_mqtt_port("port", "mqttblu Server Port", mqtt_port, 6);
+        //WiFiManagerParameter custom_mqtt_username("username", "mqttblu Username", "", 40);
+        //WiFiManagerParameter custom_mqtt_password("password", "mqttblu Password", "", 40, "type=password");
         //WiFiManagerParameter custom_ota_username("ota_username", "OTA Username", "", 40);
         //WiFiManagerParameter custom_ota_password("ota_password", "OTA Password", "", 40, "type=password");
         //WiFiManagerParameter custom_bluetti_device("bluetti", "Bluetti Bluetooth ID", bluetti_device_id, 40);
@@ -235,8 +235,8 @@
             events.send("ping",NULL,millis());
             events.send(String(millis()).c_str(),"runtime",millis());
             events.send(String(WiFi.RSSI()).c_str(),"rssi",millis());
-            events.send(String(isMQTTconnected()).c_str(),"mqtt_connected",millis());
-            events.send(String(getLastMQTTMessageTime()).c_str(),"mqtt_last_msg_time",millis());
+            events.send(String(ismqttbluconnected()).c_str(),"mqtt_connected",millis());
+            events.send(String(getLastmqttbluMessageTime()).c_str(),"mqtt_last_msg_time",millis());
             events.send(String(isBTconnected()).c_str(),"bt_connected",millis());
             events.send(String(getLastBTMessageTime()).c_str(),"bt_last_msg_time",millis());
             events.send(lastMsg.c_str(),"last_msg",millis());
@@ -257,7 +257,7 @@
           {
             return String(millis());
           }
-        else if(var == "MQTT_IP")
+        else if(var == "mqtt_IP")
           {
             char msg[40];
             strlcpy(msg, wifiConfig.mqtt_server, 40);
@@ -269,13 +269,13 @@
             strlcpy(msg, wifiConfig.mqtt_port, 6);
             return msg;
           }
-        else if(var == "MQTT_CONNECTED")
+        else if(var == "mqtt_CONNECTED")
           {
-            return String(isMQTTconnected());
+            return String(ismqttbluconnected());
           }
-        else if(var == "LAST_MQTT_MSG_TIME")
+        else if(var == "LAST_mqtt_MSG_TIME")
           {
-            return String(getLastMQTTMessageTime());
+            return String(getLastmqttbluMessageTime());
           }
         else if(var == "DEVICE_ID")
           {

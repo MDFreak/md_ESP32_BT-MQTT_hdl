@@ -1,6 +1,6 @@
 #ifdef UNUSED
 //#include "BluettiConfig.h"
-//#include "MQTT.h"
+//#include "mqttblu.h"
 //#include "BWifi.h"
 #include "BTooth.h"
 //#include "utils.h"
@@ -8,10 +8,10 @@
 //#include <WiFi.h>
 //#include <PubSubClient.h>
 
-//WiFiClient mqttClient;
-//PubSubClient client(mqttClient);
+//WiFiClient mqttbluClient;
+//PubSubClient client(mqttbluClient);
 int publishErrorCount = 0;
-unsigned long lastMQTTMessage = 0;
+unsigned long lastmqttbluMessage = 0;
 unsigned long previousDeviceStatePublish = 0;
 
 String map_field_name(enum field_names f_name)
@@ -87,7 +87,7 @@ String map_field_name(enum field_names f_name)
       payload[length] = '\0';
       String topic_path = String(topic);
 
-      Serial.print("MQTT Message arrived on topic: ");
+      Serial.print("mqttblu Message arrived on topic: ");
       Serial.print(topic);
       Serial.print(" Payload: ");
       String strPayload = String((char * ) payload);
@@ -107,21 +107,21 @@ String map_field_name(enum field_names f_name)
         }
       command.len = swap_bytes(strPayload.toInt());
       command.check_sum = modbus_crc((uint8_t*)&command,6);
-      lastMQTTMessage = millis();
+      lastmqttbluMessage = millis();
       sendBTCommand(command);
     }
   void subscribeTopic(enum field_names field_name)
-  {
-    #ifdef DEBUG
-        Serial.println("subscribe to topic: " +  map_field_name(field_name));
-      #endif
-      char subscribeTopicBuf[512];
-      //ESPBluettiSettings settings = get_esp32_bluetti_settings();
-      //sprintf(subscribeTopicBuf, "bluetti/%s/command/%s", settings.bluetti_device_id, map_field_name(field_name).c_str() );
-      sprintf(subscribeTopicBuf, "bluetti/%s", map_field_name(field_name).c_str() );
-      client.subscribe(subscribeTopicBuf);
-      lastMQTTMessage = millis();
-  }
+    {
+      #ifdef DEBUG
+          Serial.println("subscribe to topic: " +  map_field_name(field_name));
+        #endif
+        char subscribeTopicBuf[512];
+        //ESPBluettiSettings settings = get_esp32_bluetti_settings();
+        //sprintf(subscribeTopicBuf, "bluetti/%s/command/%s", settings.bluetti_device_id, map_field_name(field_name).c_str() );
+        sprintf(subscribeTopicBuf, "bluetti/%s", map_field_name(field_name).c_str() );
+        client.subscribe(subscribeTopicBuf);
+        lastmqttbluMessage = millis();
+    }
   void publishTopic(enum field_names field_name, String value)
     {
       char publishTopicBuf[1024];
@@ -137,16 +137,16 @@ String map_field_name(enum field_names f_name)
       ESPBluettiSettings settings = get_esp32_bluetti_settings();
       //sprintf(publishTopicBuf, "bluetti/%s/state/%s", settings.bluetti_device_id, map_field_name(field_name).c_str() );
       sprintf(publishTopicBuf, "bluetti/%s\0", map_field_name(field_name).c_str() );
-      lastMQTTMessage = millis();
+      lastmqttbluMessage = millis();
       Serial.print(millis()); Serial.print(" "); Serial.print(publishTopicBuf); Serial.print("="); Serial.println(value.c_str());
       if (!client.publish(publishTopicBuf, value.c_str() ))
         {
           publishErrorCount++;
-          AddtoMsgView(String(lastMQTTMessage) + ": publish ERROR! " + map_field_name(field_name) + " -> " + value);
+          AddtoMsgView(String(lastmqttbluMessage) + ": publish ERROR! " + map_field_name(field_name) + " -> " + value);
         }
         else
         {
-          AddtoMsgView(String(lastMQTTMessage) + ": " + map_field_name(field_name) + " -> " + value);
+          AddtoMsgView(String(lastmqttbluMessage) + ": " + map_field_name(field_name) + " -> " + value);
         }
     }
   void publishDeviceState()
@@ -160,14 +160,14 @@ String map_field_name(enum field_names f_name)
         {
           publishErrorCount++;
         }
-      lastMQTTMessage = millis();
+      lastmqttbluMessage = millis();
       previousDeviceStatePublish = millis();
     }
-  void initMQTT()
+  void initmqttblu()
     {
       enum field_names f_name;
       ESPBluettiSettings settings = get_esp32_bluetti_settings();
-      Serial.print("Connecting to MQTT at: ");
+      Serial.print("Connecting to mqttblu at: ");
       Serial.print(settings.mqtt_server);
       Serial.print(":");
       Serial.println(F(settings.mqtt_port));
@@ -185,7 +185,7 @@ String map_field_name(enum field_names f_name)
         }
       if (connect_result)
         {
-          Serial.println(F("Connected to MQTT Server... "));
+          Serial.println(F("Connected to mqttblu Server... "));
           // subscribe to topics for commands
           for (int i=0; i< sizeof(bluetti_device_command)/sizeof(device_field_data_t); i++)
             {
@@ -194,48 +194,51 @@ String map_field_name(enum field_names f_name)
           publishDeviceState();
         }
     };
-  void handleMQTT(){
-      if ((millis() - lastMQTTMessage) > (MAX_DISCONNECTED_TIME_UNTIL_REBOOT * 60000))
+  void handlemqttblu()
+    {
+      if ((millis() - lastmqttbluMessage) > (MAX_DISCONNECTED_TIME_UNTIL_REBOOT * 60000))
         {
-          Serial.println(F("MQTT is disconnected over allowed limit, reboot device"));
+          Serial.println(F("mqttblu is disconnected over allowed limit, reboot device"));
           ESP.restart();
         }
       if ((millis() - previousDeviceStatePublish) > (DEVICE_STATE_UPDATE * 60000))
         {
           publishDeviceState();
         }
-      if (!isMQTTconnected() && publishErrorCount > 5)
+      if (!ismqttbluconnected() && publishErrorCount > 5)
         {
-          Serial.println(F("MQTT lost connection, try to reconnect"));
+          Serial.println(F("mqttblu lost connection, try to reconnect"));
           client.disconnect();
-          lastMQTTMessage=0;
+          lastmqttbluMessage=0;
           previousDeviceStatePublish=0;
           publishErrorCount=0;
-          AddtoMsgView(String(millis()) + ": MQTT connection lost, try reconnect");
-          initMQTT();
+          AddtoMsgView(String(millis()) + ": mqttblu connection lost, try reconnect");
+          initmqttblu();
 
         }
       client.loop();
-  }
-
-  bool isMQTTconnected(){
-      if (client.connected()){
-        return true;
-      }
-      else
-      {
-        return false;
-      }
-  }
-
-  int getPublishErrorCount(){
-      return publishErrorCount;
-  }
-  unsigned long getLastMQTTMessageTime(){
-      return lastMQTTMessage;
-  }
-  unsigned long getLastMQTDeviceStateMessageTime(){
-      return previousDeviceStatePublish;
-  }
+    }
+  bool ismqttbluconnected()
+    {
+        if (client.connected()){
+          return true;
+        }
+        else
+        {
+          return false;
+        }
+    }
+  int getPublishErrorCount()
+    {
+        return publishErrorCount;
+    }
+  unsigned long getLastmqttbluMessageTime()
+    {
+        return lastmqttbluMessage;
+    }
+  unsigned long getLastMQTDeviceStateMessageTime()
+    {
+        return previousDeviceStatePublish;
+    }
 */
 #endif

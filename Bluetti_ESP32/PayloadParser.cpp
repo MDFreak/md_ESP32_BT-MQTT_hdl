@@ -1,5 +1,5 @@
 //#include "BluettiConfig.h"
-//#include "MQTT.h"
+//#include "mqttblu.h"
 #include "PayloadParser.h"
 //#include "BWifi.h"
 
@@ -97,7 +97,7 @@ void     parse_bluetooth_data(device_field_data_t* pdev_field_data,
                 //for(int i=0; i< sizeof(bluetti_device_state)/sizeof(device_field_data_t); i++)
                 length -= 5;  // protokoll overhead
                 //S3VAL(" found 0x03 page offs length ", page, offset, length); SOUTLN();
-                for(int i=0; (i<FIELD_IDX_MAX); i++)
+                for(int i=0; (i<BLUETTI_FIELD_IDX_MAX); i++)
                   {
                         //tmps = " check  "; tmps.concat(DEVICE_F_NAMES[pbluetti_device_state[i].f_name]);
                         //S4VAL(tmps.c_str(), " f_age f_offs f_size ", pbluetti_device_state[i].f_page, pbluetti_device_state[i].f_offset, pbluetti_device_state[i].f_size);
