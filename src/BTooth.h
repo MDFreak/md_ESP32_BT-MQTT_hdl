@@ -1,7 +1,8 @@
 #ifndef BTOOTH_H
   #define BTOOTH_H
   #include "Arduino.h"
-  #include "BLEDevice.h"
+  #include <BLEDevice.h>
+  //#include <NimBLEDevice.h>
   #include <prj_conf_BT_MQTT_hdl.h>
   //#include "Config.h"
   //#include "Device_AC300.h"
