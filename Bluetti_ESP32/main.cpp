@@ -100,7 +100,7 @@
             const  String  mqttbluID    = MQTT_BLUETTI_DEVICE;
             const  String  topbluDevice = MQTT_BLUETTI_TOPDEV;
             Network::Client::MQTTv5 mqtt(mqttbluID.c_str(), &msgHdl);
-            //device_field_data_t* pbtooth_dev_state = NULL;
+            device_field_data_t* pbtooth_dev_state = NULL;
             // --- value storage
               // INFO device offset sort
                 static String    BLUDEVICE_TYPE           = "---";
@@ -570,7 +570,7 @@
                 //SVAL(" outputcycle idx ", outpIdx);
                 if (errMQTT == MD_OK)
                   {
-                    #if (USE_Bluetti)
+                    #if (USE_BLUETTI > OFF)
                         if ( ((device_field_data_t*) pbtooth_dev_state)[outpIdx].f_new > OFF) // new value
                           {
                             switch(outpIdx)

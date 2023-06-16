@@ -1,5 +1,5 @@
-#ifndef mqtt_H
-#define mqtt_H
+#ifndef MQTT_H
+#define MQTT_H
 #include "Arduino.h"
 /*
   #include "DeviceType.h"

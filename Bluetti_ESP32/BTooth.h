@@ -7,7 +7,7 @@
       #include <NimBLEDevice.h>
     #endif
   #if (USE_BLUETTI)
-      #include "BLEDevice.h"
+      #include <NimBLEDevice.h> //#include "BLEDevice.h"
       #include "PayloadParser.h"
       /*
         static boolean doConnect = false;

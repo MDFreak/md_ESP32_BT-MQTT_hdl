@@ -7,16 +7,16 @@
   static boolean doConnect = false;
   static boolean connected = false;
   static boolean doScan    = false;
-  static BLERemoteCharacteristic* pRemoteWriteCharacteristic;
-  static BLERemoteCharacteristic* pRemoteNotifyCharacteristic;
-  static BLEAdvertisedDevice*     pbluettiDevice;
+  static NimBLERemoteCharacteristic* pRemoteWriteCharacteristic; //static BLERemoteCharacteristic* pRemoteWriteCharacteristic;
+  static NimBLERemoteCharacteristic* pRemoteNotifyCharacteristic; //static BLERemoteCharacteristic* pRemoteNotifyCharacteristic;
+  static NimBLEAdvertisedDevice*     pbluettiDevice; //static BLEAdvertisedDevice*     pbluettiDevice;
 
 
     // The remote Bluetti service we wish to connect to.
-    static BLEUUID serviceUUID("0000ff00-0000-1000-8000-00805f9b34fb");
+    static NimBLEUUID serviceUUID("0000ff00-0000-1000-8000-00805f9b34fb"); //static BLEUUID serviceUUID("0000ff00-0000-1000-8000-00805f9b34fb");
     // The characteristics of Bluetti Devices
-    static BLEUUID WRITE_UUID ("0000ff02-0000-1000-8000-00805f9b34fb");
-    static BLEUUID NOTIFY_UUID("0000ff01-0000-1000-8000-00805f9b34fb");
+    static NimBLEUUID WRITE_UUID ("0000ff02-0000-1000-8000-00805f9b34fb"); //static BLEUUID WRITE_UUID ("0000ff02-0000-1000-8000-00805f9b34fb");
+    static NimBLEUUID NOTIFY_UUID("0000ff01-0000-1000-8000-00805f9b34fb"); //static BLEUUID NOTIFY_UUID("0000ff01-0000-1000-8000-00805f9b34fb");
 
   #if (USE_CONRAD_UIP)
     #endif
@@ -202,13 +202,13 @@
       }
     }
    */
-  class MyClientCallback : public BLEClientCallbacks
+  class MyClientCallback : public NimBLEClientCallbacks //public BLEClientCallbacks
     {
-      void onConnect(BLEClient* pclient)
+      void onConnect(NimBLEClient* pclient) //void onConnect(BLEClient* pclient)
         {
           Serial.println(F("onConnect"));
         }
-      void onDisconnect(BLEClient* pclient)
+      void onDisconnect(NimBLEClient* pclient) //void onDisconnect(BLEClient* pclient)
         {
           connected = false;
           Serial.println(F("onDisconnect"));
@@ -220,21 +220,21 @@
   //BLEAdvertisedDevice
   /* Scan for BLE servers and find the first one that advertises the service we are looking for.
    */
-  class BluettiAdvertisedDeviceCallbacks: public BLEAdvertisedDeviceCallbacks
+  class BluettiAdvertisedDeviceCallbacks: public BLEAdvertisedDeviceCallbacks //public BLEAdvertisedDeviceCallbacks
     {
-      void onResult(BLEAdvertisedDevice advertisedDevice)
+      void onResult(NimBLEAdvertisedDevice advertisedDevice) //void onResult(BLEAdvertisedDevice advertisedDevice)
         {
           //Serial.print(F("BLE Advertised Device found: "));
           //Serial.println(advertisedDevice.toString().c_str());
-          SVAL("BLE Advertised Device found: ", advertisedDevice.toString().c_str());
+          SVAL("NimBLE Advertised Device found: ", advertisedDevice.toString().c_str());
           //ESPBluettiSettings settings = get_esp32_bluetti_settings();
           // We have found a device, let us now see if it contains the service we are looking for.
           //if (advertisedDevice.haveServiceUUID() && advertisedDevice.isAdvertisingService(serviceUUID) && advertisedDevice.getName().compare(settings.bluetti_device_id))
           if (advertisedDevice.haveServiceUUID() && advertisedDevice.isAdvertisingService(serviceUUID) && advertisedDevice.getName().compare(_settings.bluetti_device_id))
             {
               Serial.println(" onResult stop scan ");
-              BLEDevice::getScan()->stop();
-              pbluettiDevice = new BLEAdvertisedDevice(advertisedDevice);
+              NimBLEDevice::getScan()->stop(); //BLEDevice::getScan()->stop();
+              pbluettiDevice = new BLEAdvertisedDevice(advertisedDevice); //pbluettiDevice = new BLEAdvertisedDevice(advertisedDevice);
               doConnect = true;
               doScan = true;
             }
@@ -251,8 +251,8 @@
     }
   void     initBluetooth()
     {
-      BLEDevice::init("");
-      BLEScan* pBLEScan = BLEDevice::getScan();
+      NimBLEDevice::init(""); //BLEDevice::init("");
+      NimBLEAddress* pBLEScan = NimBLEDevice::getScan(); //BLEScan* pBLEScan = BLEDevice::getScan();
       //pBLEScan->setAdvertisedDeviceCallbacks(new BluettiAdvertisedDeviceCallbacks());
       pBLEScan->setAdvertisedDeviceCallbacks(pBluettiAdvDevCallbacks);
       pBLEScan->setInterval(1349);
@@ -264,7 +264,7 @@
       sendQueue = xQueueCreate( 5, sizeof(bt_command_t) );
       lastBTMessage =  millis();
     }
-  static void notifyCallback( BLERemoteCharacteristic* pBLERemoteCharacteristic,
+  static void notifyCallback( NimBLERemoteCharacteristic* pBLERemoteCharacteristic, //static void notifyCallback( BLERemoteCharacteristic* pBLERemoteCharacteristic,
                               uint8_t* pData, size_t length,   bool isNotify)
     {
       #ifdef DEBUG
@@ -299,7 +299,7 @@
     {
       // create client
           SVAL("Forming a connection to ", pbluettiDevice->getAddress().toString().c_str());
-      BLEClient*  pClient  = BLEDevice::createClient();
+      NimBLEClient*  pClient  = NimBLEDevice::createClient(); //BLEClient*  pClient  = BLEDevice::createClient();
           STXT(" - Created client");
       pClient->setClientCallbacks(plocClientCallback);
       // Connect to the remove BLE Server.
@@ -307,7 +307,7 @@
           STXT(" - Connected to server");
       pClient->setMTU(517); //set client to request maximum MTU from server (default is 23 otherwise)
       // Obtain a reference to the service we are after in the remote BLE server.
-      BLERemoteService* pRemoteService = pClient->getService(serviceUUID);
+      NimBLERemoteService* pRemoteService = pClient->getService(serviceUUID); // BLERemoteService* pRemoteService = pClient->getService(serviceUUID);
       if (pRemoteService == nullptr)
         {
           SVAL("Failed to find our service UUID: ", serviceUUID.toString().c_str());

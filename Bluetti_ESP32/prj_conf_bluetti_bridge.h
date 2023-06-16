@@ -101,8 +101,8 @@
               // The characteristics of Bluetti Devices
               #define BLUETTI_UUID_WRITE      "0000ff02-0000-1000-8000-00805f9b34fb"
               #define BLUETTI_UUID_NOTIFY     "0000ff01-0000-1000-8000-00805f9b34fb"
-              #define mqtt_BLUETTI_DEVICE  "bluetti"
-              #define mqtt_BLUETTI_TOPDEV  "bluetti/"
+              #define MQTT_BLUETTI_DEVICE  "bluetti"
+              #define MQTT_BLUETTI_TOPDEV  "bluetti/"
             #endif
         #endif
       #if (USE_CONRAD_UIP > OFF)
