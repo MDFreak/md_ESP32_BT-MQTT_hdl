@@ -12,6 +12,7 @@
       #define USE_WIFI       ON
       #define USE_FLASH_MEM  ON
       #define USE_NTP_SERVER ON
+      #define USE_BLUETTI    ON
   // --- bluetti
     #define BLUETTI_TYPE BLUETTI_AC300
     //#define BLUETTI_TYPE BLUETTI_EP500P
