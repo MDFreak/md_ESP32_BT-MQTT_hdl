@@ -95,7 +95,7 @@
         uint8_t errMQTTold = MD_OK;
       #endif
   // --- Bluetti
-    device_field_data_t* pbluetti_dev_state = NULL;
+    bluetti_dev_f_data_t* pbluetti_dev_state = NULL;
     // --- value storage
       static bool      BLUacouton     = 0;
       static bool      BLUdcouton     = 0;
@@ -181,26 +181,26 @@
       static int8_t    pubBLUintcurr1 = 0;
       static int8_t    pubBLUpackmax  = 0;
     #if (USE_MQTT > OFF) // MQTT topic
-        static String topBLUdcoutp   = DEVICE_F_NAMES[DC_OUTPUT_ON]; // "dcoutp"
-        static String topBLUdcouton  = DEVICE_F_NAMES[AC_OUTPUT_ON] ; // "dcouton"
-        static String topBLUacoutp   = DEVICE_F_NAMES[DC_OUTPUT_POWER]; // "acoutp"
-        static String topBLUacouton  = DEVICE_F_NAMES[AC_OUTPUT_POWER] ; // "acouton"
-        static String topBLUpowgen   = DEVICE_F_NAMES[POWER_GENERATION]  ; // "powgen"
-        static String topBLUtotbatt  = DEVICE_F_NAMES[TOTAL_BATTERY_PERCENT] ; // "totbatt"
-        static String topBLUdcinp    = DEVICE_F_NAMES[DC_INPUT_POWER] ; // "dcinp"
-        static String topBLUacinp    = DEVICE_F_NAMES[AC_INPUT_POWER] ; // "acinp"
-        static String topBLUpaku     = DEVICE_F_NAMES[PACK_VOLTAGE]   ; // "paku"
-        static String topBLUsernum   = DEVICE_F_NAMES[SERIAL_NUMBER]  ; // "sernum"
-        static String topBLUarmvers  = DEVICE_F_NAMES[ARM_VERSION] ; // "armvers"
-        static String topBLUdspvers  = DEVICE_F_NAMES[DSP_VERSION] ; // "dspvers"
-        static String topBLUdevtype  = DEVICE_F_NAMES[DEVICE_TYPE] ; // "devtype"
-        static String topBLUintacu   = DEVICE_F_NAMES[INTERNAL_AC_VOLTAGE] ; // "intacu"
-        static String topBLUintcurr1 = DEVICE_F_NAMES[INTERNAL_CURRENT_ONE]; // "intcurr1"
-        static String topBLUpackmax  = DEVICE_F_NAMES[PACK_NUM_MAX] ; // "packmax"
-        static String topBLUupsmode  = DEVICE_F_NAMES[UPS_MODE] ; // "upsmode"
-        static String topBLUslpmode  = DEVICE_F_NAMES[AUTO_SLEEP_MODE] ; // "sleepm"
-        static String topBLUgrdchon  = DEVICE_F_NAMES[GRID_CHANGE_ON]; // "grdchon"
-        static String topBLUfieldund = DEVICE_F_NAMES[FIELD_UNDEFINED]; // "fldundef"
+        static String topBLUdcoutp   = BLU_DEV_F_NAMES[DC_OUTPUT_ON]; // "dcoutp"
+        static String topBLUdcouton  = BLU_DEV_F_NAMES[AC_OUTPUT_ON] ; // "dcouton"
+        static String topBLUacoutp   = BLU_DEV_F_NAMES[DC_OUTPUT_POWER]; // "acoutp"
+        static String topBLUacouton  = BLU_DEV_F_NAMES[AC_OUTPUT_POWER] ; // "acouton"
+        static String topBLUpowgen   = BLU_DEV_F_NAMES[POWER_GENERATION]  ; // "powgen"
+        static String topBLUtotbatt  = BLU_DEV_F_NAMES[TOTAL_BATTERY_PERCENT] ; // "totbatt"
+        static String topBLUdcinp    = BLU_DEV_F_NAMES[DC_INPUT_POWER] ; // "dcinp"
+        static String topBLUacinp    = BLU_DEV_F_NAMES[AC_INPUT_POWER] ; // "acinp"
+        static String topBLUpaku     = BLU_DEV_F_NAMES[PACK_VOLTAGE]   ; // "paku"
+        static String topBLUsernum   = BLU_DEV_F_NAMES[SERIAL_NUMBER]  ; // "sernum"
+        static String topBLUarmvers  = BLU_DEV_F_NAMES[ARM_VERSION] ; // "armvers"
+        static String topBLUdspvers  = BLU_DEV_F_NAMES[DSP_VERSION] ; // "dspvers"
+        static String topBLUdevtype  = BLU_DEV_F_NAMES[DEVICE_TYPE] ; // "devtype"
+        static String topBLUintacu   = BLU_DEV_F_NAMES[INTERNAL_AC_VOLTAGE] ; // "intacu"
+        static String topBLUintcurr1 = BLU_DEV_F_NAMES[INTERNAL_CURRENT_ONE]; // "intcurr1"
+        static String topBLUpackmax  = BLU_DEV_F_NAMES[PACK_NUM_MAX] ; // "packmax"
+        static String topBLUupsmode  = BLU_DEV_F_NAMES[UPS_MODE] ; // "upsmode"
+        static String topBLUslpmode  = BLU_DEV_F_NAMES[AUTO_SLEEP_MODE] ; // "sleepm"
+        static String topBLUgrdchon  = BLU_DEV_F_NAMES[GRID_CHANGE_ON]; // "grdchon"
+        static String topBLUfieldund = BLU_DEV_F_NAMES[FIELD_UNDEFINED]; // "fldundef"
       #endif
     unsigned long lastTime1 = 0;
     unsigned long timerDelay1 = 3000;
@@ -251,8 +251,8 @@
             #endif // USE_WIFI
         // start bluetooth
           #if (USE_BTOOTH)
-              SHEXVAL(" init bluetooth...", (uint32_t) pbluetti_dev_state);
               pbluetti_dev_state = getpDevField();
+              SHEXVAL(" init bluetooth...", (uint32_t) pbluetti_dev_state);
               initBluetooth();
               SHEXVAL(" ...init bluetooth", (uint32_t) pbluetti_dev_state);
             #endif
@@ -843,7 +843,7 @@
                   #if (USE_BLUETTI_AC300 > OFF)
                       // AC_OUTPUT_ON
                         //S4HEXVAL(" conn MQTT idx pblu pblu[idx] size ", AC_OUTPUT_ON, (uint32_t) pbluetti_dev_state,
-                        //                                              (uint32_t) &(pbluetti_dev_state[AC_OUTPUT_ON]), sizeof(device_field_data_t) );
+                        //                                              (uint32_t) &(pbluetti_dev_state[AC_OUTPUT_ON]), sizeof(bluetti_dev_f_data_t) );
                         pbluetti_dev_state[AC_OUTPUT_ON].p_f_value = (void*) &BLUacouton;
                         topBLUacouton = topDevice + topBLUacouton;
                         errMQTT = (int8_t) mqtt.subscribe(topBLUacouton.c_str());
@@ -859,7 +859,7 @@
 
                       // DC_OUTPUT_POWER
                         //S4HEXVAL(" conn MQTT idx pblu pblu[idx] size ", DC_OUTPUT_POWER, (uint32_t) pbluetti_dev_state,
-                        //                                              (uint32_t) &(pbluetti_dev_state[DC_OUTPUT_POWER]), sizeof(device_field_data_t) );
+                        //                                              (uint32_t) &(pbluetti_dev_state[DC_OUTPUT_POWER]), sizeof(bluetti_dev_f_data_t) );
                         pbluetti_dev_state[DC_OUTPUT_POWER].p_f_value = (void*) &BLUdcoutp;
                         topBLUdcoutp = topDevice + topBLUdcoutp;
                         errMQTT = (int8_t) mqtt.subscribe(topBLUdcoutp.c_str());

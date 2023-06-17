@@ -29,7 +29,10 @@
       };
    */
 
-  enum field_types
+
+  #define BLU_AC300_DEV_ID   "AC3002235000574654"
+
+  enum bluetti_field_types
     {
        UINT_FIELD,
        BOOL_FIELD,
@@ -41,7 +44,7 @@
        SN_FIELD,
        TYPE_UNDEFINED
     };
-  enum field_index
+  enum bluetti_field_index
     {
       DC_OUTPUT_ON,
       AC_OUTPUT_ON,
@@ -65,7 +68,7 @@
       FIELD_UNDEFINED,
       FIELD_IDX_MAX
     };
-  const char DEVICE_F_NAMES [FIELD_IDX_MAX][25] =
+  const char BLU_DEV_F_NAMES [FIELD_IDX_MAX][25] =
     {
       "AC_OUTPUT_ON",
       "DC_OUTPUT_ON",
@@ -88,21 +91,21 @@
       "GRID_CHANGE_ON",
       "FIELD_UNDEFINED"
     };
-  typedef struct device_field_data
+  typedef struct bluetti_dev_f_data
     {
-      enum field_index f_name;
+      enum bluetti_field_index blu_f_name;
       void*   p_f_value;
       uint8_t f_page;
       uint8_t f_offset;
       int8_t  f_size;
       int8_t  f_scale;
       int8_t  f_enum;
-      enum field_types f_type;
-    } device_field_data_t;
+      enum bluetti_field_types f_type;
+    } bluetti_dev_f_data_t;
 
 
   // { FIELD_NAME, PAGE, OFFSET, SIZE, SCALE (if scale is needed e.g. decimal value, defaults to 0) , ENUM (if data is enum, defaults to 0) , FIELD_TYPE }
-  //extern device_field_data_t bluetti_device_state[];
-  //extern device_field_data_t bluetti_device_command[];
-  //extern device_field_data_t bluetti_polling_command[];
+  //extern bluetti_dev_f_data_t bluetti_device_state[];
+  //extern bluetti_dev_f_data_t bluetti_device_command[];
+  //extern bluetti_dev_f_data_t bluetti_polling_command[];
 #endif // _BLUETTI_AC300_H_

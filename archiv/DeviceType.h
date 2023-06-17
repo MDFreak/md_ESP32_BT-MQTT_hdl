@@ -3,7 +3,7 @@
 #include "Arduino.h"
 
 /*
-  enum field_types{
+  enum bluetti_field_types{
      UINT_FIELD,
      BOOL_FIELD,
      ENUM_FIELD,
@@ -38,15 +38,15 @@
     PACK_NUM_MAX
   };
 
-  typedef struct device_field_data {
-    enum field_names f_name;
+  typedef struct bluetti_dev_f_data {
+    enum field_names blu_f_name;
     uint8_t f_page;
     uint8_t f_offset;
     int8_t f_size;
     int8_t f_scale;
     int8_t f_enum;
-    enum field_types f_type;
-  } device_field_data_t;
+    enum bluetti_field_types f_type;
+  } bluetti_dev_f_data_t;
  */
 
 #endif

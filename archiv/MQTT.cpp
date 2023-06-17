@@ -14,9 +14,9 @@ int publishErrorCount = 0;
 unsigned long lastMQTTMessage = 0;
 unsigned long previousDeviceStatePublish = 0;
 
-String map_field_name(enum field_names f_name)
+String map_field_name(enum field_names blu_f_name)
   {
-   switch(f_name)
+   switch(blu_f_name)
     {
       case DC_OUTPUT_POWER:
         return "dc_output_power";
@@ -97,9 +97,9 @@ String map_field_name(enum field_names f_name)
       command.prefix = 0x01;
       command.field_update_cmd = 0x06;
 
-      for (int i=0; i< sizeof(bluetti_device_command)/sizeof(device_field_data_t); i++)
+      for (int i=0; i< sizeof(bluetti_device_command)/sizeof(bluetti_dev_f_data_t); i++)
         {
-          if (topic_path.indexOf(map_field_name(bluetti_device_command[i].f_name)) > -1)
+          if (topic_path.indexOf(map_field_name(bluetti_device_command[i].blu_f_name)) > -1)
             {
               command.page = bluetti_device_command[i].f_page;
               command.offset = bluetti_device_command[i].f_offset;
@@ -165,7 +165,7 @@ String map_field_name(enum field_names f_name)
     }
   void initMQTT()
     {
-      enum field_names f_name;
+      enum field_names blu_f_name;
       ESPBluettiSettings settings = get_esp32_bluetti_settings();
       Serial.print("Connecting to MQTT at: ");
       Serial.print(settings.mqtt_server);
@@ -187,9 +187,9 @@ String map_field_name(enum field_names f_name)
         {
           Serial.println(F("Connected to MQTT Server... "));
           // subscribe to topics for commands
-          for (int i=0; i< sizeof(bluetti_device_command)/sizeof(device_field_data_t); i++)
+          for (int i=0; i< sizeof(bluetti_device_command)/sizeof(bluetti_dev_f_data_t); i++)
             {
-              subscribeTopic(bluetti_device_command[i].f_name);
+              subscribeTopic(bluetti_device_command[i].blu_f_name);
             }
           publishDeviceState();
         }

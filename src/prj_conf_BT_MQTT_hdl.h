@@ -39,9 +39,6 @@
         #define MAX_DISCONN_TIME_TO_REBOOT  5 //device will reboot when wlan/BT/MQTT is not connectet within x Minutes
         #define SLEEP_TIME_ON_BT_NOT_AVAIL  2 //device will sleep x minutes if restarted is triggered by bluetooth error
                                               //set to 0 to disable
-        #define DEV_STATE_UPDATE_S          5 //time in sec
-        #define MSG_VIEWER_ENTRY_COUNT      20 //number of lines for web message viewer
-        #define MSG_VIEWER_REFRESH_CYC_S    5 //refresh time for website data in seconds
         #if (USE_BLUETTI_AC300 > OFF)
             //#define DEVICE_NAME = "BLUETTI_AC300"
             #include <Bluetti_AC300.h>
@@ -62,6 +59,12 @@
             #define MQTT_DEVICE           "bluetti"
             #define MQTT_TOPDEV           "bluetti/"
           #endif
+      #endif
+  // voltcraft (conrad)
+    #if (USE_VOLTCRAFT > OFF)
+        #define SEM6000             1
+
+        #define VOLTCRAFT_SEM6000   ON
       #endif
   // --- network
     // wifi
@@ -120,13 +123,35 @@
             #define WIFI_SUBNET     0x00FFFFFFul // 255.255.255.0
         #endif
     // --- bluetooth
+      #define DEV_STATE_UPDATE_S          5 //time in sec
+      #define MSG_VIEWER_ENTRY_COUNT      20 //number of lines for web message viewer
+      #define MSG_VIEWER_REFRESH_CYC_S    5 //refresh time for website data in seconds
+
       #if (USE_BLUETTI_AC300 > OFF)
-          // The remote Bluetti service we wish to connect to.
+              // The remote Bluetti service we wish to connect to.
           #define BLUETTI_UUID_SERVICE  "0000ff00-0000-1000-8000-00805f9b34fb"
-          // The characteristics of Bluetti Devices
-          #define BLUETTI_UUID_WRITE    "0000ff02-0000-1000-8000-00805f9b34fb"
+              // The characteristics of Bluetti Devices
           #define BLUETTI_UUID_NOTIFY   "0000ff01-0000-1000-8000-00805f9b34fb"
+          #define BLUETTI_UUID_WRITE    "0000ff02-0000-1000-8000-00805f9b34fb"
         #endif
+    #if (USE_VOLTCRAFT > OFF)
+          // The remote Voltcraft service we wish to connect to
+            // device name
+            // handle: 0x0002u, char properties: 0x02u, char value handle: 0x0003u
+          #define VOLTCRAFT_UUID_SERVICE  "00002a00-0000-1000-8000-00805f9b34fb"
+            // device vendor, hardware, firmware
+            // handle: 0x0024u, char properties: 0x06u, char value handle: 0x0025u
+          #define VOLTCRAFT_UUID_NAME     "0000ff01-0000-1000-8000-00805f9b34fb"
+            // ?
+            // handle: 0x0027u, char properties: 0x02u, char value handle: 0x0028u
+          #define VOLTCRAFT_UUID_UNDEF   "0000ff02-0000-1000-8000-00805f9b34fb"
+            // device vendor, hardware, firmware
+            // handle: 0x002au, char properties: 0x04u, char value handle: 0x002bu
+          #define VOLTCRAFT_UUID_WRITE    "0000ff03-0000-1000-8000-00805f9b34fb"
+            // notifcations
+            // handle: 0x002du, char properties: 0x10u, char value handle: 0x002eu
+          #define VOLTCRAFT_UUID_NOTIFY   "0000ff04-0000-1000-8000-00805f9b34fb"
+      #endif
     // --- MQTT Mosquitto client
     #if (USE_MQTT > OFF)
         #define MQTT_HOST             "10.0.0.203"
